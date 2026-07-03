@@ -1,0 +1,50 @@
+{
+  "case_id": "helpdesk_cred_reset",
+  "title": "Helpdesk cred reset",
+  "category": "benign",
+  "alert": {
+    "technique_id": "T1098",
+    "tactic": "persistence",
+    "platform": "windows",
+    "log_source": "authentication",
+    "anomaly_score": 0.24,
+    "attributes": {
+      "known_admin_host": true
+    }
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "benign_anchor_min": 0.2,
+    "expected_log_sources": [
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

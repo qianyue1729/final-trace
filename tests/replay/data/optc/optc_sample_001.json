@@ -1,0 +1,129 @@
+{
+  "metadata": {
+    "performer": "OpTC",
+    "scenario_id": "optc_sample_001",
+    "title": "Corrected OpTC: host-a credential -> SMB lateral -> host-b execution",
+    "category": "attack-like"
+  },
+  "ground_truth": {
+    "entry_event_id": "optc:e_exec",
+    "anomaly_score": 0.93,
+    "root_causes": ["optc:e_cred", "T1003.001"],
+    "attack_technique_pairs": [
+      ["T1003.001", "T1059.001"],
+      ["T1059.001", "T1021.002"],
+      ["T1021.002", "T1021.002"],
+      ["T1021.002", "T1059.001"]
+    ],
+    "benign_technique_pairs": [["T1039", "T1059.001"]],
+    "oos_technique_pairs": [],
+    "attack_event_ids": ["optc:e_cred", "optc:e_susp", "optc:e_lateral", "optc:e_remote", "optc:e_exec"],
+    "attack_node_ids": ["optc:e_cred", "optc:e_susp", "optc:e_lateral", "optc:e_remote", "optc:e_exec"],
+    "attack_edge_ids": [
+      "edge:optc:e_cred->optc:e_susp",
+      "edge:optc:e_susp->optc:e_lateral",
+      "edge:optc:e_lateral->optc:e_remote",
+      "edge:optc:e_remote->optc:e_exec"
+    ],
+    "attack_hosts": ["host-a", "host-b"],
+    "oos_hosts": ["host-c"],
+    "cross_host_attack_edges": [
+      ["T1059.001", "T1021.002"],
+      ["T1021.002", "T1021.002"]
+    ],
+    "lateral_movement_pairs": [["T1021.002", "T1021.002"]],
+    "network_pivot_pairs": [["T1059.001", "T1021.002"]],
+    "benign_cross_host_pairs": [["T1039", "T1059.001"]]
+  },
+  "events": [
+    {
+      "event_id": "optc:e_cred",
+      "timestamp": "2019-09-23T10:00:00Z",
+      "host_id": "host-a",
+      "subject": { "id": "host-a:proc:100", "type": "process", "name": "powershell.exe" },
+      "object": { "id": "host-a:file:lsass.dmp", "type": "file", "name": "lsass.dmp" },
+      "relation": "file_read",
+      "tactic": "credential-access",
+      "technique": "T1003.001",
+      "role": "attack"
+    },
+    {
+      "event_id": "optc:e_susp",
+      "timestamp": "2019-09-23T10:00:20Z",
+      "host_id": "host-a",
+      "parent_event_id": "optc:e_cred",
+      "subject": { "id": "host-a:proc:100", "type": "process", "name": "powershell.exe" },
+      "object": { "id": "host-a:proc:101", "type": "process", "name": "cmd.exe" },
+      "relation": "process_spawn",
+      "tactic": "execution",
+      "technique": "T1059.001",
+      "role": "attack"
+    },
+    {
+      "event_id": "optc:e_lateral",
+      "timestamp": "2019-09-23T10:00:40Z",
+      "host_id": "host-a",
+      "parent_event_id": "optc:e_susp",
+      "subject": { "id": "host-a:proc:101", "type": "process", "name": "cmd.exe" },
+      "object": { "id": "host-b:svc:remote-service", "type": "service", "name": "RemoteService" },
+      "relation": "lateral_movement",
+      "edge_scope": "cross_host",
+      "network_flow_id": "flow:host-a:host-b:445",
+      "src_host": "host-a",
+      "dst_host": "host-b",
+      "tactic": "lateral-movement",
+      "technique": "T1021.002",
+      "role": "attack"
+    },
+    {
+      "event_id": "optc:e_remote",
+      "timestamp": "2019-09-23T10:01:00Z",
+      "host_id": "host-b",
+      "parent_event_id": "optc:e_lateral",
+      "subject": { "id": "host-b:svc:remote-service", "type": "service", "name": "RemoteService" },
+      "object": { "id": "host-b:proc:200", "type": "process", "name": "services.exe" },
+      "relation": "remote_service_create",
+      "src_host": "host-b",
+      "tactic": "lateral-movement",
+      "technique": "T1021.002",
+      "role": "attack"
+    },
+    {
+      "event_id": "optc:e_exec",
+      "timestamp": "2019-09-23T10:01:30Z",
+      "host_id": "host-b",
+      "parent_event_id": "optc:e_remote",
+      "subject": { "id": "host-b:proc:201", "type": "process", "name": "powershell.exe" },
+      "object": { "id": "host-b:file:stage.ps1", "type": "file", "name": "stage.ps1" },
+      "relation": "execve",
+      "tactic": "execution",
+      "technique": "T1059.001",
+      "role": "attack"
+    },
+    {
+      "event_id": "optc:e_benign_share",
+      "timestamp": "2019-09-23T10:00:25Z",
+      "host_id": "host-a",
+      "subject": { "id": "host-a:proc:admin", "type": "process", "name": "explorer.exe" },
+      "object": { "id": "host-b:file:share", "type": "file", "name": "\\\\host-b\\share" },
+      "relation": "file_share",
+      "edge_scope": "cross_host",
+      "src_host": "host-a",
+      "dst_host": "host-b",
+      "tactic": "lateral-movement",
+      "technique": "T1039",
+      "role": "benign"
+    },
+    {
+      "event_id": "optc:e_oos_miner",
+      "timestamp": "2019-09-23T10:01:10Z",
+      "host_id": "host-c",
+      "subject": { "id": "host-c:proc:miner", "type": "process", "name": "xmrig.exe" },
+      "object": { "id": "host-c:socket:pool", "type": "socket", "name": "mining-pool" },
+      "relation": "network_connect",
+      "tactic": "impact",
+      "technique": "T1496",
+      "role": "oos"
+    }
+  ]
+}

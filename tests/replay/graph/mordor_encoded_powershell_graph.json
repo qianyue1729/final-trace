@@ -1,0 +1,234 @@
+{
+  "case_id": "mordor_encoded_powershell_graph",
+  "title": "Mordor graph: encoded PowerShell + deobfuscation",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_encoded_ps",
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "timestamp": 1735691040.0,
+    "anomaly_score": 0.89,
+    "attributes": {
+      "encoded": true,
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.89,
+    "attributes": {
+      "encoded": true,
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_phish",
+        "technique": "T1566.001",
+        "tactic": "initial-access",
+        "timestamp": 1735691000.0,
+        "source": "email_log",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_encoded_ps",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735691040.0,
+        "source": "process_creation",
+        "attributes": {
+          "encoded": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_obfuscate",
+        "technique": "T1027",
+        "tactic": "defense-evasion",
+        "timestamp": 1735691045.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_decode_exec",
+        "technique": "T1140",
+        "tactic": "defense-evasion",
+        "timestamp": 1735691070.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_ps",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735691035.0,
+        "source": "process_creation",
+        "attributes": {
+          "benign": true,
+          "admin_baseline": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_inv",
+        "technique": "T1057",
+        "tactic": "discovery",
+        "timestamp": 1735691050.0,
+        "source": "process_creation",
+        "attributes": {
+          "benign": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_rdp",
+        "technique": "T1021.001",
+        "tactic": "lateral-movement",
+        "timestamp": 1735691055.0,
+        "source": "authentication",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "a1",
+        "src": "e_phish",
+        "dst": "e_encoded_ps",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a2",
+        "src": "e_encoded_ps",
+        "dst": "e_obfuscate",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a3",
+        "src": "e_obfuscate",
+        "dst": "e_decode_exec",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "b1",
+        "src": "e_benign_ps",
+        "dst": "e_benign_inv",
+        "relation": "causes",
+        "role": "benign"
+      },
+      {
+        "id": "o1",
+        "src": "e_oos_rdp",
+        "dst": "e_encoded_ps",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_phish",
+      "T1566.001"
+    ],
+    "attack_edges": [
+      [
+        "T1566.001",
+        "T1059.001"
+      ],
+      [
+        "T1059.001",
+        "T1027"
+      ],
+      [
+        "T1027",
+        "T1140"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1059.001",
+        "T1057"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1021.001",
+        "T1059.001"
+      ]
+    ],
+    "attack_nodes": [
+      "e_phish",
+      "e_encoded_ps",
+      "e_obfuscate",
+      "e_decode_exec"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_phish",
+      "e_obfuscate",
+      "e_decode_exec"
+    ],
+    "pollute_queue": [
+      "e_benign_ps",
+      "e_oos_rdp"
+    ],
+    "probe_bindings": []
+  },
+  "replay_config": {
+    "max_rounds": 10,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.6,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1566.001",
+        "T1059.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1059.001",
+        "T1057"
+      ],
+      [
+        "T1021.001",
+        "T1059.001"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

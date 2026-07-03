@@ -1,0 +1,218 @@
+{
+  "version": "1.1",
+  "generated_at": "2026-06-30T03:12:42.813921+00:00",
+  "raw_dir": "prior_knowledge\\raw",
+  "fetch_results": {
+    "mitre_enterprise_attack_stix": {
+      "id": "mitre_enterprise_attack_stix",
+      "status": "cached",
+      "path": "mitre/enterprise-attack.json",
+      "bytes": 47450483,
+      "sha256": "fc783039f17fba646f79448f1322996457c658a9474f6d14c3bc924a2cf1c97d",
+      "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json"
+    },
+    "atomic_enterprise_matrix": {
+      "id": "atomic_enterprise_matrix",
+      "status": "missing_offline",
+      "path": "atomic/enterprise-attack-index.json",
+      "required": false
+    },
+    "lolbas_csv": {
+      "id": "lolbas_csv",
+      "status": "cached",
+      "path": "lolbas/lolbas.csv",
+      "bytes": 630154,
+      "sha256": "e1862f43b4d2f56b697b9d2e2e819c0172418fd9d5a8f89c614f771c6ec8623c",
+      "url": "https://lolbas-project.github.io/api/lolbas.csv"
+    },
+    "sigma_rules_index": {
+      "id": "sigma_rules_index",
+      "status": "cached",
+      "path": "sigma/rules_index.json",
+      "bytes": 6688,
+      "sha256": "88d97bb4dd8995b4a17a7b591ee3f71fff825e8c6f765a3fc345c828b7794087",
+      "url": "https://api.github.com/repos/SigmaHQ/sigma/contents/rules"
+    },
+    "gtfobins_data_functions": {
+      "id": "gtfobins_data_functions",
+      "status": "cached",
+      "path": "gtfobins/data_index.json",
+      "bytes": 1740,
+      "sha256": "1b72e201b426dac00cc9c1740d18d5ac7a81c7523b5d5510f6ef1814374d83d8",
+      "url": "https://api.github.com/repos/GTFOBins/GTFOBins.github.io/contents/_data"
+    },
+    "attack_flow_corpus": {
+      "id": "attack_flow_corpus",
+      "status": "cached",
+      "path": "attack_flow/corpus/",
+      "afb_count": 40,
+      "required": false
+    },
+    "sigma_rules_corpus": {
+      "id": "sigma_rules_corpus",
+      "status": "cached",
+      "path": "sigma/rules/",
+      "rule_count": 1262,
+      "required": false
+    },
+    "gtfobins_binaries": {
+      "id": "gtfobins_binaries",
+      "status": "cached",
+      "path": "gtfobins/binaries/",
+      "binary_count": 477,
+      "required": false
+    }
+  },
+  "source_provenance": [
+    {
+      "id": "mitre_enterprise_attack_stix",
+      "required": true,
+      "fetched": true,
+      "status": "cached",
+      "checksum_sha256": "fc783039f17fba646f79448f1322996457c658a9474f6d14c3bc924a2cf1c97d",
+      "object_count": null,
+      "used_by": [
+        "L1",
+        "L2",
+        "score_v3.threat_prevalence",
+        "DecisionLedger.seed"
+      ],
+      "build_role": "intrusion-set × technique × tactic 共现；L1 反向战术转移",
+      "path": "mitre/enterprise-attack.json"
+    },
+    {
+      "id": "atomic_enterprise_matrix",
+      "required": false,
+      "fetched": false,
+      "status": "missing_offline",
+      "checksum_sha256": null,
+      "object_count": null,
+      "used_by": [
+        "L2.is_observable",
+        "L3.technique_visibility"
+      ],
+      "build_role": "technique 可执行测试覆盖；验证 L2 节点可观测性",
+      "path": "atomic/enterprise-attack-index.json"
+    },
+    {
+      "id": "lolbas_csv",
+      "required": false,
+      "fetched": true,
+      "status": "cached",
+      "checksum_sha256": "e1862f43b4d2f56b697b9d2e2e819c0172418fd9d5a8f89c614f771c6ec8623c",
+      "object_count": null,
+      "used_by": [
+        "L2.tools.lolbas",
+        "boundary_prior.benign",
+        "DecisionLedger.null_anchor"
+      ],
+      "build_role": "Living-off-the-land 双用途工具 → 分支 null 锚 benign 先验升高",
+      "path": "lolbas/lolbas.csv"
+    },
+    {
+      "id": "sigma_rules_index",
+      "required": false,
+      "fetched": true,
+      "status": "cached",
+      "checksum_sha256": "88d97bb4dd8995b4a17a7b591ee3f71fff825e8c6f765a3fc345c828b7794087",
+      "object_count": null,
+      "used_by": [
+        "L2.sigma_rules",
+        "L3.log_source_mapping"
+      ],
+      "build_role": "detection → log source；不当攻击因果依据",
+      "path": "sigma/rules_index.json"
+    },
+    {
+      "id": "gtfobins_data_functions",
+      "required": false,
+      "fetched": true,
+      "status": "cached",
+      "checksum_sha256": "1b72e201b426dac00cc9c1740d18d5ac7a81c7523b5d5510f6ef1814374d83d8",
+      "object_count": null,
+      "used_by": [
+        "L2.tools.gtfobins",
+        "boundary_prior.benign"
+      ],
+      "build_role": "Linux 双用途二进制 → benign/oos 边界先验",
+      "path": "gtfobins/data_index.json"
+    },
+    {
+      "id": "attack_flow_corpus",
+      "required": false,
+      "fetched": true,
+      "status": "cached",
+      "object_count": 40,
+      "used_by": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "build_role": "corpus",
+      "path": "attack_flow/corpus/"
+    },
+    {
+      "id": "sigma_rules_corpus",
+      "required": false,
+      "fetched": true,
+      "status": "cached",
+      "object_count": 1262,
+      "used_by": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "build_role": "corpus",
+      "path": "sigma/rules/"
+    },
+    {
+      "id": "gtfobins_binaries",
+      "required": false,
+      "fetched": true,
+      "status": "cached",
+      "object_count": 477,
+      "used_by": [
+        "L1",
+        "L2",
+        "L3"
+      ],
+      "build_role": "corpus",
+      "path": "gtfobins/binaries/"
+    }
+  ],
+  "stix_summary": {
+    "total_objects": 25842,
+    "by_type": {
+      "x-mitre-matrix": 1,
+      "course-of-action": 268,
+      "malware": 729,
+      "tool": 95,
+      "x-mitre-tactic": 15,
+      "attack-pattern": 858,
+      "x-mitre-analytic": 1758,
+      "x-mitre-data-component": 109,
+      "x-mitre-data-source": 38,
+      "intrusion-set": 189,
+      "campaign": 56,
+      "x-mitre-detection-strategy": 699,
+      "relationship": 21025,
+      "identity": 1,
+      "marking-definition": 1
+    },
+    "intrusion_sets": 189,
+    "attack_patterns": 858,
+    "relationships": 21025
+  },
+  "flow_corpus_summary": {
+    "afb_files": 40,
+    "unique_edges": 373,
+    "total_transitions": 399
+  },
+  "build_mode_hint": "opensource",
+  "fallback_reasons": [],
+  "notes": [
+    "STIX 共现 ≠ 时序；ATT&CK Flow 管顺序",
+    "Sigma 管 log source；LOLBAS/GTFOBins 管 benign 边界",
+    "fallback 内嵌 50 APT 仅用于 --offline 开发，不是生产真相"
+  ]
+}

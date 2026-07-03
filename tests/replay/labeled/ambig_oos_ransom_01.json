@@ -1,0 +1,34 @@
+{
+  "case_id": "ambig_oos_ransom_01",
+  "title": "Concurrent ransom unrelated",
+  "category": "ambiguous",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1486",
+    "tactic": "impact",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.68,
+    "attributes": {
+      "concurrent_incident": true,
+      "weak_case_link": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "concurrent_oos",
+    "true_boundary": "oos",
+    "benign": false,
+    "oos": true,
+    "expected_techniques": [
+      "T1486"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

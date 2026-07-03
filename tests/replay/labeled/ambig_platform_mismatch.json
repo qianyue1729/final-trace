@@ -1,0 +1,33 @@
+{
+  "case_id": "ambig_platform_mismatch",
+  "title": "Platform mismatch alert",
+  "category": "ambiguous",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1059.004",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.55,
+    "attributes": {
+      "weak_case_link": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "platform_oos",
+    "true_boundary": "oos",
+    "benign": false,
+    "oos": true,
+    "expected_techniques": [
+      "T1059.004"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

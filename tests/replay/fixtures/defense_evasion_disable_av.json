@@ -1,0 +1,54 @@
+{
+  "case_id": "defense_evasion_disable_av",
+  "title": "Disable AV",
+  "category": "attack-like",
+  "alert": {
+    "technique_id": "T1562.001",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.82,
+    "attributes": {}
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "top_k_should_include": [
+      "technique_context"
+    ],
+    "expected_log_sources": [
+      "process_creation",
+      "service_log"
+    ],
+    "expected_probe_sources": [
+      "process_creation",
+      "service_log"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation",
+      "service_log"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage",
+      "service_log": "confirm_or_refute"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

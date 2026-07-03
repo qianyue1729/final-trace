@@ -1,0 +1,255 @@
+{
+  "step": 9,
+  "scenario_id": "pipeline_18",
+  "mode": "extended",
+  "gt_total": 18,
+  "hits_count": 8,
+  "misses_count": 10,
+  "coverage_pct": 44.44,
+  "hits": [
+    "attack:idx_stress:evt_005",
+    "attack:idx_stress:evt_006",
+    "attack:idx_stress:evt_009",
+    "attack:idx_stress:evt_010",
+    "attack:idx_stress:evt_011",
+    "attack:idx_stress:evt_016",
+    "attack:idx_stress:evt_017",
+    "attack:idx_stress:evt_018"
+  ],
+  "misses": [
+    "attack:idx_stress:evt_001",
+    "attack:idx_stress:evt_002",
+    "attack:idx_stress:evt_003",
+    "attack:idx_stress:evt_004",
+    "attack:idx_stress:evt_007",
+    "attack:idx_stress:evt_008",
+    "attack:idx_stress:evt_012",
+    "attack:idx_stress:evt_013",
+    "attack:idx_stress:evt_014",
+    "attack:idx_stress:evt_015"
+  ],
+  "ref_records": [
+    {
+      "ref": "attack:idx_stress:evt_001",
+      "hit": false,
+      "technique": "T1566.001",
+      "tactic": "initial-access",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_002",
+      "hit": false,
+      "technique": "T1059.001",
+      "tactic": "execution",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_003",
+      "hit": false,
+      "technique": "T1053.005",
+      "tactic": "persistence",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_004",
+      "hit": false,
+      "technique": "T1053.005",
+      "tactic": "persistence",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_005",
+      "hit": true,
+      "technique": "T1548",
+      "tactic": "privilege-escalation",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_006",
+      "hit": true,
+      "technique": "T1055",
+      "tactic": "defense-evasion",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_007",
+      "hit": false,
+      "technique": "T1070",
+      "tactic": "defense-evasion",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_008",
+      "hit": false,
+      "technique": "T1003",
+      "tactic": "credential-access",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_009",
+      "hit": true,
+      "technique": "T1016",
+      "tactic": "discovery",
+      "host_uid": "WS-USER-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_010",
+      "hit": true,
+      "technique": "T1021.001",
+      "tactic": "lateral-movement",
+      "host_uid": "WS-USER-02",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_011",
+      "hit": true,
+      "technique": "T1005",
+      "tactic": "collection",
+      "host_uid": "WS-USER-02",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_012",
+      "hit": false,
+      "technique": "T1570",
+      "tactic": "lateral-movement",
+      "host_uid": "WS-USER-02",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_013",
+      "hit": false,
+      "technique": "T1021.001",
+      "tactic": "lateral-movement",
+      "host_uid": "SRV-WEB-03",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_014",
+      "hit": false,
+      "technique": "T1059.003",
+      "tactic": "execution",
+      "host_uid": "SRV-WEB-03",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_015",
+      "hit": false,
+      "technique": "T1021.001",
+      "tactic": "lateral-movement",
+      "host_uid": "SRV-WEB-03",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_016",
+      "hit": true,
+      "technique": "T1068",
+      "tactic": "",
+      "host_uid": "DB-PROD-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_017",
+      "hit": true,
+      "technique": "T1115",
+      "tactic": "",
+      "host_uid": "DB-PROD-01",
+      "step_index": null
+    },
+    {
+      "ref": "attack:idx_stress:evt_018",
+      "hit": true,
+      "technique": "T1041",
+      "tactic": "exfiltration",
+      "host_uid": "DB-PROD-01",
+      "step_index": null
+    }
+  ],
+  "coverage_curve": [
+    {
+      "round_num": 1,
+      "cumulative_hits": 5,
+      "node_count": 6,
+      "new_hits": [
+        "attack:idx_stress:evt_009",
+        "attack:idx_stress:evt_010",
+        "attack:idx_stress:evt_011",
+        "attack:idx_stress:evt_017",
+        "attack:idx_stress:evt_018"
+      ]
+    },
+    {
+      "round_num": 2,
+      "cumulative_hits": 7,
+      "node_count": 10,
+      "new_hits": [
+        "attack:idx_stress:evt_005",
+        "attack:idx_stress:evt_016"
+      ]
+    },
+    {
+      "round_num": 3,
+      "cumulative_hits": 8,
+      "node_count": 12,
+      "new_hits": [
+        "attack:idx_stress:evt_006"
+      ]
+    }
+  ],
+  "rounds_used": 3,
+  "stop_reason": "robust_partial_chain",
+  "checks": [
+    {
+      "id": "gt_ref_total",
+      "status": "pass",
+      "message": "attack_edge_refs 数量与注册表一致",
+      "expected": 18,
+      "actual": 18
+    },
+    {
+      "id": "gt_coverage_reported",
+      "status": "pass",
+      "message": "覆盖率 = hits / total",
+      "expected": "8/18",
+      "actual": "44.44%"
+    },
+    {
+      "id": "gt_min_hits",
+      "status": "pass",
+      "message": "至少命中 1 条 GT 攻击边",
+      "expected": null,
+      "actual": 8
+    },
+    {
+      "id": "gt_root_host",
+      "status": "pass",
+      "message": "根因主机入图",
+      "expected": "ws-user-01",
+      "actual": true
+    },
+    {
+      "id": "gt_root_technique",
+      "status": "warn",
+      "message": "根因 technique 入图",
+      "expected": "T1566.001",
+      "actual": false
+    },
+    {
+      "id": "gt_extend_mode",
+      "status": "pass",
+      "message": "extended 模式应跑多轮扩图",
+      "expected": null,
+      "actual": 3
+    }
+  ],
+  "report_md": "# Step 9 · GT attack_edge_refs 覆盖率 [PASS] · extended\n场景: pipeline_18 · 入口: attack:idx_stress:evt_018\nGT 总量: 18 · 命中: 8 · 未命中: 10 · 覆盖率: 44.44%\n轮次: 3 · probes: 9 · stop: robust_partial_chain\n根因 GT: WS-USER-01 · T1566.001 · host_hit=True tech_hit=False\n\n## 命中 refs\nattack:idx_stress:evt_005, attack:idx_stress:evt_006, attack:idx_stress:evt_009, attack:idx_stress:evt_010, attack:idx_stress:evt_011, attack:idx_stress:evt_016, attack:idx_stress:evt_017, attack:idx_stress:evt_018\n\n## 未命中 refs (sample)\nattack:idx_stress:evt_001, attack:idx_stress:evt_002, attack:idx_stress:evt_003, attack:idx_stress:evt_004, attack:idx_stress:evt_007, attack:idx_stress:evt_008, attack:idx_stress:evt_012, attack:idx_stress:evt_013 ... +2 more\n\n## 逐轮累计 (approx)\n  R1: hits=5/18 nodes=6\n  R2: hits=7/18 nodes=10\n  R3: hits=8/18 nodes=12\n\n## 校验\n- [OK] gt_ref_total: attack_edge_refs 数量与注册表一致\n- [OK] gt_coverage_reported: 覆盖率 = hits / total\n- [OK] gt_min_hits: 至少命中 1 条 GT 攻击边\n- [OK] gt_root_host: 根因主机入图\n- [WARN] gt_root_technique: 根因 technique 入图\n- [OK] gt_extend_mode: extended 模式应跑多轮扩图"
+}

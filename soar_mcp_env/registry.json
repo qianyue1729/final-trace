@@ -1,0 +1,52 @@
+{
+  "version": "1.0",
+  "description": "Web 演示与 run-soar 压力测试共用的 SOAR MCP 多源场景注册表",
+  "scenarios": {
+    "pipeline_18": {
+      "file": "scenarios/scenario_pipeline_18steps.json",
+      "name": "18 步全链路管道",
+      "description": "10 主机企业内网，入口告警在 SRV-MAIL-01；七类数据源经单 SOAR MCP 统一查询，跨源关联回溯至钓鱼 IA。",
+      "tags": ["SOAR", "7 数据源", "18 跳", "推荐"],
+      "entry_alert_ref": null,
+      "wazuh_scope": {
+        "incident_prefix": "INC-PIPELINE_18",
+        "scope_field": "incident",
+        "attacks_only": true,
+        "indexed_attack_chain": true,
+        "scenario_slug": "pipeline_18"
+      },
+      "run": {
+        "mcp_calls": 300,
+        "d_max": 50,
+        "max_iterations": 80,
+        "beam_width": 5
+      }
+    },
+    "apt_5host": {
+      "file": "scenarios/apt_5host.json",
+      "name": "5 主机 APT 企业网",
+      "description": "APT 多阶段攻击；演示入口改用链内枢纽 evt_015（原 evt_025 邻接过少）。九源 SOAR fan-out。",
+      "tags": ["SOAR", "9 数据源", "25 跳"],
+      "entry_alert_ref": "attack:idx_stress:evt_015",
+      "run": {
+        "mcp_calls": 400,
+        "d_max": 50,
+        "max_iterations": 80,
+        "beam_width": 5
+      }
+    },
+    "multipath_12host": {
+      "file": "scenarios/multipath_scenario.json",
+      "name": "12 主机多路径企业网",
+      "description": "多路径分支 APT、高噪声；演示入口 evt_005（原 evt_031 易耗尽预算）。18 源分片。",
+      "tags": ["SOAR", "18 数据源", "31 跳"],
+      "entry_alert_ref": "attack:idx_stress:evt_005",
+      "run": {
+        "mcp_calls": 400,
+        "d_max": 50,
+        "max_iterations": 80,
+        "beam_width": 5
+      }
+    }
+  }
+}

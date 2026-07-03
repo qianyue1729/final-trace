@@ -1,0 +1,176 @@
+{
+  "step": 3,
+  "scenario_id": "pipeline_18",
+  "all_pass": true,
+  "pool_size_before": 5,
+  "pool_size_after": 5,
+  "obligations": [],
+  "mandated_count": 0,
+  "root_cause_entity": "WS-USER-01",
+  "root_cause_technique": "T1566.001",
+  "reachability_matches": [
+    {
+      "id": "P-549de853",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::auth_log::initial-access",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "initial-access"
+      }
+    }
+  ],
+  "probes_after": [
+    {
+      "id": "P-c66c996e",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0007",
+      "source": "prior",
+      "dedup_key": "DB-PROD-01::process_tree::ta0007",
+      "explanation_ids": [],
+      "priority_hint": 0.5,
+      "metadata": {
+        "origin_technique": "T1041",
+        "neighbor_technique": "T1018"
+      }
+    },
+    {
+      "id": "P-44649edd",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0009",
+      "source": "prior",
+      "dedup_key": "DB-PROD-01::process_tree::ta0009",
+      "explanation_ids": [],
+      "priority_hint": 0.5,
+      "metadata": {
+        "origin_technique": "T1041",
+        "neighbor_technique": "T1119"
+      }
+    },
+    {
+      "id": "P-549de853",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::auth_log::initial-access",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "initial-access"
+      }
+    },
+    {
+      "id": "P-7ff344b8",
+      "target": "DB-PROD-01",
+      "target_type": "process",
+      "operator": "process_tree",
+      "tactic": "execution",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::process_tree::execution",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "execution"
+      }
+    },
+    {
+      "id": "P-216220fa",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "persistence_scan",
+      "tactic": "persistence",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::persistence_scan::persistence",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "persistence"
+      }
+    }
+  ],
+  "checks": [
+    {
+      "id": "v_pool_survives",
+      "status": "pass",
+      "message": "② 拍后幸存候选池非空",
+      "expected": null,
+      "actual": 5
+    },
+    {
+      "id": "v_pool_not_expanded",
+      "status": "pass",
+      "message": "VETO 不扩张候选池（仅过滤/义务物化）",
+      "expected": "<=5",
+      "actual": 5
+    },
+    {
+      "id": "v_graph_readonly",
+      "status": "pass",
+      "message": "② 拍不写入 SessionGraph",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "v_ledger_readonly",
+      "status": "pass",
+      "message": "② 拍不更新 DecisionLedger 后验",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "v_beta_readonly",
+      "status": "pass",
+      "message": "② 拍不写入 BetaLedger",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "v_obligations_scanned",
+      "status": "warn",
+      "message": "bootstrap 单节点图常无结构/生命周期义务（scan 已执行）",
+      "expected": null,
+      "actual": 0
+    },
+    {
+      "id": "gt_root_cause_reachability",
+      "status": "pass",
+      "message": "幸存候选含可追根 operator/tactic（auth_log/lateral/network/email/IA 等）",
+      "expected": {
+        "root_entity": "WS-USER-01",
+        "root_technique": "T1566.001",
+        "root_tactic": "initial-access",
+        "reach_operators": [
+          "auth_log",
+          "dns_query",
+          "email_gateway",
+          "lateral_movement_check",
+          "network_flow",
+          "script_execution"
+        ]
+      },
+      "actual": [
+        {
+          "operator": "auth_log",
+          "tactic": "initial-access",
+          "target": "DB-PROD-01",
+          "source": "rule_gap"
+        }
+      ]
+    }
+  ],
+  "report_md": "# Step 3 · ② 拍 · 检验（VETO + MANDATE） [PASS]\n场景: pipeline_18 · 入口: attack:idx_stress:evt_018\n根因 GT: WS-USER-01 · T1566.001\n\n## ① 做了什么\n证据信任闸门 + obligation.scan/discharge；当前 orchestrator 对池内 Probe 不做硬 VETO（C 拍验真时处理）。\n\n## ② 输入（读了什么）\n- L 拍候选池 5 条 · operators: auth_log, persistence_scan, process_tree\n- SessionGraph 不变 · margin=21.37%\n- EvidenceTrust / 图不变量（scan 输入）\n\n## ③ 产出（生成了什么）\n- 幸存池 5 条 · operators: auth_log, persistence_scan, process_tree\n- 义务 0 条 · mandated 物化 0\n  - （无开放义务 — bootstrap 单节点常见）\n- gt_root_cause_reachability 匹配: [{\"id\": \"P-549de853\", \"target\": \"DB-PROD-01\", \"target_type\": \"host\", \"operator\": \"auth_log\", \"tactic\": \"initial-access\", \"source\": \"rule_gap\", \"dedup_key\": \"DB-PROD-01::auth_log::initial-access\", \"explanation_ids\": [], \"priority_hint\": 0.25, \"metadata\": {\"gap_type\": \"stagnation\", \"missing_tactic\": \"initial-access\"}}]\n\n## ④ 怎么算的\n- scan_structural / lifecycle / anti_forensics / discriminative\n- discharge 关闭已满足义务\n- reachability：operator ∈ auth_log|lateral|network|dns|email 或 tactic=IA/lateral/credential\n\n## ⑤ 维护了什么\n【图/决策/Beta】只读\n【义务】scan + discharge（本场景常仍为 0）\n【候选池】当前实现透传（size 不变）\n\n## Ground truth 校验\n- [OK] v_pool_survives: ② 拍后幸存候选池非空\n- [OK] v_pool_not_expanded: VETO 不扩张候选池（仅过滤/义务物化）\n- [OK] v_graph_readonly: ② 拍不写入 SessionGraph\n- [OK] v_ledger_readonly: ② 拍不更新 DecisionLedger 后验\n- [OK] v_beta_readonly: ② 拍不写入 BetaLedger\n- [WARN] v_obligations_scanned: bootstrap 单节点图常无结构/生命周期义务（scan 已执行）\n- [OK] gt_root_cause_reachability: 幸存候选含可追根 operator/tactic（auth_log/lateral/network/email/IA 等）"
+}

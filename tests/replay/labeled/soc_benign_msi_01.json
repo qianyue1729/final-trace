@@ -1,0 +1,31 @@
+{
+  "case_id": "soc_benign_msi_01",
+  "title": "SOC: software install",
+  "category": "benign",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1218.007",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.27,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "software_install",
+    "true_boundary": "benign",
+    "benign": true,
+    "oos": false,
+    "expected_techniques": [
+      "T1218.007"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

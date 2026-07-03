@@ -1,0 +1,146 @@
+{
+  "action": "ESCALATE / INCOMPLETE",
+  "confidence": 0.9,
+  "stopReason": "budget",
+  "leadingExplanation": "勒索软件投递链",
+  "suboptimalExplanation": {
+    "label": "H2",
+    "posterior": 0.3,
+    "reason": "次优解释后验不足以翻转处置决策"
+  },
+  "counterfactual": "If H2 became the leading explanation, the decision might change to contain_escalate",
+  "prunedEdges": [],
+  "oosItems": [],
+  "traceNarrative": {
+    "caseId": "CASE-2024-RANSOM-001",
+    "analyst": "LOCK 自动溯源引擎 v1.0",
+    "generatedAt": "2026-07-03 16:34:55",
+    "alertSummary": "db-prod-01 主机检测到异常 PowerShell 执行 (T1059.001)，伴随大量文件加密操作。Sysmon 告警触发自动调查。",
+    "investigationGoal": "确定攻击范围、重构完整杀伤链、评估影响、提供处置建议",
+    "killChainStages": [
+      {
+        "stage": "初始访问 (Initial Access)",
+        "technique": "T1566.001 — 铓鱼邮件附件 (Spearphishing Attachment)",
+        "evidence": "邮件网关日志发现铓鱼附件，包含恶意宏的 .xlsm 文件",
+        "confidence": "高 — forge-resistant 源确认"
+      },
+      {
+        "stage": "执行 (Execution)",
+        "technique": "T1059.001 — PowerShell 执行",
+        "evidence": "Sysmon 进程树显示 Excel 子进程启动 PowerShell，执行混淆脚本",
+        "confidence": "高 — 进程树 forge-resistant"
+      },
+      {
+        "stage": "持久化 (Persistence)",
+        "technique": "T1053.005 — 计划任务持久化 (Scheduled Task)",
+        "evidence": "注册表 + 计划任务扫描发现异常 schtask，每 15min 触发",
+        "confidence": "高 — 多源交叉确认"
+      },
+      {
+        "stage": "横向移动 (Lateral Movement)",
+        "technique": "T1021.001 — RDP 横向移动",
+        "evidence": "AD 审计日志显示非常规 RDP 登录，源 IP 与受害主机关联",
+        "confidence": "中高 — auth_log 可信"
+      },
+      {
+        "stage": "命令与控制 (C2)",
+        "technique": "T1071.001 — HTTP C2 通信",
+        "evidence": "Zeek 网络流量显示周期性 HTTP 回连，目标 IP 匹配威胁情报",
+        "confidence": "中 — adversary-controlled 源但模式明确"
+      },
+      {
+        "stage": "影响 (Impact)",
+        "technique": "T1486 — 数据加密勒索 (Data Encrypted for Impact)",
+        "evidence": "文件系统审计发现大量 .lock 扩展名 + 勒索信息文件",
+        "confidence": "高 — 文件哈希确认"
+      }
+    ],
+    "roundNarratives": [
+      {
+        "round": 1,
+        "title": "初诊 + 邮件投递链溯源",
+        "discovery": "初始进程树分析发现 PowerShell 执行链 + 铓鱼邮件投递痕迹",
+        "techniques": [
+          "T1059.001"
+        ],
+        "tactics": [
+          "execution"
+        ],
+        "posteriorAfter": 0.45,
+        "nodesAdded": 0,
+        "edgesAdded": 0
+      },
+      {
+        "round": 2,
+        "title": "歧义区 + scheduled task 争议",
+        "discovery": "持久化机制确认：计划任务植入，确认攻击者意图驻留",
+        "techniques": [
+          "T1059.001"
+        ],
+        "tactics": [
+          "execution"
+        ],
+        "posteriorAfter": 0.45,
+        "nodesAdded": 0,
+        "edgesAdded": 0
+      },
+      {
+        "round": 3,
+        "title": "定界剪枝 + lifecycle 确认",
+        "discovery": "横向移动证据链：RDP 登录异常，确认攻击范围扩展",
+        "techniques": [
+          "T1059.001"
+        ],
+        "tactics": [
+          "execution"
+        ],
+        "posteriorAfter": 0.45,
+        "nodesAdded": 0,
+        "edgesAdded": 0
+      },
+      {
+        "round": 4,
+        "title": "反取证义务 + oos 发现",
+        "discovery": "C2 通道确认：HTTP 回连流量模式匹配，攻击指挥链路完整",
+        "techniques": [
+          "T1059.001"
+        ],
+        "tactics": [
+          "execution"
+        ],
+        "posteriorAfter": 0.45,
+        "nodesAdded": 0,
+        "edgesAdded": 0
+      }
+    ],
+    "posteriorEvolution": [
+      {
+        "round": 1,
+        "h1": 0.45,
+        "h2": 0.3,
+        "hNull": 0.1
+      },
+      {
+        "round": 2,
+        "h1": 0.45,
+        "h2": 0.3,
+        "hNull": 0.1
+      },
+      {
+        "round": 3,
+        "h1": 0.45,
+        "h2": 0.3,
+        "hNull": 0.1
+      },
+      {
+        "round": 4,
+        "h1": 0.45,
+        "h2": 0.3,
+        "hNull": 0.1
+      }
+    ],
+    "attackPath": "铓鱼邮件附件(.xlsm) → Excel 宏执行 → PowerShell 下载器 → 计划任务持久化(15min间隔) → RDP 横向扩展到 db-prod-01 → HTTP C2 回连(周期性 beacon) → 数据加密 + 勒索信息投放",
+    "conclusion": "经过 4 轮 LOCK 循环调查，以 90.0% 的置信度确认本次事件为「勒索软件投递链」攻击。攻击者通过铓鱼邮件成功投递恶意载荷，利用 PowerShell 下载器建立立足点，通过计划任务实现持久化，经 RDP 横向移动到数据库服务器 db-prod-01，最终对关键数据实施加密勒索。",
+    "recommendation": "① 立即隔离 db-prod-01 及关联工作站；② 启动事件响应流程 (CONTAIN + ESCALATE)；③ 清除计划任务持久化机制；④ 封堵 C2 IP/域名；⑤ 通知全员重置凭证；⑥ 从离线备份恢复数据。"
+  }
+}

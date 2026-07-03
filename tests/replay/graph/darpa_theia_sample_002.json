@@ -1,0 +1,328 @@
+{
+  "case_id": "darpa_theia_sample_002",
+  "title": "THEIA: process → network_connect → C2 beacon",
+  "category": "attack-like",
+  "source": "darpa_tc_theia",
+  "label_quality": "ground_truth",
+  "schema_version": "graph_replay_v1",
+  "primary_tactic": "command-and-control",
+  "entry_alert": {
+    "event_id": "theia:e_beacon",
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "linux",
+    "log_source": "network_connection",
+    "timestamp": 1525248300.0,
+    "anomaly_score": 0.91,
+    "attributes": {
+      "host_id": "theia-host-2",
+      "relation": "network_connect",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "socket",
+      "performer": "THEIA",
+      "theia": true
+    },
+    "selection_strategy": "explicit"
+  },
+  "alert": {
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "linux",
+    "log_source": "network_connection",
+    "anomaly_score": 0.91,
+    "attributes": {
+      "host_id": "theia-host-2",
+      "relation": "network_connect",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "socket",
+      "performer": "THEIA",
+      "theia": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "theia:e_implant",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1525248000.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-2",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_connect",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1525248060.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-2",
+          "relation": "network_connect",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_beacon",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1525248300.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-2",
+          "relation": "network_connect",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_benign_cdn",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1525248030.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-2",
+          "relation": "network_connect",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_benign_page",
+        "technique": "T1102.001",
+        "tactic": "command-and-control",
+        "timestamp": 1525248035.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-2",
+          "relation": "network_connect",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_oos_tor",
+        "technique": "T1090.003",
+        "tactic": "command-and-control",
+        "timestamp": 1525248120.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-2",
+          "relation": "network_connect",
+          "role": "oos",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "THEIA",
+          "theia": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:theia:e_implant->theia:e_connect",
+        "src": "theia:e_implant",
+        "dst": "theia:e_connect",
+        "relation": "network_connect",
+        "role": "attack"
+      },
+      {
+        "id": "edge:theia:e_connect->theia:e_beacon",
+        "src": "theia:e_connect",
+        "dst": "theia:e_beacon",
+        "relation": "network_connect",
+        "role": "attack"
+      },
+      {
+        "id": "edge:theia:e_benign_cdn->theia:e_benign_page",
+        "src": "theia:e_benign_cdn",
+        "dst": "theia:e_benign_page",
+        "relation": "network_connect",
+        "role": "benign"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "theia:e_implant"
+    ],
+    "attack_nodes": [
+      "theia:e_implant",
+      "theia:e_connect",
+      "theia:e_beacon"
+    ],
+    "attack_edges": [
+      [
+        "T1059.004",
+        "T1071.001"
+      ],
+      [
+        "T1071.001",
+        "T1071.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1071.001",
+        "T1102.001"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1090.003",
+        "T1071.001"
+      ]
+    ]
+  },
+  "replay_driver": {
+    "mode": "offline",
+    "entry_event_id": "theia:e_beacon",
+    "reveal_queue": [
+      "theia:e_implant",
+      "theia:e_connect"
+    ],
+    "pollute_queue": [
+      "theia:e_benign_cdn",
+      "theia:e_benign_page",
+      "theia:e_oos_tor"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution",
+            "initial-access"
+          ]
+        },
+        "reveals": [
+          "theia:e_implant"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "network_flow",
+            "dns_query"
+          ],
+          "tactics": [
+            "command-and-control",
+            "exfiltration"
+          ]
+        },
+        "reveals": [
+          "theia:e_connect"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 45,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.004",
+        "T1071.001"
+      ],
+      [
+        "T1071.001",
+        "T1071.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1071.001",
+        "T1102.001"
+      ],
+      [
+        "T1090.003",
+        "T1071.001"
+      ]
+    ],
+    "counterfactuals": []
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  },
+  "adapter_meta": {
+    "performer": "THEIA",
+    "input_path": "F:\\cursor all\\final trace\\tests\\replay\\data\\theia\\theia_sample_002.json",
+    "event_count": 6,
+    "events_raw_count": 6,
+    "normalization_stats": {
+      "source": "darpa_tc_theia",
+      "scenario_id": "theia_sample_002",
+      "events_in": 6,
+      "events_kept": 6,
+      "events_dropped": 0,
+      "nodes": {
+        "process": 7,
+        "file": 0,
+        "socket": 5,
+        "user": 0,
+        "host": 0
+      },
+      "relations": {
+        "process_spawn": 1,
+        "network_connect": 5
+      },
+      "roles": {
+        "attack": 3,
+        "benign": 2,
+        "oos": 1
+      },
+      "graph_edges": 3,
+      "graph_edge_roles": {
+        "attack": 2,
+        "benign": 1
+      },
+      "dropped_events": {}
+    },
+    "entry_alert_strategy": "explicit"
+  }
+}

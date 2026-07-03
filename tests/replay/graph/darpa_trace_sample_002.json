@@ -1,0 +1,328 @@
+{
+  "case_id": "darpa_trace_sample_002",
+  "title": "TRACE: process → network_connect → C2 beacon",
+  "category": "attack-like",
+  "source": "darpa_tc_trace",
+  "label_quality": "ground_truth",
+  "schema_version": "graph_replay_v1",
+  "primary_tactic": "command-and-control",
+  "entry_alert": {
+    "event_id": "trace:e_beacon",
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "linux",
+    "log_source": "network_connection",
+    "timestamp": 1527926700.0,
+    "anomaly_score": 0.92,
+    "attributes": {
+      "host_id": "trace-host-2",
+      "relation": "network_connect",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "socket",
+      "performer": "TRACE",
+      "trace": true
+    },
+    "selection_strategy": "explicit"
+  },
+  "alert": {
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "linux",
+    "log_source": "network_connection",
+    "anomaly_score": 0.92,
+    "attributes": {
+      "host_id": "trace-host-2",
+      "relation": "network_connect",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "socket",
+      "performer": "TRACE",
+      "trace": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "trace:e_implant",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1527926400.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "trace-host-2",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "TRACE",
+          "trace": true
+        }
+      },
+      {
+        "id": "trace:e_connect",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1527926460.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "trace-host-2",
+          "relation": "network_connect",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "TRACE",
+          "trace": true
+        }
+      },
+      {
+        "id": "trace:e_beacon",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1527926700.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "trace-host-2",
+          "relation": "network_connect",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "TRACE",
+          "trace": true
+        }
+      },
+      {
+        "id": "trace:e_benign_cdn",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1527926430.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "trace-host-2",
+          "relation": "network_connect",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "TRACE",
+          "trace": true
+        }
+      },
+      {
+        "id": "trace:e_benign_page",
+        "technique": "T1102.001",
+        "tactic": "command-and-control",
+        "timestamp": 1527926435.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "trace-host-2",
+          "relation": "network_connect",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "TRACE",
+          "trace": true
+        }
+      },
+      {
+        "id": "trace:e_oos_tor",
+        "technique": "T1090.003",
+        "tactic": "command-and-control",
+        "timestamp": 1527926520.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "trace-host-2",
+          "relation": "network_connect",
+          "role": "oos",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "TRACE",
+          "trace": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:trace:e_implant->trace:e_connect",
+        "src": "trace:e_implant",
+        "dst": "trace:e_connect",
+        "relation": "network_connect",
+        "role": "attack"
+      },
+      {
+        "id": "edge:trace:e_connect->trace:e_beacon",
+        "src": "trace:e_connect",
+        "dst": "trace:e_beacon",
+        "relation": "network_connect",
+        "role": "attack"
+      },
+      {
+        "id": "edge:trace:e_benign_cdn->trace:e_benign_page",
+        "src": "trace:e_benign_cdn",
+        "dst": "trace:e_benign_page",
+        "relation": "network_connect",
+        "role": "benign"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "trace:e_implant"
+    ],
+    "attack_nodes": [
+      "trace:e_implant",
+      "trace:e_connect",
+      "trace:e_beacon"
+    ],
+    "attack_edges": [
+      [
+        "T1059.004",
+        "T1071.001"
+      ],
+      [
+        "T1071.001",
+        "T1071.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1071.001",
+        "T1102.001"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1090.003",
+        "T1071.001"
+      ]
+    ]
+  },
+  "replay_driver": {
+    "mode": "offline",
+    "entry_event_id": "trace:e_beacon",
+    "reveal_queue": [
+      "trace:e_implant",
+      "trace:e_connect"
+    ],
+    "pollute_queue": [
+      "trace:e_benign_cdn",
+      "trace:e_benign_page",
+      "trace:e_oos_tor"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution",
+            "initial-access"
+          ]
+        },
+        "reveals": [
+          "trace:e_implant"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "network_flow",
+            "dns_query"
+          ],
+          "tactics": [
+            "command-and-control",
+            "exfiltration"
+          ]
+        },
+        "reveals": [
+          "trace:e_connect"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 45,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.004",
+        "T1071.001"
+      ],
+      [
+        "T1071.001",
+        "T1071.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1071.001",
+        "T1102.001"
+      ],
+      [
+        "T1090.003",
+        "T1071.001"
+      ]
+    ],
+    "counterfactuals": []
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  },
+  "adapter_meta": {
+    "performer": "TRACE",
+    "input_path": "F:\\cursor all\\final trace\\tests\\replay\\data\\trace\\trace_sample_002.json",
+    "event_count": 6,
+    "events_raw_count": 6,
+    "normalization_stats": {
+      "source": "darpa_tc_trace",
+      "scenario_id": "trace_sample_002",
+      "events_in": 6,
+      "events_kept": 6,
+      "events_dropped": 0,
+      "nodes": {
+        "process": 7,
+        "file": 0,
+        "socket": 5,
+        "user": 0,
+        "host": 0
+      },
+      "relations": {
+        "process_spawn": 1,
+        "network_connect": 5
+      },
+      "roles": {
+        "attack": 3,
+        "benign": 2,
+        "oos": 1
+      },
+      "graph_edges": 3,
+      "graph_edge_roles": {
+        "attack": 2,
+        "benign": 1
+      },
+      "dropped_events": {}
+    },
+    "entry_alert_strategy": "explicit"
+  }
+}

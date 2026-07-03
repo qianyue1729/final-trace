@@ -1,0 +1,62 @@
+{
+  "case_id": "gap_single_edr_gap",
+  "title": "Gap single EDR gap",
+  "category": "telemetry-gap",
+  "alert": {
+    "technique_id": "T1055",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.52,
+    "attributes": {
+      "available_log_sources": [
+        "process_creation"
+      ]
+    }
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true,
+    "expected_log_sources": [
+      "network_connection",
+      "process_creation",
+      "script_execution"
+    ],
+    "expected_probe_sources": [
+      "network_connection",
+      "process_creation"
+    ],
+    "missing_expected_log_sources": [
+      "network_connection",
+      "script_execution"
+    ],
+    "visibility_annotation_source": "manual_gap_design"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "manual_gap_design"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "network_connection",
+      "process_creation"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "network_connection": 2,
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "network_connection": "confirm_payload_download_or_c2",
+      "process_creation": "confirm_parent_lineage"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "manual_expected"
+  }
+}

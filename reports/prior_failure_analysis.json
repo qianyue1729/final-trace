@@ -1,0 +1,394 @@
+{
+  "severity_ranked": [
+    {
+      "case_id": "cloud_s3_exfil",
+      "severity": "S1",
+      "reasons": [
+        "near max_prior cap (0.5157) \u2014 overconfident investigation prior risk"
+      ],
+      "roadmap_hints": [
+        "cloud template / exfil L2 coverage",
+        "sigma log source mapping / tenant available_log_sources",
+        "attack_flow edge or lifecycle template"
+      ]
+    },
+    {
+      "case_id": "concurrent_miner_ransomware",
+      "severity": "S1",
+      "reasons": [
+        "near max_prior cap (0.5157) \u2014 overconfident investigation prior risk"
+      ],
+      "roadmap_hints": [
+        "attack_flow edge or lifecycle template"
+      ]
+    },
+    {
+      "case_id": "admin_powershell_inventory",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "atomic_red_team_sim",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "backup_registry_touch",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "backup_smb",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "cert_rotation_iam",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "cicd_bash_curl",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "cloud_assume_role_normal",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": [
+        "cloud template / exfil L2 coverage"
+      ]
+    },
+    {
+      "case_id": "cloud_terraform_apply",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": [
+        "cloud template / exfil L2 coverage"
+      ]
+    },
+    {
+      "case_id": "dev_powershell_test",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "dns_cdn_benign",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "edr_health_check",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "inventory_scheduled_task",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "it_rdp_admin",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "jenkins_bash_build",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "linux_package_update",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "missing_logs_no_attack",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "monitoring_netscan",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "msiexec_install",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "patch_mgmt_wmi",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "soc_phish_sim",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "software_deploy_gpo",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "vmware_admin_wmi",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "vuln_scanner_lateral_look",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    }
+  ],
+  "near_miss_cases": [
+    {
+      "case_id": "cloud_s3_exfil",
+      "severity": "S1",
+      "reasons": [
+        "near max_prior cap (0.5157) \u2014 overconfident investigation prior risk"
+      ],
+      "roadmap_hints": [
+        "cloud template / exfil L2 coverage",
+        "sigma log source mapping / tenant available_log_sources",
+        "attack_flow edge or lifecycle template"
+      ]
+    },
+    {
+      "case_id": "concurrent_miner_ransomware",
+      "severity": "S1",
+      "reasons": [
+        "near max_prior cap (0.5157) \u2014 overconfident investigation prior risk"
+      ],
+      "roadmap_hints": [
+        "attack_flow edge or lifecycle template"
+      ]
+    },
+    {
+      "case_id": "admin_powershell_inventory",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "atomic_red_team_sim",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "backup_registry_touch",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "backup_smb",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "cert_rotation_iam",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "cicd_bash_curl",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "cloud_assume_role_normal",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": [
+        "cloud template / exfil L2 coverage"
+      ]
+    },
+    {
+      "case_id": "cloud_terraform_apply",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": [
+        "cloud template / exfil L2 coverage"
+      ]
+    },
+    {
+      "case_id": "dev_powershell_test",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "dns_cdn_benign",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "edr_health_check",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "inventory_scheduled_task",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "it_rdp_admin",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "jenkins_bash_build",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "linux_package_update",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "missing_logs_no_attack",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "monitoring_netscan",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    },
+    {
+      "case_id": "msiexec_install",
+      "severity": "S2",
+      "reasons": [
+        "dual-use boundary on benign case \u2014 false attack-chain risk"
+      ],
+      "roadmap_hints": []
+    }
+  ],
+  "fragile_gates": [],
+  "summary": {
+    "total_cases": 80,
+    "failed_cases": 0,
+    "s1_count": 2,
+    "s2_count": 23,
+    "s3_count": 0
+  }
+}

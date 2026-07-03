@@ -1,0 +1,298 @@
+{
+  "modes": {
+    "full": {
+      "mean_explanation_count": 3.85,
+      "mean_entropy": 1.3369,
+      "mean_normalized_entropy": 0.9997,
+      "mean_max_prior": 0.2777,
+      "top_k_behavior_hit_rate": 1.0,
+      "boundary_flag_hit_rate": 1.0,
+      "log_source_hit_rate": 1.0,
+      "mean_log_source_count": 2.3875,
+      "lifecycle_explanation_share": 0.256,
+      "pass_rate": 1.0,
+      "sigma_visibility": {
+        "log_source_hit_rate": 1.0,
+        "probe_recommendation_hit_rate": 1.0,
+        "visibility_gap_detection_rate": 0.833,
+        "evidence_debt_explanation_rate": 1.0,
+        "sigma_trace_presence_rate": 0.875,
+        "mean_recommended_log_source_count": 2.388,
+        "cases_with_expected_log_sources": 80,
+        "by_annotation_source": {
+          "derived_from_prior_recommendation": {
+            "case_count": 72,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          },
+          "manual_gap_design": {
+            "case_count": 8,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          }
+        },
+        "interpretation": "log_source_hit_rate on synthetic fixtures is visibility behavior suite pass rate, not real SOC log-source recommendation accuracy, when expectations are derived_from_prior_recommendation",
+        "mean_rec_count_note": "mean_recommended_log_source_count reflects increased visibility coverage, not precision; probe precision deferred until labeled probe ground truth"
+      },
+      "probe_ground_truth": {
+        "cases_with_probe_ground_truth": 80,
+        "probe_source_hit_rate": 1.0,
+        "probe_must_not_violation_rate": 1.0,
+        "probe_cost_weighted_hit_rate": 1.0,
+        "probe_coverage_at_k": 1.0,
+        "probe_noise_rate": 0.142,
+        "by_annotation_source": {
+          "derived_from_visibility_expectation": {
+            "case_count": 72,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          },
+          "manual_expected": {
+            "case_count": 8,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          }
+        },
+        "interpretation": "probe metrics on derived_from_visibility_expectation validate behavioral-suite consistency; they do not claim SOC probe accuracy or optimal probe selection"
+      }
+    },
+    "no_flow": {
+      "mean_explanation_count": 1.95,
+      "mean_entropy": 0.658,
+      "mean_normalized_entropy": 0.9492,
+      "mean_max_prior": 0.5401,
+      "top_k_behavior_hit_rate": 0.4,
+      "boundary_flag_hit_rate": 1.0,
+      "log_source_hit_rate": 1.0,
+      "mean_log_source_count": 2.3875,
+      "lifecycle_explanation_share": 0.506,
+      "pass_rate": 0.8,
+      "sigma_visibility": {
+        "log_source_hit_rate": 1.0,
+        "probe_recommendation_hit_rate": 1.0,
+        "visibility_gap_detection_rate": 0.833,
+        "evidence_debt_explanation_rate": 1.0,
+        "sigma_trace_presence_rate": 0.875,
+        "mean_recommended_log_source_count": 2.388,
+        "cases_with_expected_log_sources": 80,
+        "by_annotation_source": {
+          "derived_from_prior_recommendation": {
+            "case_count": 72,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          },
+          "manual_gap_design": {
+            "case_count": 8,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          }
+        },
+        "interpretation": "log_source_hit_rate on synthetic fixtures is visibility behavior suite pass rate, not real SOC log-source recommendation accuracy, when expectations are derived_from_prior_recommendation",
+        "mean_rec_count_note": "mean_recommended_log_source_count reflects increased visibility coverage, not precision; probe precision deferred until labeled probe ground truth"
+      },
+      "probe_ground_truth": {
+        "cases_with_probe_ground_truth": 80,
+        "probe_source_hit_rate": 1.0,
+        "probe_must_not_violation_rate": 1.0,
+        "probe_cost_weighted_hit_rate": 1.0,
+        "probe_coverage_at_k": 1.0,
+        "probe_noise_rate": 0.142,
+        "by_annotation_source": {
+          "derived_from_visibility_expectation": {
+            "case_count": 72,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          },
+          "manual_expected": {
+            "case_count": 8,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          }
+        },
+        "interpretation": "probe metrics on derived_from_visibility_expectation validate behavioral-suite consistency; they do not claim SOC probe accuracy or optimal probe selection"
+      }
+    },
+    "no_sigma": {
+      "mean_explanation_count": 3.85,
+      "mean_entropy": 1.3369,
+      "mean_normalized_entropy": 0.9997,
+      "mean_max_prior": 0.2777,
+      "top_k_behavior_hit_rate": 1.0,
+      "boundary_flag_hit_rate": 1.0,
+      "log_source_hit_rate": 0.75,
+      "mean_log_source_count": 1.0875,
+      "lifecycle_explanation_share": 0.256,
+      "pass_rate": 0.75,
+      "sigma_visibility": {
+        "log_source_hit_rate": 0.738,
+        "probe_recommendation_hit_rate": 0.7,
+        "visibility_gap_detection_rate": 0.4,
+        "evidence_debt_explanation_rate": 0.375,
+        "sigma_trace_presence_rate": 0.0,
+        "mean_recommended_log_source_count": 1.087,
+        "cases_with_expected_log_sources": 80,
+        "by_annotation_source": {
+          "derived_from_prior_recommendation": {
+            "case_count": 72,
+            "log_source_hit_rate": 0.75,
+            "probe_recommendation_hit_rate": 0.722
+          },
+          "manual_gap_design": {
+            "case_count": 8,
+            "log_source_hit_rate": 0.625,
+            "probe_recommendation_hit_rate": 0.5
+          }
+        },
+        "interpretation": "log_source_hit_rate on synthetic fixtures is visibility behavior suite pass rate, not real SOC log-source recommendation accuracy, when expectations are derived_from_prior_recommendation",
+        "mean_rec_count_note": "mean_recommended_log_source_count reflects increased visibility coverage, not precision; probe precision deferred until labeled probe ground truth"
+      },
+      "probe_ground_truth": {
+        "cases_with_probe_ground_truth": 80,
+        "probe_source_hit_rate": 0.125,
+        "probe_must_not_violation_rate": 0.938,
+        "probe_cost_weighted_hit_rate": 0.476,
+        "probe_coverage_at_k": 0.412,
+        "probe_noise_rate": 0.3,
+        "by_annotation_source": {
+          "derived_from_visibility_expectation": {
+            "case_count": 72,
+            "probe_source_hit_rate": 0.111,
+            "probe_must_not_violation_rate": 0.958
+          },
+          "manual_expected": {
+            "case_count": 8,
+            "probe_source_hit_rate": 0.25,
+            "probe_must_not_violation_rate": 0.75
+          }
+        },
+        "interpretation": "probe metrics on derived_from_visibility_expectation validate behavioral-suite consistency; they do not claim SOC probe accuracy or optimal probe selection"
+      }
+    },
+    "no_dual_use": {
+      "mean_explanation_count": 2.8875,
+      "mean_entropy": 1.049,
+      "mean_normalized_entropy": 0.9871,
+      "mean_max_prior": 0.3684,
+      "top_k_behavior_hit_rate": 1.0,
+      "boundary_flag_hit_rate": 1.0,
+      "log_source_hit_rate": 1.0,
+      "mean_log_source_count": 2.3875,
+      "lifecycle_explanation_share": 0.342,
+      "pass_rate": 0.988,
+      "sigma_visibility": {
+        "log_source_hit_rate": 1.0,
+        "probe_recommendation_hit_rate": 1.0,
+        "visibility_gap_detection_rate": 0.833,
+        "evidence_debt_explanation_rate": 1.0,
+        "sigma_trace_presence_rate": 0.875,
+        "mean_recommended_log_source_count": 2.388,
+        "cases_with_expected_log_sources": 80,
+        "by_annotation_source": {
+          "derived_from_prior_recommendation": {
+            "case_count": 72,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          },
+          "manual_gap_design": {
+            "case_count": 8,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          }
+        },
+        "interpretation": "log_source_hit_rate on synthetic fixtures is visibility behavior suite pass rate, not real SOC log-source recommendation accuracy, when expectations are derived_from_prior_recommendation",
+        "mean_rec_count_note": "mean_recommended_log_source_count reflects increased visibility coverage, not precision; probe precision deferred until labeled probe ground truth"
+      },
+      "probe_ground_truth": {
+        "cases_with_probe_ground_truth": 80,
+        "probe_source_hit_rate": 1.0,
+        "probe_must_not_violation_rate": 1.0,
+        "probe_cost_weighted_hit_rate": 1.0,
+        "probe_coverage_at_k": 1.0,
+        "probe_noise_rate": 0.142,
+        "by_annotation_source": {
+          "derived_from_visibility_expectation": {
+            "case_count": 72,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          },
+          "manual_expected": {
+            "case_count": 8,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          }
+        },
+        "interpretation": "probe metrics on derived_from_visibility_expectation validate behavioral-suite consistency; they do not claim SOC probe accuracy or optimal probe selection"
+      }
+    },
+    "no_lifecycle": {
+      "mean_explanation_count": 2.8625,
+      "mean_entropy": 1.032,
+      "mean_normalized_entropy": 0.9624,
+      "mean_max_prior": 0.3731,
+      "top_k_behavior_hit_rate": 0.9,
+      "boundary_flag_hit_rate": 1.0,
+      "log_source_hit_rate": 1.0,
+      "mean_log_source_count": 2.3875,
+      "lifecycle_explanation_share": 0.0,
+      "pass_rate": 0.938,
+      "sigma_visibility": {
+        "log_source_hit_rate": 1.0,
+        "probe_recommendation_hit_rate": 1.0,
+        "visibility_gap_detection_rate": 0.833,
+        "evidence_debt_explanation_rate": 1.0,
+        "sigma_trace_presence_rate": 0.875,
+        "mean_recommended_log_source_count": 2.388,
+        "cases_with_expected_log_sources": 80,
+        "by_annotation_source": {
+          "derived_from_prior_recommendation": {
+            "case_count": 72,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          },
+          "manual_gap_design": {
+            "case_count": 8,
+            "log_source_hit_rate": 1.0,
+            "probe_recommendation_hit_rate": 1.0
+          }
+        },
+        "interpretation": "log_source_hit_rate on synthetic fixtures is visibility behavior suite pass rate, not real SOC log-source recommendation accuracy, when expectations are derived_from_prior_recommendation",
+        "mean_rec_count_note": "mean_recommended_log_source_count reflects increased visibility coverage, not precision; probe precision deferred until labeled probe ground truth"
+      },
+      "probe_ground_truth": {
+        "cases_with_probe_ground_truth": 80,
+        "probe_source_hit_rate": 1.0,
+        "probe_must_not_violation_rate": 1.0,
+        "probe_cost_weighted_hit_rate": 1.0,
+        "probe_coverage_at_k": 1.0,
+        "probe_noise_rate": 0.142,
+        "by_annotation_source": {
+          "derived_from_visibility_expectation": {
+            "case_count": 72,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          },
+          "manual_expected": {
+            "case_count": 8,
+            "probe_source_hit_rate": 1.0,
+            "probe_must_not_violation_rate": 1.0
+          }
+        },
+        "interpretation": "probe metrics on derived_from_visibility_expectation validate behavioral-suite consistency; they do not claim SOC probe accuracy or optimal probe selection"
+      }
+    }
+  },
+  "fixture_count": 80,
+  "sanity_notes": [
+    "no_flow: candidate collapse \u2014 fewer explanations; check normalized_entropy not raw entropy"
+  ],
+  "sigma_visibility_delta_gate": {
+    "pass": true,
+    "positive_deltas": 3,
+    "deltas": {
+      "log_source_hit_rate": 0.262,
+      "visibility_gap_detection_rate": 0.433,
+      "sigma_trace_presence_rate": 0.875
+    },
+    "mean_recommended_log_source_count_delta": 1.301
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "case_id": "manual_ransom_chain",
+  "title": "Ransomware chain pattern",
+  "category": "attack-like",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1486",
+    "tactic": "impact",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.9,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "ransomware_chain",
+    "true_boundary": "in_attack",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1486",
+      "T1490"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

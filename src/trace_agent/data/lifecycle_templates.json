@@ -1,0 +1,80 @@
+{
+  "_comment": "Lifecycle Templates - RFC-004-02 §8 LifecycleTemplate. debt_policy: 'hard'|'hard_if_<cond>'|'voi_gated'. required: true|'conditional'|false.",
+  "metadata": {
+    "version": "1.0",
+    "total_templates": 6
+  },
+  "templates": [
+    {
+      "template_id": "commodity_malware_v1",
+      "family": "commodity_malware",
+      "description": "Generic commodity malware (dropper → backdoor → C2)",
+      "stages": [
+        {"stage": "initial_access", "required": true, "expected_tactics": ["initial-access"], "expected_techniques": ["T1566", "T1190", "T1195.002"], "debt_policy": "hard"},
+        {"stage": "execution", "required": true, "expected_tactics": ["execution"], "expected_techniques": ["T1204", "T1059"], "debt_policy": "hard"},
+        {"stage": "persistence", "required": "conditional", "expected_tactics": ["persistence"], "expected_techniques": ["T1547.001", "T1053.005", "T1543.003"], "debt_policy": "voi_gated"},
+        {"stage": "defense_evasion", "required": "conditional", "expected_tactics": ["defense-evasion"], "expected_techniques": ["T1027", "T1055", "T1036.005"], "debt_policy": "voi_gated"},
+        {"stage": "command_and_control", "required": "conditional", "expected_tactics": ["command-and-control"], "expected_techniques": ["T1071.001", "T1105", "T1573"], "debt_policy": "voi_gated"}
+      ]
+    },
+    {
+      "template_id": "ransomware_enterprise_v1",
+      "family": "ransomware",
+      "description": "Enterprise ransomware (initial access → lateral → encrypt)",
+      "stages": [
+        {"stage": "initial_access", "required": true, "expected_tactics": ["initial-access"], "expected_techniques": ["T1566", "T1190", "T1133"], "debt_policy": "hard_if_no_initial_vector"},
+        {"stage": "execution", "required": true, "expected_tactics": ["execution"], "expected_techniques": ["T1059", "T1204"], "debt_policy": "hard"},
+        {"stage": "privilege_escalation", "required": "conditional", "expected_tactics": ["privilege-escalation"], "expected_techniques": ["T1068", "T1548.002"], "debt_policy": "voi_gated"},
+        {"stage": "credential_access", "required": "conditional", "expected_tactics": ["credential-access"], "expected_techniques": ["T1003", "T1558.003"], "debt_policy": "voi_gated"},
+        {"stage": "lateral_movement", "required": "conditional", "expected_tactics": ["lateral-movement"], "expected_techniques": ["T1021.002", "T1021.001", "T1570"], "debt_policy": "voi_gated"},
+        {"stage": "exfiltration", "required": "conditional", "expected_tactics": ["exfiltration"], "expected_techniques": ["T1041", "T1567.002"], "debt_policy": "voi_gated"},
+        {"stage": "impact", "required": "conditional", "expected_tactics": ["impact"], "expected_techniques": ["T1486", "T1490", "T1489"], "debt_policy": "hard_if_ransomware_claimed"}
+      ]
+    },
+    {
+      "template_id": "credential_theft_v1",
+      "family": "credential_theft",
+      "description": "Credential theft and exfiltration",
+      "stages": [
+        {"stage": "initial_access", "required": true, "expected_tactics": ["initial-access"], "expected_techniques": ["T1566", "T1078", "T1133"], "debt_policy": "hard"},
+        {"stage": "credential_access", "required": true, "expected_tactics": ["credential-access"], "expected_techniques": ["T1003", "T1110", "T1552.001", "T1056.001"], "debt_policy": "hard"},
+        {"stage": "collection", "required": "conditional", "expected_tactics": ["collection"], "expected_techniques": ["T1005", "T1039", "T1560.001"], "debt_policy": "voi_gated"},
+        {"stage": "exfiltration", "required": "conditional", "expected_tactics": ["exfiltration"], "expected_techniques": ["T1041", "T1048"], "debt_policy": "voi_gated"}
+      ]
+    },
+    {
+      "template_id": "insider_misuse_v1",
+      "family": "insider_misuse",
+      "description": "Insider threat / misuse with valid credentials",
+      "stages": [
+        {"stage": "valid_access", "required": true, "expected_tactics": ["initial-access"], "expected_techniques": ["T1078"], "debt_policy": "hard"},
+        {"stage": "discovery", "required": "conditional", "expected_tactics": ["discovery"], "expected_techniques": ["T1083", "T1135", "T1087"], "debt_policy": "voi_gated"},
+        {"stage": "collection", "required": "conditional", "expected_tactics": ["collection"], "expected_techniques": ["T1005", "T1039", "T1074.001"], "debt_policy": "voi_gated"},
+        {"stage": "exfiltration", "required": "conditional", "expected_tactics": ["exfiltration"], "expected_techniques": ["T1567.002", "T1048"], "debt_policy": "voi_gated"}
+      ]
+    },
+    {
+      "template_id": "cloud_compromise_v1",
+      "family": "cloud_compromise",
+      "description": "Cloud environment compromise (IAM → persistence → impact)",
+      "stages": [
+        {"stage": "initial_access", "required": true, "expected_tactics": ["initial-access"], "expected_techniques": ["T1078", "T1190"], "debt_policy": "hard"},
+        {"stage": "discovery", "required": "conditional", "expected_tactics": ["discovery"], "expected_techniques": ["T1082", "T1087.002"], "debt_policy": "voi_gated"},
+        {"stage": "privilege_escalation", "required": "conditional", "expected_tactics": ["privilege-escalation"], "expected_techniques": ["T1098", "T1068"], "debt_policy": "voi_gated"},
+        {"stage": "persistence", "required": "conditional", "expected_tactics": ["persistence"], "expected_techniques": ["T1098", "T1136.001"], "debt_policy": "voi_gated"},
+        {"stage": "impact_or_exfil", "required": "conditional", "expected_tactics": ["impact", "exfiltration"], "expected_techniques": ["T1486", "T1567.002"], "debt_policy": "voi_gated"}
+      ]
+    },
+    {
+      "template_id": "living_off_the_land_v1",
+      "family": "living_off_the_land",
+      "description": "Living-off-the-land intrusion using legitimate tools",
+      "stages": [
+        {"stage": "execution", "required": true, "expected_tactics": ["execution"], "expected_techniques": ["T1059.001", "T1059.003", "T1047"], "debt_policy": "hard"},
+        {"stage": "defense_evasion", "required": "conditional", "expected_tactics": ["defense-evasion"], "expected_techniques": ["T1218.011", "T1218.005", "T1036.005"], "debt_policy": "voi_gated"},
+        {"stage": "discovery", "required": "conditional", "expected_tactics": ["discovery"], "expected_techniques": ["T1082", "T1018", "T1016"], "debt_policy": "voi_gated"},
+        {"stage": "lateral_or_collection", "required": "conditional", "expected_tactics": ["lateral-movement", "collection"], "expected_techniques": ["T1021.002", "T1021.006", "T1005"], "debt_policy": "voi_gated"}
+      ]
+    }
+  ]
+}

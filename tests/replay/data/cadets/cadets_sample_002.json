@@ -1,0 +1,29 @@
+{
+  "metadata": {
+    "performer": "CADETS",
+    "scenario_id": "cadets_sample_002",
+    "title": "CADETS: shell → suspicious child → file write → execution",
+    "category": "attack-like"
+  },
+  "ground_truth": {
+    "entry_event_id": "cadets:e_exec",
+    "anomaly_score": 0.87,
+    "root_causes": ["cadets:e_shell", "T1059.004"],
+    "attack_technique_pairs": [
+      ["T1059.004", "T1059.004"],
+      ["T1059.004", "T1059.001"],
+      ["T1059.001", "T1204.002"]
+    ],
+    "benign_technique_pairs": [["T1059.004", "T1082"]],
+    "oos_technique_pairs": [["T1046", "T1059.004"]]
+  },
+  "events": [
+    {"event_id": "cadets:e_shell", "timestamp": "2018-04-07T10:00:00Z", "host_id": "cadets-host-2", "subject": {"id": "proc:bash:1", "type": "process", "name": "bash"}, "object": {"id": "proc:sh:2", "type": "process", "name": "sh"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "attack"},
+    {"event_id": "cadets:e_child", "timestamp": "2018-04-07T10:00:20Z", "host_id": "cadets-host-2", "parent_event_id": "cadets:e_shell", "subject": {"id": "proc:sh:2", "type": "process", "name": "sh"}, "object": {"id": "proc:curl:3", "type": "process", "name": "curl"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "attack"},
+    {"event_id": "cadets:e_write", "timestamp": "2018-04-07T10:00:40Z", "host_id": "cadets-host-2", "parent_event_id": "cadets:e_child", "subject": {"id": "proc:curl:3", "type": "process", "name": "curl"}, "object": {"id": "file:/tmp/stage.sh", "type": "file", "name": "/tmp/stage.sh"}, "relation": "file_write", "tactic": "execution", "technique": "T1059.001", "role": "attack"},
+    {"event_id": "cadets:e_exec", "timestamp": "2018-04-07T10:01:00Z", "host_id": "cadets-host-2", "parent_event_id": "cadets:e_write", "subject": {"id": "proc:stage:4", "type": "process", "name": "stage.sh"}, "object": {"id": "file:/tmp/stage.sh", "type": "file", "name": "/tmp/stage.sh"}, "relation": "execve", "tactic": "execution", "technique": "T1204.002", "role": "attack"},
+    {"event_id": "cadets:e_benign_ps", "timestamp": "2018-04-07T10:00:15Z", "host_id": "cadets-host-2", "subject": {"id": "proc:bash:9", "type": "process", "name": "bash"}, "object": {"id": "proc:uname:10", "type": "process", "name": "uname"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "benign"},
+    {"event_id": "cadets:e_benign_info", "timestamp": "2018-04-07T10:00:18Z", "host_id": "cadets-host-2", "parent_event_id": "cadets:e_benign_ps", "subject": {"id": "proc:uname:10", "type": "process", "name": "uname"}, "object": {"id": "file:/etc/hostname", "type": "file", "name": "/etc/hostname"}, "relation": "file_read", "tactic": "discovery", "technique": "T1082", "role": "benign"},
+    {"event_id": "cadets:e_oos_scan", "timestamp": "2018-04-07T10:00:30Z", "host_id": "cadets-host-2", "subject": {"id": "proc:nmap:8", "type": "process", "name": "nmap"}, "object": {"id": "socket:10.0.0.0/24", "type": "socket", "name": "scan"}, "relation": "network_connect", "tactic": "discovery", "technique": "T1046", "role": "oos"}
+  ]
+}

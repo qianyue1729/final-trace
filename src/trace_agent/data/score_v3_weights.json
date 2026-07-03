@@ -1,0 +1,15 @@
+{
+  "_comment": "score_v3 weights for DecisionLedger.seed() - RFC-004-02 §4/§11. Temperature τ keeps initial priors high-entropy.",
+  "version": "2.0",
+  "temperature": 2.0,
+  "weights": {
+    "tactic_fit": 0.18,
+    "technique_fit": 0.22,
+    "lifecycle_fit": 0.18,
+    "environment_fit": 0.12,
+    "temporal_fit": 0.12,
+    "threat_prevalence": 0.08,
+    "boundary_risk": 0.10
+  },
+  "notes": "threat_prevalence weight must stay low - public frequency != current environment probability. Temperature 1.5-2.5 keeps high entropy."
+}

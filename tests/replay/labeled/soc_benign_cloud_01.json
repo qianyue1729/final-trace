@@ -1,0 +1,33 @@
+{
+  "case_id": "soc_benign_cloud_01",
+  "title": "SOC: Terraform apply",
+  "category": "benign",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1078.004",
+    "tactic": "initial-access",
+    "platform": "linux",
+    "log_source": "cloudtrail_management_event",
+    "anomaly_score": 0.26,
+    "attributes": {
+      "admin_baseline": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "cloud_admin",
+    "true_boundary": "benign",
+    "benign": true,
+    "oos": false,
+    "expected_techniques": [
+      "T1078.004"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

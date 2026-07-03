@@ -1,0 +1,37 @@
+{
+  "timestamp": "20260701_175242",
+  "scenarios": {
+    "apt_5host": {
+      "scenario_id": "apt_5host",
+      "decision": "dismiss_benign",
+      "decision_correct": false,
+      "confidence": 1.0,
+      "stop_reason": "budget",
+      "rounds_used": 5,
+      "probes_used": 25,
+      "total_attack_edges": 25,
+      "found_attack_edges": 0,
+      "recall": 0.0,
+      "total_graph_events": 8,
+      "attack_in_graph": 0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "elapsed_seconds": 0.18275165557861328,
+      "llm_calls": 0,
+      "llm_tokens": 0,
+      "leading_explanation": "__null__",
+      "alternatives": [],
+      "errors": []
+    }
+  },
+  "summary": {
+    "total": 1,
+    "correct_decisions": 0,
+    "avg_recall": 0.0,
+    "avg_precision": 0.0,
+    "avg_f1": 0.0,
+    "total_elapsed": 0.18275165557861328,
+    "total_llm_calls": 0,
+    "total_llm_tokens": 0
+  }
+}

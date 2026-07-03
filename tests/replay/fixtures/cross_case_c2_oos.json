@@ -1,0 +1,56 @@
+{
+  "case_id": "cross_case_c2_oos",
+  "title": "Cross case C2 oos",
+  "category": "ambiguous",
+  "alert": {
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "anomaly_score": 0.62,
+    "attributes": {
+      "weak_case_link": true
+    }
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "oos_anchor_min": 0.12,
+    "expected_log_sources": [
+      "network_connection",
+      "dns_query",
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "network_connection",
+      "dns_query"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "network_connection",
+      "dns_query"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "network_connection": 2,
+      "dns_query": 2
+    },
+    "expected_probe_outcome": {
+      "network_connection": "confirm_payload_download_or_c2",
+      "dns_query": "confirm_c2_domain"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

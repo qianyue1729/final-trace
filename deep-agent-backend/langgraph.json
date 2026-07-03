@@ -1,0 +1,20 @@
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "dependencies": ["."],
+  "graphs": {
+    "trace_agent": "trace_deep_agent.graph:agent"
+  },
+  "http": {
+    "cors": {
+      "allow_origins": [
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+        "http://localhost:3002",
+        "http://127.0.0.1:3002"
+      ],
+      "allow_methods": ["*"],
+      "allow_headers": ["*"],
+      "allow_credentials": true
+    }
+  }
+}

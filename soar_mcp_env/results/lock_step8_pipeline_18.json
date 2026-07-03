@@ -1,0 +1,108 @@
+{
+  "step": 8,
+  "scenario_id": "pipeline_18",
+  "all_pass": true,
+  "rounds_used": 1,
+  "stop_reason": "robust",
+  "hosts_in_graph": [
+    "db-prod-01",
+    "ws-user-01"
+  ],
+  "techniques_in_graph": [
+    "T1041",
+    "T1566.001"
+  ],
+  "attack_ref_hits": [
+    "attack:idx_stress:evt_001"
+  ],
+  "prior_semantic_tactics": [
+    "collection",
+    "credential-access"
+  ],
+  "cross_host_pool_count": 4,
+  "checks": [
+    {
+      "id": "s8_tactic_normalized",
+      "status": "pass",
+      "message": "prior_generator 产出语义 tactic（非 TA#### 原始 ID）",
+      "expected": null,
+      "actual": [
+        "collection",
+        "credential-access"
+      ]
+    },
+    {
+      "id": "s8_normalize_tactic_map",
+      "status": "pass",
+      "message": "normalize_tactic TA0009 → collection",
+      "expected": "collection",
+      "actual": "collection"
+    },
+    {
+      "id": "s8_cross_host_probes",
+      "status": "pass",
+      "message": "cross_host_probe_generator 对非告警主机产出探针",
+      "expected": null,
+      "actual": 4
+    },
+    {
+      "id": "s8_ws_hosts_prioritized",
+      "status": "pass",
+      "message": "跨主机候选优先 WS-* 工作站",
+      "expected": null,
+      "actual": [
+        "WS-USER-01",
+        "WS-USER-02",
+        "WS-USER-03",
+        "SRV-BACKUP-01"
+      ]
+    },
+    {
+      "id": "s8_round1_reach_operator",
+      "status": "pass",
+      "message": "首轮 O 拍含追根 operator（auth_log / lateral / network_flow）",
+      "expected": null,
+      "actual": [
+        "auth_log"
+      ]
+    },
+    {
+      "id": "gt_pipeline18_root_host",
+      "status": "pass",
+      "message": "pipeline_18 根因主机 WS-USER-01 入图",
+      "expected": "WS-USER-01",
+      "actual": [
+        "db-prod-01",
+        "ws-user-01"
+      ]
+    },
+    {
+      "id": "gt_pipeline18_root_technique",
+      "status": "pass",
+      "message": "pipeline_18 根因 technique T1566.001 入图",
+      "expected": "T1566.001",
+      "actual": [
+        "T1041",
+        "T1566.001"
+      ]
+    },
+    {
+      "id": "gt_pipeline18_attack_ref",
+      "status": "pass",
+      "message": "pipeline_18 GT attack_edge_refs 至少命中 1 条",
+      "expected": null,
+      "actual": "1/18"
+    },
+    {
+      "id": "gt_pipeline18_multi_round_or_trace",
+      "status": "pass",
+      "message": "追根成功：根因主机+technique 同轮或跨轮达成",
+      "expected": null,
+      "actual": {
+        "rounds_used": 1,
+        "stop_reason": "robust"
+      }
+    }
+  ],
+  "report_md": "# Step 8 · 追根 + TA 映射 [PASS]\n场景: pipeline_18 · 入口: attack:idx_stress:evt_018\n告警: DB-PROD-01 · 根因 GT: WS-USER-01 · T1566.001\n\n## 机制\n- prior tactics: ['collection', 'credential-access']\n- cross_host pool: 4 probes\n- rounds: 1 · stop: robust\n- hosts: ['db-prod-01', 'ws-user-01']\n- techniques: ['T1041', 'T1566.001']\n- GT hits: ['attack:idx_stress:evt_001'] (1/18)\n\n## 各轮\n  R1: ops=['auth_log', 'auth_log', 'auth_log'] nodes=2 stop=robust\n\n## 校验\n- [OK] s8_tactic_normalized: prior_generator 产出语义 tactic（非 TA#### 原始 ID）\n- [OK] s8_normalize_tactic_map: normalize_tactic TA0009 → collection\n- [OK] s8_cross_host_probes: cross_host_probe_generator 对非告警主机产出探针\n- [OK] s8_ws_hosts_prioritized: 跨主机候选优先 WS-* 工作站\n- [OK] s8_round1_reach_operator: 首轮 O 拍含追根 operator（auth_log / lateral / network_flow）\n- [OK] gt_pipeline18_root_host: pipeline_18 根因主机 WS-USER-01 入图\n- [OK] gt_pipeline18_root_technique: pipeline_18 根因 technique T1566.001 入图\n- [OK] gt_pipeline18_attack_ref: pipeline_18 GT attack_edge_refs 至少命中 1 条\n- [OK] gt_pipeline18_multi_round_or_trace: 追根成功：根因主机+technique 同轮或跨轮达成"
+}

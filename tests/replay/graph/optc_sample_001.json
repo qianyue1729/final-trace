@@ -1,0 +1,439 @@
+{
+  "case_id": "optc_sample_001",
+  "title": "Corrected OpTC: host-a credential → SMB lateral → host-b execution",
+  "category": "attack-like",
+  "source": "optc_corrected",
+  "label_quality": "ground_truth",
+  "schema_version": "graph_replay_v1",
+  "primary_tactic": "execution",
+  "entry_alert": {
+    "event_id": "optc:e_exec",
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "linux",
+    "log_source": "process_creation",
+    "timestamp": 1569232890.0,
+    "anomaly_score": 0.93,
+    "attributes": {
+      "host_id": "host-b",
+      "relation": "execve",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "OpTC",
+      "optc": true
+    },
+    "selection_strategy": "explicit"
+  },
+  "alert": {
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "linux",
+    "log_source": "process_creation",
+    "anomaly_score": 0.93,
+    "attributes": {
+      "host_id": "host-b",
+      "relation": "execve",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "OpTC",
+      "optc": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "optc:e_cred",
+        "technique": "T1003.001",
+        "tactic": "credential-access",
+        "timestamp": 1569232800.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-a",
+          "relation": "file_read",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "OpTC",
+          "optc": true
+        }
+      },
+      {
+        "id": "optc:e_susp",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1569232820.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-a",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "OpTC",
+          "optc": true
+        }
+      },
+      {
+        "id": "optc:e_lateral",
+        "technique": "T1021.002",
+        "tactic": "lateral-movement",
+        "timestamp": 1569232840.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-a",
+          "relation": "lateral_movement",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "service",
+          "performer": "OpTC",
+          "optc": true,
+          "src_host": "host-a",
+          "dst_host": "host-b",
+          "edge_scope": "cross_host",
+          "network_flow_id": "flow:host-a:host-b:445"
+        }
+      },
+      {
+        "id": "optc:e_remote",
+        "technique": "T1021.002",
+        "tactic": "lateral-movement",
+        "timestamp": 1569232860.0,
+        "source": "service_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-b",
+          "relation": "remote_service_create",
+          "role": "attack",
+          "subject_type": "service",
+          "object_type": "process",
+          "performer": "OpTC",
+          "optc": true,
+          "src_host": "host-b"
+        }
+      },
+      {
+        "id": "optc:e_exec",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1569232890.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-b",
+          "relation": "execve",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "OpTC",
+          "optc": true
+        }
+      },
+      {
+        "id": "optc:e_benign_share",
+        "technique": "T1039",
+        "tactic": "lateral-movement",
+        "timestamp": 1569232825.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-a",
+          "relation": "file_share",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "OpTC",
+          "optc": true,
+          "src_host": "host-a",
+          "dst_host": "host-b",
+          "edge_scope": "cross_host"
+        }
+      },
+      {
+        "id": "optc:e_oos_miner",
+        "technique": "T1496",
+        "tactic": "impact",
+        "timestamp": 1569232870.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "host-c",
+          "relation": "network_connect",
+          "role": "oos",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "OpTC",
+          "optc": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:optc:e_cred->optc:e_susp",
+        "src": "optc:e_cred",
+        "dst": "optc:e_susp",
+        "relation": "process_spawn",
+        "role": "attack",
+        "edge_scope": null,
+        "src_host": null,
+        "dst_host": null,
+        "network_flow_id": null
+      },
+      {
+        "id": "edge:optc:e_susp->optc:e_lateral",
+        "src": "optc:e_susp",
+        "dst": "optc:e_lateral",
+        "relation": "lateral_movement",
+        "role": "attack",
+        "edge_scope": "cross_host",
+        "src_host": "host-a",
+        "dst_host": "host-b",
+        "network_flow_id": "flow:host-a:host-b:445"
+      },
+      {
+        "id": "edge:optc:e_lateral->optc:e_remote",
+        "src": "optc:e_lateral",
+        "dst": "optc:e_remote",
+        "relation": "remote_service_create",
+        "role": "attack",
+        "edge_scope": null,
+        "src_host": "host-b",
+        "dst_host": null,
+        "network_flow_id": null
+      },
+      {
+        "id": "edge:optc:e_remote->optc:e_exec",
+        "src": "optc:e_remote",
+        "dst": "optc:e_exec",
+        "relation": "execve",
+        "role": "attack",
+        "edge_scope": null,
+        "src_host": null,
+        "dst_host": null,
+        "network_flow_id": null
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "optc:e_cred",
+      "T1003.001"
+    ],
+    "attack_nodes": [
+      "optc:e_cred",
+      "optc:e_susp",
+      "optc:e_lateral",
+      "optc:e_remote",
+      "optc:e_exec"
+    ],
+    "attack_edges": [
+      [
+        "T1003.001",
+        "T1059.001"
+      ],
+      [
+        "T1059.001",
+        "T1021.002"
+      ],
+      [
+        "T1021.002",
+        "T1021.002"
+      ],
+      [
+        "T1021.002",
+        "T1059.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1039",
+        "T1059.001"
+      ]
+    ],
+    "oos_edges": [],
+    "attack_event_ids": [
+      "optc:e_cred",
+      "optc:e_susp",
+      "optc:e_lateral",
+      "optc:e_remote",
+      "optc:e_exec"
+    ],
+    "attack_node_ids": [
+      "optc:e_cred",
+      "optc:e_susp",
+      "optc:e_lateral",
+      "optc:e_remote",
+      "optc:e_exec"
+    ],
+    "attack_edge_ids": [
+      "edge:optc:e_cred->optc:e_susp",
+      "edge:optc:e_susp->optc:e_lateral",
+      "edge:optc:e_lateral->optc:e_remote",
+      "edge:optc:e_remote->optc:e_exec"
+    ],
+    "attack_hosts": [
+      "host-a",
+      "host-b"
+    ],
+    "oos_hosts": [
+      "host-c"
+    ],
+    "cross_host_attack_edges": [
+      [
+        "T1059.001",
+        "T1021.002"
+      ],
+      [
+        "T1021.002",
+        "T1021.002"
+      ]
+    ],
+    "lateral_movement_pairs": [
+      [
+        "T1021.002",
+        "T1021.002"
+      ]
+    ],
+    "network_pivot_pairs": [
+      [
+        "T1059.001",
+        "T1021.002"
+      ]
+    ],
+    "benign_cross_host_pairs": [
+      [
+        "T1039",
+        "T1059.001"
+      ]
+    ]
+  },
+  "replay_driver": {
+    "mode": "offline",
+    "entry_event_id": "optc:e_exec",
+    "reveal_queue": [
+      "optc:e_cred",
+      "optc:e_susp",
+      "optc:e_lateral",
+      "optc:e_remote"
+    ],
+    "pollute_queue": [
+      "optc:e_benign_share",
+      "optc:e_oos_miner"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution",
+            "initial-access"
+          ]
+        },
+        "reveals": [
+          "optc:e_cred"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "network_flow",
+            "dns_query"
+          ],
+          "tactics": [
+            "command-and-control",
+            "exfiltration"
+          ]
+        },
+        "reveals": [
+          "optc:e_oos_miner"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 45,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1003.001",
+        "T1059.001"
+      ],
+      [
+        "T1059.001",
+        "T1021.002"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1039",
+        "T1059.001"
+      ]
+    ],
+    "counterfactuals": []
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  },
+  "adapter_meta": {
+    "performer": "OpTC",
+    "input_path": "F:\\cursor all\\final trace\\tests\\replay\\data\\optc\\optc_sample_001.json",
+    "event_count": 7,
+    "events_raw_count": 7,
+    "normalization_stats": {
+      "source": "optc_corrected",
+      "scenario_id": "optc_sample_001",
+      "events_in": 7,
+      "events_kept": 7,
+      "events_dropped": 0,
+      "nodes": {
+        "process": 8,
+        "file": 3,
+        "socket": 1,
+        "user": 0,
+        "host": 0,
+        "service": 2
+      },
+      "relations": {
+        "file_read": 1,
+        "process_spawn": 1,
+        "lateral_movement": 1,
+        "remote_service_create": 1,
+        "execve": 1,
+        "file_share": 1,
+        "network_connect": 1
+      },
+      "roles": {
+        "attack": 5,
+        "benign": 1,
+        "oos": 1
+      },
+      "graph_edges": 4,
+      "graph_edge_roles": {
+        "attack": 4
+      },
+      "dropped_events": {}
+    },
+    "entry_alert_strategy": "explicit"
+  }
+}

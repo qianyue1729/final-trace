@@ -1,0 +1,314 @@
+{
+  "case_id": "darpa_cadets_sample_005",
+  "title": "CADETS: log clearing / anti-forensics before impact",
+  "category": "attack-like",
+  "source": "darpa_tc_cadets",
+  "label_quality": "ground_truth",
+  "schema_version": "graph_replay_v1",
+  "primary_tactic": "defense-evasion",
+  "entry_alert": {
+    "event_id": "cadets:e_log_clear",
+    "technique_id": "T1070.001",
+    "tactic": "defense-evasion",
+    "platform": "linux",
+    "log_source": "process_creation",
+    "timestamp": 1523383230.0,
+    "anomaly_score": 0.94,
+    "attributes": {
+      "host_id": "cadets-host-5",
+      "relation": "log_delete",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "CADETS",
+      "cadets": true
+    },
+    "selection_strategy": "explicit"
+  },
+  "alert": {
+    "technique_id": "T1070.001",
+    "tactic": "defense-evasion",
+    "platform": "linux",
+    "log_source": "process_creation",
+    "anomaly_score": 0.94,
+    "attributes": {
+      "host_id": "cadets-host-5",
+      "relation": "log_delete",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "CADETS",
+      "cadets": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "cadets:e_prep",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1523383200.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-5",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_log_clear",
+        "technique": "T1070.001",
+        "tactic": "defense-evasion",
+        "timestamp": 1523383230.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-5",
+          "relation": "log_delete",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_impact",
+        "technique": "T1486",
+        "tactic": "impact",
+        "timestamp": 1523383260.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-5",
+          "relation": "file_write",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_log_rotate",
+        "technique": "T1070.001",
+        "tactic": "defense-evasion",
+        "timestamp": 1523383140.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-5",
+          "relation": "log_delete",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_rotate_done",
+        "technique": "T1070.002",
+        "tactic": "defense-evasion",
+        "timestamp": 1523383150.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-5",
+          "relation": "log_delete",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_oos_av",
+        "technique": "T1562.001",
+        "tactic": "defense-evasion",
+        "timestamp": 1523383240.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-5",
+          "relation": "file_write",
+          "role": "oos",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:cadets:e_prep->cadets:e_log_clear",
+        "src": "cadets:e_prep",
+        "dst": "cadets:e_log_clear",
+        "relation": "log_delete",
+        "role": "attack"
+      },
+      {
+        "id": "edge:cadets:e_log_clear->cadets:e_impact",
+        "src": "cadets:e_log_clear",
+        "dst": "cadets:e_impact",
+        "relation": "file_write",
+        "role": "attack"
+      },
+      {
+        "id": "edge:cadets:e_log_rotate->cadets:e_rotate_done",
+        "src": "cadets:e_log_rotate",
+        "dst": "cadets:e_rotate_done",
+        "relation": "log_delete",
+        "role": "benign"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "cadets:e_prep"
+    ],
+    "attack_nodes": [
+      "cadets:e_prep",
+      "cadets:e_log_clear",
+      "cadets:e_impact"
+    ],
+    "attack_edges": [
+      [
+        "T1059.004",
+        "T1070.001"
+      ],
+      [
+        "T1070.001",
+        "T1486"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1070.001",
+        "T1070.002"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1562.001",
+        "T1070.001"
+      ]
+    ]
+  },
+  "replay_driver": {
+    "mode": "offline",
+    "entry_event_id": "cadets:e_log_clear",
+    "reveal_queue": [
+      "cadets:e_prep",
+      "cadets:e_impact"
+    ],
+    "pollute_queue": [
+      "cadets:e_log_rotate",
+      "cadets:e_rotate_done",
+      "cadets:e_oos_av"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution",
+            "initial-access"
+          ]
+        },
+        "reveals": [
+          "cadets:e_prep"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 45,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.004",
+        "T1070.001"
+      ],
+      [
+        "T1070.001",
+        "T1486"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1070.001",
+        "T1070.002"
+      ],
+      [
+        "T1562.001",
+        "T1070.001"
+      ]
+    ],
+    "counterfactuals": []
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  },
+  "adapter_meta": {
+    "performer": "CADETS",
+    "input_path": "F:\\cursor all\\final trace\\tests\\replay\\data\\cadets\\cadets_sample_005.json",
+    "event_count": 6,
+    "events_raw_count": 6,
+    "normalization_stats": {
+      "source": "darpa_tc_cadets",
+      "scenario_id": "cadets_sample_005",
+      "events_in": 6,
+      "events_kept": 6,
+      "events_dropped": 0,
+      "nodes": {
+        "process": 7,
+        "file": 5,
+        "socket": 0,
+        "user": 0,
+        "host": 0
+      },
+      "relations": {
+        "process_spawn": 1,
+        "log_delete": 3,
+        "file_write": 2
+      },
+      "roles": {
+        "attack": 3,
+        "benign": 2,
+        "oos": 1
+      },
+      "graph_edges": 3,
+      "graph_edge_roles": {
+        "attack": 2,
+        "benign": 1
+      },
+      "dropped_events": {}
+    },
+    "entry_alert_strategy": "explicit"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "case_id": "ambig_oos_cloud_01",
+  "title": "Wrong tenant cloud",
+  "category": "ambiguous",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1537",
+    "tactic": "exfiltration",
+    "platform": "linux",
+    "log_source": "cloudtrail_management_event",
+    "anomaly_score": 0.6,
+    "attributes": {
+      "weak_case_link": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "wrong_tenant",
+    "true_boundary": "oos",
+    "benign": false,
+    "oos": true,
+    "expected_techniques": [
+      "T1537"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

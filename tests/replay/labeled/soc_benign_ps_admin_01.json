@@ -1,0 +1,34 @@
+{
+  "case_id": "soc_benign_ps_admin_01",
+  "title": "SOC: admin PS inventory",
+  "category": "benign",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.22,
+    "attributes": {
+      "admin_baseline": true,
+      "known_admin_host": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "admin_powershell",
+    "true_boundary": "benign",
+    "benign": true,
+    "oos": false,
+    "expected_techniques": [
+      "T1059.001"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

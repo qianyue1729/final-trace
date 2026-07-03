@@ -1,0 +1,193 @@
+{
+  "case_id": "mordor_wmi_lateral_graph",
+  "title": "Mordor graph: WMI remote execution lateral movement",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_wmi",
+    "technique_id": "T1047",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "timestamp": 1735692570.0,
+    "anomaly_score": 0.88,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1047",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.88,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_cred",
+        "technique": "T1003.001",
+        "tactic": "credential-access",
+        "timestamp": 1735692500.0,
+        "source": "process_access",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_wmi",
+        "technique": "T1047",
+        "tactic": "execution",
+        "timestamp": 1735692570.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_remote_b",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735692620.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-b"
+        }
+      },
+      {
+        "id": "e_benign_wmi",
+        "technique": "T1047",
+        "tactic": "execution",
+        "timestamp": 1735692565.0,
+        "source": "process_creation",
+        "attributes": {
+          "benign": true,
+          "admin_baseline": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_scan",
+        "technique": "T1046",
+        "tactic": "discovery",
+        "timestamp": 1735692575.0,
+        "source": "network_connection",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-c"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "a1",
+        "src": "e_cred",
+        "dst": "e_wmi",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a2",
+        "src": "e_wmi",
+        "dst": "e_remote_b",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "b1",
+        "src": "e_benign_wmi",
+        "dst": "e_wmi",
+        "relation": "precedes",
+        "role": "benign"
+      },
+      {
+        "id": "o1",
+        "src": "e_oos_scan",
+        "dst": "e_wmi",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_cred",
+      "T1003.001"
+    ],
+    "attack_edges": [
+      [
+        "T1003.001",
+        "T1047"
+      ],
+      [
+        "T1047",
+        "T1059.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1047",
+        "T1047"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1046",
+        "T1047"
+      ]
+    ],
+    "attack_nodes": [
+      "e_cred",
+      "e_wmi",
+      "e_remote_b"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_cred",
+      "e_remote_b"
+    ],
+    "pollute_queue": [
+      "e_benign_wmi",
+      "e_oos_scan"
+    ],
+    "probe_bindings": []
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1003.001",
+        "T1047"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1046",
+        "T1047"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

@@ -1,0 +1,232 @@
+{
+  "step": 2,
+  "scenario_id": "pipeline_18",
+  "all_pass": true,
+  "pool_size": 5,
+  "prior_count": 2,
+  "gap_count": 3,
+  "sources": {
+    "prior": 2,
+    "rule_gap": 3
+  },
+  "probes": [
+    {
+      "id": "P-c66c996e",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0007",
+      "source": "prior",
+      "dedup_key": "DB-PROD-01::process_tree::ta0007",
+      "explanation_ids": [],
+      "priority_hint": 0.5,
+      "metadata": {
+        "origin_technique": "T1041",
+        "neighbor_technique": "T1018"
+      }
+    },
+    {
+      "id": "P-44649edd",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0009",
+      "source": "prior",
+      "dedup_key": "DB-PROD-01::process_tree::ta0009",
+      "explanation_ids": [],
+      "priority_hint": 0.5,
+      "metadata": {
+        "origin_technique": "T1041",
+        "neighbor_technique": "T1119"
+      }
+    },
+    {
+      "id": "P-549de853",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::auth_log::initial-access",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "initial-access"
+      }
+    },
+    {
+      "id": "P-7ff344b8",
+      "target": "DB-PROD-01",
+      "target_type": "process",
+      "operator": "process_tree",
+      "tactic": "execution",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::process_tree::execution",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "execution"
+      }
+    },
+    {
+      "id": "P-216220fa",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "persistence_scan",
+      "tactic": "persistence",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::persistence_scan::persistence",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "persistence"
+      }
+    }
+  ],
+  "prev_stats": {
+    "node_count": 1,
+    "edge_count": 0,
+    "frontier_count": 1,
+    "max_depth": 0,
+    "tactics_seen": [
+      "exfiltration"
+    ],
+    "techniques_seen": [
+      "T1041"
+    ]
+  },
+  "ledger_leading": "__null__",
+  "ledger_margin": 0.2137,
+  "checks": [
+    {
+      "id": "l_pool_non_empty",
+      "status": "pass",
+      "message": "L 拍候选池非空",
+      "expected": null,
+      "actual": 5
+    },
+    {
+      "id": "l_prior_source",
+      "status": "pass",
+      "message": "prior_generator 有产出（source=prior）",
+      "expected": null,
+      "actual": 2
+    },
+    {
+      "id": "l_rule_gap_source",
+      "status": "pass",
+      "message": "rule_gap_generator 有产出（bootstrap 单节点常靠 stagnation）",
+      "expected": null,
+      "actual": 3
+    },
+    {
+      "id": "l_pool_matches_generators",
+      "status": "pass",
+      "message": "_l_phase 池大小 ≤ prior + gap（去重后）",
+      "expected": "<=5",
+      "actual": 5
+    },
+    {
+      "id": "l_probe_schema",
+      "status": "pass",
+      "message": "每条 Probe 含 id/target/operator/tactic/dedup_key",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "l_pool_deduped",
+      "status": "pass",
+      "message": "候选池 dedup_key 唯一",
+      "expected": null,
+      "actual": 5
+    },
+    {
+      "id": "l_prior_targets_alert_asset",
+      "status": "pass",
+      "message": "prior 探针 target 含告警资产",
+      "expected": "DB-PROD-01",
+      "actual": [
+        "DB-PROD-01",
+        "DB-PROD-01"
+      ]
+    },
+    {
+      "id": "l_prior_from_frontier_technique",
+      "status": "pass",
+      "message": "prior 沿 frontier technique 邻域延伸",
+      "expected": "T1041",
+      "actual": null
+    },
+    {
+      "id": "l_graph_readonly",
+      "status": "pass",
+      "message": "L 拍不写入 SessionGraph",
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "id": "l_ledger_readonly",
+      "status": "pass",
+      "message": "L 拍不更新 DecisionLedger",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "l_beta_readonly",
+      "status": "pass",
+      "message": "L 拍不写入 BetaLedger",
+      "expected": null,
+      "actual": {
+        "before": 0,
+        "after": 0
+      }
+    },
+    {
+      "id": "l_obligations_readonly",
+      "status": "pass",
+      "message": "L 拍不扫描/写入义务账（② 拍职责）",
+      "expected": null,
+      "actual": 0
+    },
+    {
+      "id": "l_no_probe_budget_consumed",
+      "status": "pass",
+      "message": "L 拍不消耗探针预算（O/C 拍才消耗）",
+      "expected": null,
+      "actual": 0
+    },
+    {
+      "id": "gt_probe_tactic_relevance",
+      "status": "pass",
+      "message": "候选 tactic 与 ground_truth kill chain 有交集",
+      "expected": [
+        "collection",
+        "credential-access",
+        "defense-evasion",
+        "discovery",
+        "execution",
+        "exfiltration",
+        "initial-access",
+        "lateral-movement",
+        "persistence",
+        "privilege-escalation"
+      ],
+      "actual": [
+        "execution",
+        "initial-access",
+        "persistence"
+      ]
+    },
+    {
+      "id": "l_frontier_driven",
+      "status": "pass",
+      "message": "frontier 存在时 prior_generator 应产出",
+      "expected": null,
+      "actual": 2
+    }
+  ],
+  "report_md": "# Step 2 · L 拍 · 选哪条（生成层投候选） [PASS]\n场景: pipeline_18 · 入口: attack:idx_stress:evt_018\n\n## ① 做了什么\nprior_generator + rule_gap_generator 向统一 CandidatePool 投掷探针，去重合并；尚未 VOI 排序。\n\n## ② 输入（读了什么）\n- SessionGraph：1 节点 · frontier=1\n- 告警锚点：DB-PROD-01 · T1041\n- DecisionLedger leading=__null__ · margin=21.37%\n- 上一轮 graph.stats()（bootstrap 后首轮 prev_stats 与当前图相同 → 可触发 stagnation gap）\n\n## ③ 产出（生成了什么）\n- 候选池 +5 条（prior=2 · rule_gap=3 · 去重后=5）\n- 来源分布：{'prior': 2, 'rule_gap': 3}\n  - [prior] DB-PROD-01 · process_tree · ta0007 (prio=0.50)\n  - [prior] DB-PROD-01 · process_tree · ta0009 (prio=0.50)\n  - [rule_gap] DB-PROD-01 · auth_log · initial-access (prio=0.25)\n  - [rule_gap] DB-PROD-01 · process_tree · execution (prio=0.25)\n  - [rule_gap] DB-PROD-01 · persistence_scan · persistence (prio=0.25)\n\n## ④ 怎么算的\n- prior：frontier technique → L2 technique_neighbors(outgoing) → Probe(target=asset, operator=tactic map)\n- rule_gap：单节点 bootstrap → stagnation 补 unseen kill-chain tactics\n- CandidatePool.add 按 dedup_key 去重；本拍不调用 voi()\n\n## ⑤ 维护了什么\n【图】只读\n【决策账】只读（供 leading / explanation_ids）\n【Beta/义务】未写\n\n## Ground truth 校验\n- [OK] l_pool_non_empty: L 拍候选池非空\n- [OK] l_prior_source: prior_generator 有产出（source=prior）\n- [OK] l_rule_gap_source: rule_gap_generator 有产出（bootstrap 单节点常靠 stagnation）\n- [OK] l_pool_matches_generators: _l_phase 池大小 ≤ prior + gap（去重后）\n- [OK] l_probe_schema: 每条 Probe 含 id/target/operator/tactic/dedup_key\n- [OK] l_pool_deduped: 候选池 dedup_key 唯一\n- [OK] l_prior_targets_alert_asset: prior 探针 target 含告警资产\n- [OK] l_prior_from_frontier_technique: prior 沿 frontier technique 邻域延伸\n- [OK] l_graph_readonly: L 拍不写入 SessionGraph\n- [OK] l_ledger_readonly: L 拍不更新 DecisionLedger\n- [OK] l_beta_readonly: L 拍不写入 BetaLedger\n- [OK] l_obligations_readonly: L 拍不扫描/写入义务账（② 拍职责）\n- [OK] l_no_probe_budget_consumed: L 拍不消耗探针预算（O/C 拍才消耗）\n- [OK] gt_probe_tactic_relevance: 候选 tactic 与 ground_truth kill chain 有交集\n- [OK] l_frontier_driven: frontier 存在时 prior_generator 应产出"
+}

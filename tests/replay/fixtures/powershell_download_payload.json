@@ -1,0 +1,75 @@
+{
+  "case_id": "powershell_download_payload",
+  "title": "PowerShell 下载 payload",
+  "alert": {
+    "technique_id": "T1105",
+    "tactic": "command-and-control",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "anomaly_score": 0.88
+  },
+  "expect": {
+    "max_max_prior": 0.55,
+    "explanation_types_any": [
+      "technique_context",
+      "lifecycle",
+      "l1_predecessor"
+    ],
+    "log_source_contains_any": [
+      "network",
+      "process"
+    ],
+    "min_contested_edges": 0
+  },
+  "category": "attack-like",
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "explanation_types_any": [
+      "technique_context",
+      "lifecycle",
+      "l1_predecessor"
+    ],
+    "log_source_contains_any": [
+      "network",
+      "process"
+    ],
+    "min_contested_edges": 0,
+    "expected_log_sources": [
+      "network_connection",
+      "dns_query",
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "network_connection",
+      "dns_query"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "network_connection",
+      "dns_query"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "network_connection": 2,
+      "dns_query": 2
+    },
+    "expected_probe_outcome": {
+      "network_connection": "confirm_payload_download_or_c2",
+      "dns_query": "confirm_c2_domain"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

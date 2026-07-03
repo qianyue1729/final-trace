@@ -1,0 +1,31 @@
+{
+  "case_id": "tel_gap_bash_hist",
+  "title": "Bash history only",
+  "category": "telemetry-gap",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1059.004",
+    "tactic": "execution",
+    "platform": "linux",
+    "log_source": "bash_history",
+    "anomaly_score": 0.45,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "linux_shell",
+    "true_boundary": "uncertain",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1059.004"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "metadata": {
+    "performer": "CADETS",
+    "scenario_id": "cadets_sample_001",
+    "title": "CADETS sample: document → shell → download → C2",
+    "description": "Real-derived subset for B1 adapter validation (not full TC dump)."
+  },
+  "ground_truth": {
+    "entry_event_id": "cadets:e_download",
+    "anomaly_score": 0.91,
+    "root_causes": ["cadets:e_doc_open", "T1204.002"],
+    "attack_event_ids": [
+      "cadets:e_doc_open",
+      "cadets:e_shell",
+      "cadets:e_download",
+      "cadets:e_c2"
+    ],
+    "attack_technique_pairs": [
+      ["T1204.002", "T1059.004"],
+      ["T1059.004", "T1105"],
+      ["T1105", "T1071.001"]
+    ],
+    "benign_technique_pairs": [
+      ["T1059.004", "T1082"]
+    ],
+    "oos_technique_pairs": [
+      ["T1046", "T1059.004"]
+    ]
+  },
+  "events": [
+    {
+      "event_id": "cadets:e_doc_open",
+      "timestamp": "2018-04-06T12:00:00Z",
+      "host_id": "cadets-host-1",
+      "subject": {"id": "proc:firefox:1001", "type": "process", "name": "firefox"},
+      "object": {"id": "file:/tmp/maldoc.pdf", "type": "file", "name": "/tmp/maldoc.pdf"},
+      "relation": "file_read",
+      "tactic": "initial-access",
+      "technique": "T1204.002",
+      "role": "attack"
+    },
+    {
+      "event_id": "cadets:e_shell",
+      "timestamp": "2018-04-06T12:00:30Z",
+      "host_id": "cadets-host-1",
+      "parent_event_id": "cadets:e_doc_open",
+      "subject": {"id": "proc:bash:1100", "type": "process", "name": "bash"},
+      "object": {"id": "proc:curl:1101", "type": "process", "name": "curl"},
+      "relation": "process_spawn",
+      "tactic": "execution",
+      "technique": "T1059.004",
+      "role": "attack"
+    },
+    {
+      "event_id": "cadets:e_download",
+      "timestamp": "2018-04-06T12:01:00Z",
+      "host_id": "cadets-host-1",
+      "parent_event_id": "cadets:e_shell",
+      "subject": {"id": "proc:curl:1101", "type": "process", "name": "curl"},
+      "object": {"id": "file:/tmp/stage.bin", "type": "file", "name": "/tmp/stage.bin"},
+      "relation": "network_connect",
+      "tactic": "command-and-control",
+      "technique": "T1105",
+      "role": "attack"
+    },
+    {
+      "event_id": "cadets:e_c2",
+      "timestamp": "2018-04-06T12:01:45Z",
+      "host_id": "cadets-host-1",
+      "parent_event_id": "cadets:e_download",
+      "subject": {"id": "proc:stage:1200", "type": "process", "name": "stage.bin"},
+      "object": {"id": "socket:203.0.113.10:443", "type": "socket", "name": "c2.example"},
+      "relation": "network_connect",
+      "tactic": "command-and-control",
+      "technique": "T1071.001",
+      "role": "attack"
+    },
+    {
+      "event_id": "cadets:e_benign_admin",
+      "timestamp": "2018-04-06T12:00:25Z",
+      "host_id": "cadets-host-1",
+      "subject": {"id": "proc:bash:900", "type": "process", "name": "bash"},
+      "object": {"id": "proc:uname:901", "type": "process", "name": "uname"},
+      "relation": "process_spawn",
+      "tactic": "execution",
+      "technique": "T1059.004",
+      "role": "benign"
+    },
+    {
+      "event_id": "cadets:e_benign_sysinfo",
+      "timestamp": "2018-04-06T12:00:28Z",
+      "host_id": "cadets-host-1",
+      "parent_event_id": "cadets:e_benign_admin",
+      "subject": {"id": "proc:uname:901", "type": "process", "name": "uname"},
+      "object": {"id": "file:/etc/os-release", "type": "file", "name": "/etc/os-release"},
+      "relation": "file_read",
+      "tactic": "discovery",
+      "technique": "T1082",
+      "role": "benign"
+    },
+    {
+      "event_id": "cadets:e_oos_scan",
+      "timestamp": "2018-04-06T12:00:50Z",
+      "host_id": "cadets-host-1",
+      "subject": {"id": "proc:nmap:800", "type": "process", "name": "nmap"},
+      "object": {"id": "socket:192.168.1.0/24", "type": "socket", "name": "scan"},
+      "relation": "network_connect",
+      "tactic": "discovery",
+      "technique": "T1046",
+      "role": "oos"
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "case_id": "graph_toy_oos_miner",
+  "title": "Toy graph: ransomware alert with concurrent cryptominer (OOS)",
+  "category": "ambiguous",
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_ransom_exec",
+    "technique_id": "T1486",
+    "tactic": "impact",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "timestamp": 1735689800.0,
+    "anomaly_score": 0.91,
+    "attributes": { "host_id": "host-7", "concurrent_incident": true }
+  },
+  "alert": {
+    "technique_id": "T1486",
+    "tactic": "impact",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.91,
+    "attributes": { "host_id": "host-7", "concurrent_incident": true }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_ransom_initial",
+        "technique": "T1566.001",
+        "tactic": "initial-access",
+        "timestamp": 1735689600.0,
+        "source": "email_log",
+        "attributes": { "host_id": "host-7" }
+      },
+      {
+        "id": "e_ransom_exec",
+        "technique": "T1486",
+        "tactic": "impact",
+        "timestamp": 1735689800.0,
+        "source": "process_creation",
+        "attributes": { "host_id": "host-7" }
+      },
+      {
+        "id": "e_miner",
+        "technique": "T1496",
+        "tactic": "impact",
+        "timestamp": 1735689700.0,
+        "source": "process_creation",
+        "attributes": { "host_id": "host-7", "oos": true }
+      }
+    ],
+    "edges": [
+      { "id": "edge_ransom_chain", "src": "e_ransom_initial", "dst": "e_ransom_exec", "relation": "causes", "role": "attack" },
+      { "id": "edge_oos_miner", "src": "e_miner", "dst": "e_ransom_exec", "relation": "precedes", "role": "oos" }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": ["e_ransom_initial"],
+    "attack_nodes": ["e_ransom_initial", "e_ransom_exec"],
+    "attack_edges": ["edge_ransom_chain"],
+    "benign_edges": [],
+    "oos_edges": ["edge_oos_miner"]
+  },
+  "replay_driver": {
+    "reveal_queue": ["e_ransom_initial"],
+    "pollute_queue": ["e_miner"]
+  },
+  "replay_config": {
+    "max_rounds": 8,
+    "fanout_per_round": 3,
+    "min_attack_recall": 0.5,
+    "min_boundary_precision": 0.5,
+    "max_benign_pollution": 1
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": ["contain", "contain_escalate", "monitor", "escalate"],
+    "must_include_boundaries": ["edge_ransom_chain"],
+    "must_exclude_boundaries": ["edge_oos_miner"],
+    "counterfactuals": []
+  },
+  "evaluation": { "calibration_eligible": false }
+}

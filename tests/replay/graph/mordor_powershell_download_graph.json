@@ -1,0 +1,281 @@
+{
+  "case_id": "mordor_powershell_download_graph",
+  "title": "Mordor graph: PowerShell download cradle + payload exec",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_powershell_dl",
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "timestamp": 1735689630.0,
+    "anomaly_score": 0.9,
+    "attributes": {
+      "suspicious_parent": true,
+      "host_id": "host-a",
+      "external_network_after": true
+    }
+  },
+  "alert": {
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.9,
+    "attributes": {
+      "suspicious_parent": true,
+      "host_id": "host-a",
+      "external_network_after": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_doc_open",
+        "technique": "T1204.002",
+        "tactic": "execution",
+        "timestamp": 1735689600.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_powershell_dl",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735689630.0,
+        "source": "process_creation",
+        "attributes": {
+          "suspicious_parent": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_download",
+        "technique": "T1105",
+        "tactic": "command-and-control",
+        "timestamp": 1735689660.0,
+        "source": "network_connection",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_payload_exec",
+        "technique": "T1204.002",
+        "tactic": "execution",
+        "timestamp": 1735689720.0,
+        "source": "process_creation",
+        "attributes": {
+          "payload": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_admin_ps",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735689625.0,
+        "source": "process_creation",
+        "attributes": {
+          "benign": true,
+          "admin_baseline": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_sysinfo",
+        "technique": "T1082",
+        "tactic": "discovery",
+        "timestamp": 1735689635.0,
+        "source": "process_creation",
+        "attributes": {
+          "benign": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_miner_dl",
+        "technique": "T1105",
+        "tactic": "command-and-control",
+        "timestamp": 1735689645.0,
+        "source": "network_connection",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_miner_exec",
+        "technique": "T1496",
+        "tactic": "impact",
+        "timestamp": 1735689690.0,
+        "source": "process_creation",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "atk_doc_ps",
+        "src": "e_doc_open",
+        "dst": "e_powershell_dl",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "atk_ps_dl",
+        "src": "e_powershell_dl",
+        "dst": "e_download",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "atk_dl_exec",
+        "src": "e_download",
+        "dst": "e_payload_exec",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "ben_admin_sysinfo",
+        "src": "e_benign_admin_ps",
+        "dst": "e_benign_sysinfo",
+        "relation": "causes",
+        "role": "benign"
+      },
+      {
+        "id": "oos_miner",
+        "src": "e_oos_miner_dl",
+        "dst": "e_oos_miner_exec",
+        "relation": "causes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_doc_open",
+      "T1204.002"
+    ],
+    "attack_edges": [
+      [
+        "T1204.002",
+        "T1059.001"
+      ],
+      [
+        "T1059.001",
+        "T1105"
+      ],
+      [
+        "T1105",
+        "T1204.002"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1059.001",
+        "T1082"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1105",
+        "T1496"
+      ]
+    ],
+    "attack_nodes": [
+      "e_doc_open",
+      "e_powershell_dl",
+      "e_download",
+      "e_payload_exec"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_doc_open",
+      "e_download",
+      "e_payload_exec"
+    ],
+    "pollute_queue": [
+      "e_benign_admin_ps",
+      "e_oos_miner_dl"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution"
+          ]
+        },
+        "reveals": [
+          "e_doc_open",
+          "e_payload_exec"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "network_flow",
+            "dns_query"
+          ],
+          "tactics": [
+            "command-and-control"
+          ]
+        },
+        "reveals": [
+          "e_download"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 10,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.6,
+    "max_benign_pollution": 0
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1204.002",
+        "T1059.001"
+      ],
+      [
+        "T1059.001",
+        "T1105"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1059.001",
+        "T1082"
+      ],
+      [
+        "T1105",
+        "T1496"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

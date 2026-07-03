@@ -1,0 +1,32 @@
+{
+  "case_id": "manual_phish_exec",
+  "title": "Phish to execution",
+  "category": "attack-like",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1566.001",
+    "tactic": "initial-access",
+    "platform": "windows",
+    "log_source": "email_gateway",
+    "anomaly_score": 0.85,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "phishing_execution",
+    "true_boundary": "in_attack",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1566.001",
+      "T1059.001"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

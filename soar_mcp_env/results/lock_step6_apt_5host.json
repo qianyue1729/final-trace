@@ -1,0 +1,187 @@
+{
+  "step": 6,
+  "scenario_id": "apt_5host",
+  "all_pass": true,
+  "node_count_before": 1,
+  "node_count_after": 5,
+  "margin_before": 0.1579894673688421,
+  "margin_after": 0.02041284199027904,
+  "beta_keys_after": 3,
+  "stop": {
+    "should_stop": false,
+    "reason": "continue",
+    "max_voi": 1.092870729576191,
+    "risk_now": 12.306486885904333
+  },
+  "attack_refs_in_graph": [
+    "attack:idx_stress:evt_011"
+  ],
+  "techniques_in_graph": [
+    "T0000",
+    "T1068",
+    "T1566.001"
+  ],
+  "beta_snapshots": [
+    {
+      "operator": "process_tree",
+      "tactic": "ta0002",
+      "learning_key": "process_tree|host|ta0002",
+      "hit": true,
+      "alpha": 2.0,
+      "beta": 1.0,
+      "observations": 1
+    },
+    {
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "learning_key": "auth_log|host|initial-access",
+      "hit": true,
+      "alpha": 2.0,
+      "beta": 1.0,
+      "observations": 1
+    },
+    {
+      "operator": "persistence_scan",
+      "tactic": "persistence",
+      "learning_key": "persistence_scan|host|persistence",
+      "hit": false,
+      "alpha": 1.0,
+      "beta": 2.0,
+      "observations": 1
+    }
+  ],
+  "checks": [
+    {
+      "id": "k_prereq_c_executed",
+      "status": "pass",
+      "message": "K 拍前 C 拍已执行（probes_used == len(chosen)）",
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "id": "k_graph_adds_confirmed",
+      "status": "pass",
+      "message": "valid confirmed 经 _has_required_fields 后 graph.add_events 增节点",
+      "expected": ">1",
+      "actual": 5
+    },
+    {
+      "id": "k_ledger_bayesian_update",
+      "status": "pass",
+      "message": "confirmed 非空时 DecisionLedger.update 改变 margin 或 log_post",
+      "expected": "changed",
+      "actual": {
+        "margin_before": 0.157989,
+        "margin_after": 0.020413
+      }
+    },
+    {
+      "id": "k_beta_keys_tracked",
+      "status": "pass",
+      "message": "BetaLedger 为每条 chosen 探针 learning_key 写入观测",
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "id": "k_beta_hit_miss_per_probe",
+      "status": "pass",
+      "message": "每条 chosen 探针 Beta total_observations >= 1",
+      "expected": null,
+      "actual": [
+        {
+          "op": "process_tree",
+          "obs": 1,
+          "hit": true
+        },
+        {
+          "op": "auth_log",
+          "obs": 1,
+          "hit": true
+        },
+        {
+          "op": "persistence_scan",
+          "obs": 1,
+          "hit": false
+        }
+      ]
+    },
+    {
+      "id": "k_beta_alpha_beta_semantics",
+      "status": "pass",
+      "message": "hit 增 alpha、miss 增 beta（相对先验 1,1）",
+      "expected": null,
+      "actual": [
+        {
+          "op": "process_tree",
+          "alpha": 2.0,
+          "beta": 1.0,
+          "hit": true
+        },
+        {
+          "op": "auth_log",
+          "alpha": 2.0,
+          "beta": 1.0,
+          "hit": true
+        },
+        {
+          "op": "persistence_scan",
+          "alpha": 1.0,
+          "beta": 2.0,
+          "hit": false
+        }
+      ]
+    },
+    {
+      "id": "k_calib_recorded",
+      "status": "pass",
+      "message": "GenCalibration.record 按 probe.source 写入",
+      "expected": null,
+      "actual": [
+        "prior",
+        "rule_gap"
+      ]
+    },
+    {
+      "id": "k_should_stop_well_formed",
+      "status": "pass",
+      "message": "should_stop() 返回合法 StopDecision.reason",
+      "expected": null,
+      "actual": {
+        "should_stop": false,
+        "reason": "continue",
+        "max_voi": 1.092871,
+        "risk_now": 12.306487
+      }
+    },
+    {
+      "id": "gt_attack_ref_in_graph",
+      "status": "pass",
+      "message": "C 拍命中的 GT attack_edge_refs 经 K 拍入图",
+      "expected": [
+        "attack:idx_stress:evt_011"
+      ],
+      "actual": [
+        "attack:idx_stress:evt_011"
+      ]
+    },
+    {
+      "id": "gt_root_technique_in_graph",
+      "status": "warn",
+      "message": "入图 techniques 含根因 technique 前缀",
+      "expected": "T1021.002",
+      "actual": [
+        "T0000",
+        "T1068",
+        "T1566.001"
+      ]
+    },
+    {
+      "id": "gt_continue_when_attack_evidence",
+      "status": "pass",
+      "message": "命中 GT 攻击边且 margin 低时 should_stop=False（继续调查）",
+      "expected": null,
+      "actual": "continue"
+    }
+  ],
+  "report_md": "# Step 6 · K 拍 · 学习 + 决策账 + 停止 [PASS]\n场景: apt_5host · 入口: attack:idx_stress:evt_015\n根因 GT: (未指定) · T1021.002\n时间窗对齐: alert_ts=1781321714\n\n## ① 做了什么\n_k_phase: graph.add_events -> ledger.update -> beta.update -> calib.record -> should_stop()\n\n## ② 输入\n- confirmed 4 (valid 4)\n- chosen 3 探针\n  - process_tree · ta0002 @ WS-USER-01 (voi=-0.049869)\n  - auth_log · initial-access @ WS-USER-01 (voi=-0.049869)\n  - persistence_scan · persistence @ WS-USER-01 (voi=-0.049869)\n\n## ③ 产出\n- graph nodes: 1 -> 5\n- ledger margin: 0.1580 -> 0.0204\n- beta keys: 0 -> 3\n  - process_tree: hit=True beta(2.0,1.0) obs=1\n  - auth_log: hit=True beta(2.0,1.0) obs=1\n  - persistence_scan: hit=False beta(1.0,2.0) obs=1\n- calib sources: ['prior', 'rule_gap']\n- stop: should_stop=False reason=continue\n- GT in graph: ['attack:idx_stress:evt_011']\n- techniques: ['T0000', 'T1068', 'T1566.001']\n\n## Ground truth 校验\n- [OK] k_prereq_c_executed: K 拍前 C 拍已执行（probes_used == len(chosen)）\n- [OK] k_graph_adds_confirmed: valid confirmed 经 _has_required_fields 后 graph.add_events 增节点\n- [OK] k_ledger_bayesian_update: confirmed 非空时 DecisionLedger.update 改变 margin 或 log_post\n- [OK] k_beta_keys_tracked: BetaLedger 为每条 chosen 探针 learning_key 写入观测\n- [OK] k_beta_hit_miss_per_probe: 每条 chosen 探针 Beta total_observations >= 1\n- [OK] k_beta_alpha_beta_semantics: hit 增 alpha、miss 增 beta（相对先验 1,1）\n- [OK] k_calib_recorded: GenCalibration.record 按 probe.source 写入\n- [OK] k_should_stop_well_formed: should_stop() 返回合法 StopDecision.reason\n- [OK] gt_attack_ref_in_graph: C 拍命中的 GT attack_edge_refs 经 K 拍入图\n- [WARN] gt_root_technique_in_graph: 入图 techniques 含根因 technique 前缀\n    expected='T1021.002'\n    actual=['T0000', 'T1068', 'T1566.001']\n- [OK] gt_continue_when_attack_evidence: 命中 GT 攻击边且 margin 低时 should_stop=False（继续调查）"
+}

@@ -1,0 +1,316 @@
+
+================================================================================
+SCENARIO: pipeline_18
+GT TOTAL: 18 attack edges
+Root cause: WS-USER-01 - T1566.001
+================================================================================
+
+1. attack:idx_stress:evt_001
+   Tech=T1566.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+2. attack:idx_stress:evt_002
+   Tech=T1059.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+3. attack:idx_stress:evt_003
+   Tech=T1053.005 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+4. attack:idx_stress:evt_004
+   Tech=T1053.005 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[registry]
+
+5. attack:idx_stress:evt_005
+   Tech=T1548 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+6. attack:idx_stress:evt_006
+   Tech=T1055 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+7. attack:idx_stress:evt_007
+   Tech=T1070 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[file]
+
+8. attack:idx_stress:evt_008
+   Tech=T1003 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+9. attack:idx_stress:evt_009
+   Tech=T1016 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[netconn]
+
+10. attack:idx_stress:evt_010
+   Tech=T1021.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-02[process]
+
+11. attack:idx_stress:evt_011
+   Tech=T1005 Tactic=?
+   WS-USER-02[process] -> WS-USER-02[file]
+
+12. attack:idx_stress:evt_012
+   Tech=T1570 Tactic=?
+   WS-USER-02[process] -> WS-USER-02[netconn]
+
+13. attack:idx_stress:evt_013
+   Tech=T1021.001 Tactic=?
+   WS-USER-02[process] -> SRV-WEB-03[process]
+
+14. attack:idx_stress:evt_014
+   Tech=T1059.003 Tactic=?
+   SRV-WEB-03[process] -> SRV-WEB-03[process]
+
+15. attack:idx_stress:evt_015
+   Tech=T1021.001 Tactic=?
+   SRV-WEB-03[process] -> SRV-WEB-03[netconn]
+
+16. attack:idx_stress:evt_016
+   Tech=T1068 Tactic=?
+   SRV-WEB-03[process] -> DB-PROD-01[process]
+
+17. attack:idx_stress:evt_017
+   Tech=T1115 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[file]
+
+18. attack:idx_stress:evt_018
+   Tech=T1041 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[netconn]
+
+
+================================================================================
+SCENARIO: apt_5host
+GT TOTAL: 25 attack edges
+Root cause:  - T1021.002 - Remote Services: SMB/Windows Admin Shares
+================================================================================
+
+1. attack:idx_stress:evt_001
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+2. attack:idx_stress:evt_002
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+3. attack:idx_stress:evt_003
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+4. attack:idx_stress:evt_004
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+5. attack:idx_stress:evt_005
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+6. attack:idx_stress:evt_006
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+7. attack:idx_stress:evt_007
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+8. attack:idx_stress:evt_008
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+9. attack:idx_stress:evt_009
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+10. attack:idx_stress:evt_010
+   Tech=? Tactic=?
+   ?[None] -> ?[None]
+
+11. attack:idx_stress:evt_011
+   Tech=T1566.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+12. attack:idx_stress:evt_012
+   Tech=T1059.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[netconn]
+
+13. attack:idx_stress:evt_013
+   Tech=T1055 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+14. attack:idx_stress:evt_014
+   Tech=T1053.005 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[registry]
+
+15. attack:idx_stress:evt_015
+   Tech=T1068 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+16. attack:idx_stress:evt_016
+   Tech=T1082 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+17. attack:idx_stress:evt_017
+   Tech=T1003 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+18. attack:idx_stress:evt_018
+   Tech=T1021.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[netconn]
+
+19. attack:idx_stress:evt_019
+   Tech=T1059.001 Tactic=?
+   SRV-JUMP-01[process] -> SRV-JUMP-01[process]
+
+20. attack:idx_stress:evt_020
+   Tech=T1570 Tactic=?
+   SRV-JUMP-01[process] -> SRV-JUMP-01[netconn]
+
+21. attack:idx_stress:evt_021
+   Tech=T1505.003 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[process]
+
+22. attack:idx_stress:evt_022
+   Tech=T1005 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[file]
+
+23. attack:idx_stress:evt_023
+   Tech=T1041 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[netconn]
+
+24. attack:idx_stress:evt_024
+   Tech=T1570 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[netconn]
+
+25. attack:idx_stress:evt_025
+   Tech=T1003 Tactic=?
+   DC01[process] -> DC01[file]
+
+
+================================================================================
+SCENARIO: multipath_12host
+GT TOTAL: 31 attack edges
+Root cause: external - T1566.001
+================================================================================
+
+1. attack:idx_stress:evt_001
+   Tech=T1566.001 Tactic=?
+   external[netconn] -> WS-USER-01[process]
+
+2. attack:idx_stress:evt_002
+   Tech=T1566.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+3. attack:idx_stress:evt_003
+   Tech=T1059.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+4. attack:idx_stress:evt_004
+   Tech=T1059.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[netconn]
+
+5. attack:idx_stress:evt_005
+   Tech=T1053.005 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+6. attack:idx_stress:evt_006
+   Tech=T1053.005 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[registry]
+
+7. attack:idx_stress:evt_007
+   Tech=T1548 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+8. attack:idx_stress:evt_008
+   Tech=T1548 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+9. attack:idx_stress:evt_009
+   Tech=T1190 Tactic=?
+   WS-USER-01[host] -> SRV-WEB-03[host]
+
+10. attack:idx_stress:evt_010
+   Tech=T1190 Tactic=?
+   WS-USER-01[host] -> SRV-WEB-03[host]
+
+11. attack:idx_stress:evt_011
+   Tech=T1190 Tactic=?
+   WS-USER-01[host] -> SRV-WEB-04[host]
+
+12. attack:idx_stress:evt_012
+   Tech=T1055 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[process]
+
+13. attack:idx_stress:evt_013
+   Tech=T1055 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[netconn]
+
+14. attack:idx_stress:evt_014
+   Tech=T1021.001 Tactic=?
+   WS-USER-01[process] -> WS-USER-01[netconn]
+
+15. attack:idx_stress:evt_015
+   Tech=T1021.001 Tactic=?
+   WS-USER-01[netconn] -> SRV-JUMP-01[process]
+
+16. attack:idx_stress:evt_016
+   Tech=T1082 Tactic=?
+   SRV-JUMP-01[process] -> SRV-JUMP-01[process]
+
+17. attack:idx_stress:evt_017
+   Tech=T1110 Tactic=?
+   srv-jump-01[host] -> dc01[host]
+
+18. attack:idx_stress:evt_018
+   Tech=T1110 Tactic=?
+   srv-jump-01[host] -> dc01[host]
+
+19. attack:idx_stress:evt_019
+   Tech=T1110 Tactic=?
+   srv-jump-01[host] -> dc01[host]
+
+20. attack:idx_stress:evt_020
+   Tech=T1021.001 Tactic=?
+   SRV-JUMP-01[process] -> SRV-JUMP-01[netconn]
+
+21. attack:idx_stress:evt_021
+   Tech=T1021.001 Tactic=?
+   SRV-JUMP-01[netconn] -> DC01[process]
+
+22. attack:idx_stress:evt_022
+   Tech=T1003 Tactic=?
+   DC01[process] -> DC01[process]
+
+23. attack:idx_stress:evt_023
+   Tech=T1003 Tactic=?
+   DC01[process] -> DC01[process]
+
+24. attack:idx_stress:evt_024
+   Tech=T1003 Tactic=?
+   DC01[process] -> DC01[netconn]
+
+25. attack:idx_stress:evt_025
+   Tech=T1016 Tactic=?
+   DC01[process] -> DC01[process]
+
+26. attack:idx_stress:evt_026
+   Tech=T1021.002 Tactic=?
+   DC01[process] -> DC01[netconn]
+
+27. attack:idx_stress:evt_027
+   Tech=T1005 Tactic=?
+   DC01[process] -> SRV-FILE-01[file]
+
+28. attack:idx_stress:evt_028
+   Tech=T1021.001 Tactic=?
+   DC01[process] -> DC01[netconn]
+
+29. attack:idx_stress:evt_029
+   Tech=T1021.001 Tactic=?
+   DC01[netconn] -> DB-PROD-01[process]
+
+30. attack:idx_stress:evt_030
+   Tech=T1005 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[file]
+
+31. attack:idx_stress:evt_031
+   Tech=T1048 Tactic=?
+   DB-PROD-01[process] -> DB-PROD-01[netconn]

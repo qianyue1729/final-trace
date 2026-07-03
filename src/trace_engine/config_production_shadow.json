@@ -1,0 +1,47 @@
+{
+  "backend": "soar_mcp",
+  "budget": {
+    "total_rounds": 25,
+    "total_probes": 300,
+    "fanout_per_round": 5,
+    "min_rounds_before_robust": 4,
+    "min_rounds_after_root": 8
+  },
+  "soar_mcp": {
+    "max_pages": 20,
+    "page_limit": 200,
+    "lookback_seconds": 2592000,
+    "timeout_seconds": 30.0,
+    "max_retries": 2,
+    "verify_tls": true,
+    "tool_profile": "wazuh",
+    "wazuh_time_range": "30d",
+    "wazuh_compact": true,
+    "wazuh_scope_field": "auto",
+    "wazuh_attacks_only": false
+  },
+  "model_judgement": {
+    "mode": "shadow",
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "verify_tls": true,
+    "connect_timeout_seconds": 10.0,
+    "read_timeout_seconds": 60.0,
+    "max_retries": 2,
+    "max_calls_per_round": 5,
+    "max_calls_per_case": 50,
+    "max_tokens_per_case": 50000,
+    "max_context_nodes": 40,
+    "ambiguity_margin": 0.35,
+    "deterministic_fallback": true
+  },
+  "model_planner": {
+    "mode": "shadow",
+    "max_intents_per_round": 4,
+    "cost_budget_per_round": 1.0,
+    "max_graph_nodes": 40
+  },
+  "alert_enricher": {
+    "mode": "off"
+  }
+}

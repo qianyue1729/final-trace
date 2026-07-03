@@ -1,0 +1,215 @@
+{
+  "case_id": "mordor_c2_beacon_graph",
+  "title": "Mordor graph: C2 beacon + DNS + tasking",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_beacon",
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "timestamp": 1735693090.0,
+    "anomaly_score": 0.91,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "anomaly_score": 0.91,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_implant",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735693000.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_beacon",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1735693090.0,
+        "source": "network_connection",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_dns",
+        "technique": "T1071.004",
+        "tactic": "command-and-control",
+        "timestamp": 1735693095.0,
+        "source": "dns_query",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_c2_task",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735693150.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_cdn",
+        "technique": "T1071.001",
+        "tactic": "command-and-control",
+        "timestamp": 1735693085.0,
+        "source": "network_connection",
+        "attributes": {
+          "benign": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_tor",
+        "technique": "T1090.003",
+        "tactic": "command-and-control",
+        "timestamp": 1735693100.0,
+        "source": "network_connection",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "a1",
+        "src": "e_implant",
+        "dst": "e_beacon",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a2",
+        "src": "e_beacon",
+        "dst": "e_dns",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a3",
+        "src": "e_dns",
+        "dst": "e_c2_task",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "b1",
+        "src": "e_benign_cdn",
+        "dst": "e_beacon",
+        "relation": "precedes",
+        "role": "benign"
+      },
+      {
+        "id": "o1",
+        "src": "e_oos_tor",
+        "dst": "e_beacon",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_implant",
+      "T1059.001"
+    ],
+    "attack_edges": [
+      [
+        "T1059.001",
+        "T1071.001"
+      ],
+      [
+        "T1071.001",
+        "T1071.004"
+      ],
+      [
+        "T1071.004",
+        "T1059.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1071.001",
+        "T1071.001"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1090.003",
+        "T1071.001"
+      ]
+    ],
+    "attack_nodes": [
+      "e_implant",
+      "e_beacon",
+      "e_dns",
+      "e_c2_task"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_implant",
+      "e_dns",
+      "e_c2_task"
+    ],
+    "pollute_queue": [
+      "e_benign_cdn",
+      "e_oos_tor"
+    ],
+    "probe_bindings": []
+  },
+  "replay_config": {
+    "max_rounds": 10,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.6,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.001",
+        "T1071.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1090.003",
+        "T1071.001"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

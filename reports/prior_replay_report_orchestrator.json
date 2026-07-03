@@ -1,0 +1,663 @@
+{
+  "summary": {
+    "total": 8,
+    "passed": 8,
+    "failed": 0,
+    "runtime_path": "orchestrator"
+  },
+  "cases": [
+    {
+      "case_id": "cloud_iam_anomaly",
+      "title": "Cloud IAM 异常",
+      "alert": {
+        "technique_id": "T1098",
+        "tactic": "persistence",
+        "platform": "linux",
+        "log_source": "cloudtrail_management_event",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.82,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.2609,
+        "entropy": 1.386,
+        "explanation_count": 4,
+        "null_benign": 0.35,
+        "null_oos": 0.15,
+        "contested_edge_count": 2,
+        "log_source_count": 1,
+        "log_sources": [
+          "process_creation"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "cloud_compromise_v1"
+        ]
+      },
+      "checks": {
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 4,
+      "recommended_probe_count": 4,
+      "null_reasons": [
+        "neighbor LOLBAS dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1098 fits cloud_compromise_v1:privilege_escalation",
+          "prior": 0.2609,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1098 in ATT&CK Flow-backed technique context",
+          "prior": 0.2495,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1098 preceded by execution (L1 tactic prior)",
+          "prior": 0.245,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1098 dual-use / boundary-contested execution path",
+          "prior": 0.2446,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    },
+    {
+      "case_id": "concurrent_miner_ransomware",
+      "title": "挖矿与勒索并发",
+      "alert": {
+        "technique_id": "T1496",
+        "tactic": "impact",
+        "platform": "windows",
+        "log_source": "process_creation",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.92,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.5157,
+        "entropy": 0.6927,
+        "explanation_count": 2,
+        "null_benign": 0.2,
+        "null_oos": 0.15,
+        "contested_edge_count": 0,
+        "log_source_count": 3,
+        "log_sources": [
+          "file_system",
+          "network_connection",
+          "process_creation"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H3"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "l1_predecessor"
+        ],
+        "lifecycle_templates": [
+          "ransomware_enterprise_v1"
+        ]
+      },
+      "checks": {
+        "oos_anchor_ok": true,
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 2,
+      "recommended_probe_count": 6,
+      "null_reasons": [],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1496 fits ransomware_enterprise_v1:impact",
+          "prior": 0.5157,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H3",
+          "title": "T1496 preceded by execution (L1 tactic prior)",
+          "prior": 0.4843,
+          "support_type": "l1_predecessor"
+        }
+      ]
+    },
+    {
+      "case_id": "linux_gtfobins",
+      "title": "Linux GTFOBins 滥用",
+      "alert": {
+        "technique_id": "T1059.004",
+        "tactic": "execution",
+        "platform": "linux",
+        "log_source": "auditd",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.78,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.263,
+        "entropy": 1.3859,
+        "explanation_count": 4,
+        "null_benign": 0.55,
+        "null_oos": 0.15,
+        "contested_edge_count": 8,
+        "log_source_count": 2,
+        "log_sources": [
+          "process_creation",
+          "script_execution"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "commodity_malware_v1"
+        ]
+      },
+      "checks": {
+        "benign_anchor_ok": true,
+        "boundary_ok": true,
+        "log_source_ok": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 10,
+      "recommended_probe_count": 8,
+      "null_reasons": [
+        "Linux shell execution (GTFOBins-class)",
+        "neighbor LOLBAS dual-use edge",
+        "neighbor GTFOBins dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1059.004 fits commodity_malware_v1:execution",
+          "prior": 0.263,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1059.004 in ATT&CK Flow-backed technique context",
+          "prior": 0.2475,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1059.004 preceded by initial-access (L1 tactic prior)",
+          "prior": 0.247,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1059.004 dual-use / boundary-contested execution path",
+          "prior": 0.2426,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    },
+    {
+      "case_id": "log_clearing",
+      "title": "日志被清理",
+      "alert": {
+        "technique_id": "T1070.001",
+        "tactic": "defense-evasion",
+        "platform": "windows",
+        "log_source": "windows_event_log_security",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.8,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.2573,
+        "entropy": 1.3861,
+        "explanation_count": 4,
+        "null_benign": 0.35,
+        "null_oos": 0.15,
+        "contested_edge_count": 5,
+        "log_source_count": 2,
+        "log_sources": [
+          "event_log",
+          "process_creation"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "commodity_malware_v1"
+        ]
+      },
+      "checks": {
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "log_source_ok": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 7,
+      "recommended_probe_count": 8,
+      "null_reasons": [
+        "neighbor LOLBAS dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1070.001 fits commodity_malware_v1:defense_evasion",
+          "prior": 0.2573,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1070.001 in ATT&CK Flow-backed technique context",
+          "prior": 0.2531,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1070.001 preceded by reconnaissance (L1 tactic prior)",
+          "prior": 0.2416,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1070.001 dual-use / boundary-contested execution path",
+          "prior": 0.2481,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    },
+    {
+      "case_id": "powershell_admin",
+      "title": "正常 PowerShell 运维",
+      "alert": {
+        "technique_id": "T1059.001",
+        "tactic": "execution",
+        "platform": "windows",
+        "log_source": "process_creation",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.25,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.263,
+        "entropy": 1.3859,
+        "explanation_count": 4,
+        "null_benign": 0.35,
+        "null_oos": 0.15,
+        "contested_edge_count": 8,
+        "log_source_count": 3,
+        "log_sources": [
+          "network_connection",
+          "process_creation",
+          "script_execution"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "commodity_malware_v1"
+        ]
+      },
+      "checks": {
+        "benign_anchor_ok": true,
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "hard_veto_safe": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 10,
+      "recommended_probe_count": 12,
+      "null_reasons": [
+        "neighbor LOLBAS dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1059.001 fits commodity_malware_v1:execution",
+          "prior": 0.263,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1059.001 in ATT&CK Flow-backed technique context",
+          "prior": 0.2475,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1059.001 preceded by initial-access (L1 tactic prior)",
+          "prior": 0.247,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1059.001 dual-use / boundary-contested execution path",
+          "prior": 0.2426,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    },
+    {
+      "case_id": "powershell_download_payload",
+      "title": "PowerShell 下载 payload",
+      "alert": {
+        "technique_id": "T1105",
+        "tactic": "command-and-control",
+        "platform": "windows",
+        "log_source": "network_connection",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.88,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.259,
+        "entropy": 1.386,
+        "explanation_count": 4,
+        "null_benign": 0.6,
+        "null_oos": 0.15,
+        "contested_edge_count": 8,
+        "log_source_count": 3,
+        "log_sources": [
+          "dns_query",
+          "network_connection",
+          "process_creation"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "commodity_malware_v1"
+        ]
+      },
+      "checks": {
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "boundary_ok": true,
+        "log_source_ok": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 10,
+      "recommended_probe_count": 12,
+      "null_reasons": [
+        "LOLBAS dual-use technique",
+        "neighbor LOLBAS dual-use edge",
+        "neighbor GTFOBins dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1105 fits commodity_malware_v1:command_and_control",
+          "prior": 0.259,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1105 in ATT&CK Flow-backed technique context",
+          "prior": 0.2514,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1105 preceded by execution (L1 tactic prior)",
+          "prior": 0.2432,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1105 dual-use / boundary-contested execution path",
+          "prior": 0.2464,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    },
+    {
+      "case_id": "ransomware_chain",
+      "title": "Ransomware chain",
+      "alert": {
+        "technique_id": "T1486",
+        "tactic": "impact",
+        "platform": "windows",
+        "log_source": "process_creation",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.95,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.258,
+        "entropy": 1.386,
+        "explanation_count": 4,
+        "null_benign": 0.35,
+        "null_oos": 0.15,
+        "contested_edge_count": 8,
+        "log_source_count": 2,
+        "log_sources": [
+          "file_system",
+          "process_creation"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "ransomware_enterprise_v1"
+        ]
+      },
+      "checks": {
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "boundary_ok": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 10,
+      "recommended_probe_count": 8,
+      "null_reasons": [
+        "neighbor LOLBAS dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1486 fits ransomware_enterprise_v1:impact",
+          "prior": 0.258,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1486 in ATT&CK Flow-backed technique context",
+          "prior": 0.2524,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1486 preceded by execution (L1 tactic prior)",
+          "prior": 0.2422,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1486 dual-use / boundary-contested execution path",
+          "prior": 0.2474,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    },
+    {
+      "case_id": "timestamp_spoofing",
+      "title": "时间戳伪造",
+      "alert": {
+        "technique_id": "T1070.006",
+        "tactic": "defense-evasion",
+        "platform": "linux",
+        "log_source": "file_system_timestamp",
+        "asset_id": null,
+        "timestamp": null,
+        "anomaly_score": 0.7,
+        "attributes": {}
+      },
+      "metrics": {
+        "max_prior": 0.2573,
+        "entropy": 1.3861,
+        "explanation_count": 4,
+        "null_benign": 0.35,
+        "null_oos": 0.15,
+        "contested_edge_count": 1,
+        "log_source_count": 2,
+        "log_sources": [
+          "process_creation",
+          "script_execution"
+        ],
+        "explanation_ids": [
+          "H1",
+          "H2",
+          "H3",
+          "H4"
+        ],
+        "explanation_types": [
+          "lifecycle",
+          "technique_context",
+          "l1_predecessor",
+          "dual_use_boundary"
+        ],
+        "lifecycle_templates": [
+          "commodity_malware_v1"
+        ]
+      },
+      "checks": {
+        "benign_anchor_ok": true,
+        "entropy_ok": true,
+        "top_k_hit": true,
+        "hard_veto_safe": true,
+        "expected_hit": true
+      },
+      "passed": true,
+      "runtime_path": "orchestrator",
+      "lock_phase": "L_INITIALIZED",
+      "obligation_count": 3,
+      "recommended_probe_count": 8,
+      "null_reasons": [
+        "neighbor LOLBAS dual-use edge",
+        "high benign boundary prior on neighbor edge"
+      ],
+      "explanations": [
+        {
+          "id": "H1",
+          "title": "T1070.006 fits commodity_malware_v1:defense_evasion",
+          "prior": 0.2573,
+          "support_type": "lifecycle"
+        },
+        {
+          "id": "H2",
+          "title": "T1070.006 in ATT&CK Flow-backed technique context",
+          "prior": 0.2531,
+          "support_type": "technique_context"
+        },
+        {
+          "id": "H3",
+          "title": "T1070.006 preceded by reconnaissance (L1 tactic prior)",
+          "prior": 0.2416,
+          "support_type": "l1_predecessor"
+        },
+        {
+          "id": "H4",
+          "title": "T1070.006 dual-use / boundary-contested execution path",
+          "prior": 0.2481,
+          "support_type": "dual_use_boundary"
+        }
+      ]
+    }
+  ]
+}

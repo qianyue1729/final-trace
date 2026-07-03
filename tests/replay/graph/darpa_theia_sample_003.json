@@ -1,0 +1,360 @@
+{
+  "case_id": "darpa_theia_sample_003",
+  "title": "THEIA: file read → archive → staging path",
+  "category": "attack-like",
+  "source": "darpa_tc_theia",
+  "label_quality": "ground_truth",
+  "schema_version": "graph_replay_v1",
+  "primary_tactic": "collection",
+  "entry_alert": {
+    "event_id": "theia:e_stage",
+    "technique_id": "T1074.001",
+    "tactic": "collection",
+    "platform": "linux",
+    "log_source": "file_creation",
+    "timestamp": 1525356090.0,
+    "anomaly_score": 0.85,
+    "attributes": {
+      "host_id": "theia-host-3",
+      "relation": "file_write",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "THEIA",
+      "theia": true
+    },
+    "selection_strategy": "explicit"
+  },
+  "alert": {
+    "technique_id": "T1074.001",
+    "tactic": "collection",
+    "platform": "linux",
+    "log_source": "file_creation",
+    "anomaly_score": 0.85,
+    "attributes": {
+      "host_id": "theia-host-3",
+      "relation": "file_write",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "THEIA",
+      "theia": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "theia:e_proc",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1525356000.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_read",
+        "technique": "T1005",
+        "tactic": "collection",
+        "timestamp": 1525356030.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "file_read",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_archive",
+        "technique": "T1560.001",
+        "tactic": "collection",
+        "timestamp": 1525356060.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "file_write",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_stage",
+        "technique": "T1074.001",
+        "tactic": "collection",
+        "timestamp": 1525356090.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "file_write",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_backup",
+        "technique": "T1560.001",
+        "tactic": "collection",
+        "timestamp": 1525356020.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "file_write",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_backup_copy",
+        "technique": "T1560.002",
+        "tactic": "collection",
+        "timestamp": 1525356025.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "file_write",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "THEIA",
+          "theia": true
+        }
+      },
+      {
+        "id": "theia:e_oos_cloud",
+        "technique": "T1537",
+        "tactic": "exfiltration",
+        "timestamp": 1525356120.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "theia-host-3",
+          "relation": "network_connect",
+          "role": "oos",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "THEIA",
+          "theia": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:theia:e_proc->theia:e_read",
+        "src": "theia:e_proc",
+        "dst": "theia:e_read",
+        "relation": "file_read",
+        "role": "attack"
+      },
+      {
+        "id": "edge:theia:e_read->theia:e_archive",
+        "src": "theia:e_read",
+        "dst": "theia:e_archive",
+        "relation": "file_write",
+        "role": "attack"
+      },
+      {
+        "id": "edge:theia:e_archive->theia:e_stage",
+        "src": "theia:e_archive",
+        "dst": "theia:e_stage",
+        "relation": "file_write",
+        "role": "attack"
+      },
+      {
+        "id": "edge:theia:e_backup->theia:e_backup_copy",
+        "src": "theia:e_backup",
+        "dst": "theia:e_backup_copy",
+        "relation": "file_write",
+        "role": "benign"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "theia:e_proc"
+    ],
+    "attack_nodes": [
+      "theia:e_proc",
+      "theia:e_read",
+      "theia:e_archive",
+      "theia:e_stage"
+    ],
+    "attack_edges": [
+      [
+        "T1059.004",
+        "T1005"
+      ],
+      [
+        "T1005",
+        "T1560.001"
+      ],
+      [
+        "T1560.001",
+        "T1074.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1560.001",
+        "T1560.002"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1537",
+        "T1074.001"
+      ]
+    ]
+  },
+  "replay_driver": {
+    "mode": "offline",
+    "entry_event_id": "theia:e_stage",
+    "reveal_queue": [
+      "theia:e_proc",
+      "theia:e_read",
+      "theia:e_archive"
+    ],
+    "pollute_queue": [
+      "theia:e_backup",
+      "theia:e_backup_copy",
+      "theia:e_oos_cloud"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution",
+            "initial-access"
+          ]
+        },
+        "reveals": [
+          "theia:e_proc"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "network_flow",
+            "dns_query"
+          ],
+          "tactics": [
+            "command-and-control",
+            "exfiltration"
+          ]
+        },
+        "reveals": [
+          "theia:e_oos_cloud"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 45,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.004",
+        "T1005"
+      ],
+      [
+        "T1005",
+        "T1560.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1560.001",
+        "T1560.002"
+      ],
+      [
+        "T1537",
+        "T1074.001"
+      ]
+    ],
+    "counterfactuals": []
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  },
+  "adapter_meta": {
+    "performer": "THEIA",
+    "input_path": "F:\\cursor all\\final trace\\tests\\replay\\data\\theia\\theia_sample_003.json",
+    "event_count": 7,
+    "events_raw_count": 7,
+    "normalization_stats": {
+      "source": "darpa_tc_theia",
+      "scenario_id": "theia_sample_003",
+      "events_in": 7,
+      "events_kept": 7,
+      "events_dropped": 0,
+      "nodes": {
+        "process": 8,
+        "file": 5,
+        "socket": 1,
+        "user": 0,
+        "host": 0
+      },
+      "relations": {
+        "process_spawn": 1,
+        "file_read": 1,
+        "file_write": 4,
+        "network_connect": 1
+      },
+      "roles": {
+        "attack": 4,
+        "benign": 2,
+        "oos": 1
+      },
+      "graph_edges": 4,
+      "graph_edge_roles": {
+        "attack": 3,
+        "benign": 1
+      },
+      "dropped_events": {}
+    },
+    "entry_alert_strategy": "explicit"
+  }
+}

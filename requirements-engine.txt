@@ -1,0 +1,9 @@
+# trace-engine 服务依赖（内核 trace_agent 为纯标准库）
+fastapi>=0.110
+uvicorn>=0.29
+pydantic>=2.5
+httpx>=0.27
+PyYAML>=6.0
+
+# 测试
+pytest>=8.0

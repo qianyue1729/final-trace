@@ -1,0 +1,8 @@
+{
+  "calibration_status": "skipped",
+  "reason": "eligible labeled cases below minimum",
+  "eligible_cases": 0,
+  "required_min_cases": 30,
+  "brier_score": null,
+  "ece": null
+}

@@ -1,0 +1,10 @@
+# Raw snapshots — 拉取后本地缓存，不提交大文件
+raw/mitre/
+raw/attack_flow/
+raw/atomic/
+raw/lolbas/
+raw/sigma/
+raw/gtfobins/
+!raw/sources.json
+!raw/manifest.json
+!raw/README.md

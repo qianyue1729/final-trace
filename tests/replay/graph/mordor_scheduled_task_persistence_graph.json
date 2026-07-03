@@ -1,0 +1,193 @@
+{
+  "case_id": "mordor_scheduled_task_persistence_graph",
+  "title": "Mordor graph: scheduled task persistence",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_sched_task",
+    "technique_id": "T1053.005",
+    "tactic": "persistence",
+    "platform": "windows",
+    "log_source": "scheduled_task",
+    "timestamp": 1735691560.0,
+    "anomaly_score": 0.84,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1053.005",
+    "tactic": "persistence",
+    "platform": "windows",
+    "log_source": "scheduled_task",
+    "anomaly_score": 0.84,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_initial",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735691500.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_sched_task",
+        "technique": "T1053.005",
+        "tactic": "persistence",
+        "timestamp": 1735691560.0,
+        "source": "scheduled_task",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_persist_run",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735691800.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_patch",
+        "technique": "T1543.003",
+        "tactic": "persistence",
+        "timestamp": 1735691555.0,
+        "source": "scheduled_task",
+        "attributes": {
+          "benign": true,
+          "backup_baseline": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_miner",
+        "technique": "T1496",
+        "tactic": "impact",
+        "timestamp": 1735691580.0,
+        "source": "process_creation",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "a1",
+        "src": "e_initial",
+        "dst": "e_sched_task",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a2",
+        "src": "e_sched_task",
+        "dst": "e_persist_run",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "b1",
+        "src": "e_benign_patch",
+        "dst": "e_sched_task",
+        "relation": "precedes",
+        "role": "benign"
+      },
+      {
+        "id": "o1",
+        "src": "e_oos_miner",
+        "dst": "e_sched_task",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_initial",
+      "T1059.001"
+    ],
+    "attack_edges": [
+      [
+        "T1059.001",
+        "T1053.005"
+      ],
+      [
+        "T1053.005",
+        "T1059.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1543.003",
+        "T1053.005"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1496",
+        "T1053.005"
+      ]
+    ],
+    "attack_nodes": [
+      "e_initial",
+      "e_sched_task",
+      "e_persist_run"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_initial",
+      "e_persist_run"
+    ],
+    "pollute_queue": [
+      "e_benign_patch",
+      "e_oos_miner"
+    ],
+    "probe_bindings": []
+  },
+  "replay_config": {
+    "max_rounds": 10,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.6,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.001",
+        "T1053.005"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1496",
+        "T1053.005"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

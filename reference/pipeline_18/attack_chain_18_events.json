@@ -1,0 +1,1309 @@
+{
+  "schema_version": "1.0",
+  "scenario": "pipeline_18",
+  "incident_id": "INC-PIPELINE_18",
+  "query": "data.incident_id:INC-PIPELINE_18 AND data.is_attack:true",
+  "exported_at": "2026-07-03T10:25:00Z",
+  "total": 18,
+  "expected_total": 18,
+  "events": [
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "cmd.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_001 action=EXEC technique=T1566.001 score=0.85",
+        "title": "EXEC outlook.exe -> cmd.exe",
+        "alert_type": "attack_chain",
+        "src_process": "outlook.exe",
+        "anomaly_score": "0.85",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_001",
+        "action": "EXEC",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T02:15:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_001",
+        "trace_step": "exec",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_001",
+        "mitre_technique": "T1566.001",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 8,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_001\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_001\",\"trace_step\":\"exec\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T02:15:00.000Z\",\"title\":\"EXEC outlook.exe -> cmd.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_001 action=EXEC technique=T1566.001 score=0.85\",\"raw_log_ref\":\"attack:idx_stress:evt_001\",\"action\":\"EXEC\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"outlook.exe\",\"dst_process\":\"cmd.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1566.001\",\"anomaly_score\":\"0.85\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.034Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.39408",
+      "timestamp": "2026-07-03T02:20:35.034+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "powershell.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_002 action=FORK technique=T1059.001 score=0.78",
+        "title": "FORK cmd.exe -> powershell.exe",
+        "alert_type": "attack_chain",
+        "src_process": "cmd.exe",
+        "anomaly_score": "0.78",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_002",
+        "action": "FORK",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T02:16:30.000Z",
+        "severity": "high",
+        "trace_id": "attack:idx_stress:evt_002",
+        "trace_step": "fork",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_002",
+        "mitre_technique": "T1059.001",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 9,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_002\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_002\",\"trace_step\":\"fork\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T02:16:30.000Z\",\"title\":\"FORK cmd.exe -> powershell.exe\",\"severity\":\"high\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_002 action=FORK technique=T1059.001 score=0.78\",\"raw_log_ref\":\"attack:idx_stress:evt_002\",\"action\":\"FORK\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"cmd.exe\",\"dst_process\":\"powershell.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1059.001\",\"anomaly_score\":\"0.78\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.034Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.42769",
+      "timestamp": "2026-07-03T02:20:35.034+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "schtasks.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_003 action=EXEC technique=T1053.005 score=0.82",
+        "title": "EXEC powershell.exe -> schtasks.exe",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.82",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_003",
+        "action": "EXEC",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T04:30:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_003",
+        "trace_step": "exec",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_003",
+        "mitre_technique": "T1053.005",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 17,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_003\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_003\",\"trace_step\":\"exec\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T04:30:00.000Z\",\"title\":\"EXEC powershell.exe -> schtasks.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_003 action=EXEC technique=T1053.005 score=0.82\",\"raw_log_ref\":\"attack:idx_stress:evt_003\",\"action\":\"EXEC\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"powershell.exe\",\"dst_process\":\"schtasks.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1053.005\",\"anomaly_score\":\"0.82\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.035Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.55996",
+      "timestamp": "2026-07-03T02:20:35.035+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "Run key",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_004 action=WRITE technique=T1053.005 score=0.75",
+        "title": "WRITE schtasks.exe -> Run key",
+        "alert_type": "attack_chain",
+        "src_process": "schtasks.exe",
+        "anomaly_score": "0.75",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_004",
+        "action": "WRITE",
+        "dstip": "",
+        "dst_entity_type": "registry",
+        "timestamp": "2026-06-10T05:00:00.000Z",
+        "severity": "high",
+        "trace_id": "attack:idx_stress:evt_004",
+        "trace_step": "write",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_004",
+        "mitre_technique": "T1053.005",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 22,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_004\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_004\",\"trace_step\":\"write\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T05:00:00.000Z\",\"title\":\"WRITE schtasks.exe -> Run key\",\"severity\":\"high\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_004 action=WRITE technique=T1053.005 score=0.75\",\"raw_log_ref\":\"attack:idx_stress:evt_004\",\"action\":\"WRITE\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"registry\",\"src_process\":\"schtasks.exe\",\"dst_process\":\"Run key\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1053.005\",\"anomaly_score\":\"0.75\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.035Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.64267",
+      "timestamp": "2026-07-03T02:20:35.035+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "whoami.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_005 action=EXEC technique=T1548 score=0.7",
+        "title": "EXEC powershell.exe -> whoami.exe",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.7",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_005",
+        "action": "EXEC",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T06:15:00.000Z",
+        "severity": "high",
+        "trace_id": "attack:idx_stress:evt_005",
+        "trace_step": "exec",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_005",
+        "mitre_technique": "T1548",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 27,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_005\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_005\",\"trace_step\":\"exec\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T06:15:00.000Z\",\"title\":\"EXEC powershell.exe -> whoami.exe\",\"severity\":\"high\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_005 action=EXEC technique=T1548 score=0.7\",\"raw_log_ref\":\"attack:idx_stress:evt_005\",\"action\":\"EXEC\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"powershell.exe\",\"dst_process\":\"whoami.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1548\",\"anomaly_score\":\"0.7\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.036Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.72506",
+      "timestamp": "2026-07-03T02:20:35.036+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "rundll32.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_006 action=FORK technique=T1055 score=0.88",
+        "title": "FORK powershell.exe -> rundll32.exe",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.88",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_006",
+        "action": "FORK",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T07:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_006",
+        "trace_step": "fork",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_006",
+        "mitre_technique": "T1055",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 32,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_006\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_006\",\"trace_step\":\"fork\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T07:00:00.000Z\",\"title\":\"FORK powershell.exe -> rundll32.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_006 action=FORK technique=T1055 score=0.88\",\"raw_log_ref\":\"attack:idx_stress:evt_006\",\"action\":\"FORK\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"powershell.exe\",\"dst_process\":\"rundll32.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1055\",\"anomaly_score\":\"0.88\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.036Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.80781",
+      "timestamp": "2026-07-03T02:20:35.036+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "temp.txt",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_007 action=WRITE technique=T1070 score=0.72",
+        "title": "WRITE powershell.exe -> temp.txt",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.72",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_007",
+        "action": "WRITE",
+        "dstip": "",
+        "dst_entity_type": "file",
+        "timestamp": "2026-06-10T08:30:00.000Z",
+        "severity": "high",
+        "trace_id": "attack:idx_stress:evt_007",
+        "trace_step": "write",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_007",
+        "mitre_technique": "T1070",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 42,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_007\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_007\",\"trace_step\":\"write\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T08:30:00.000Z\",\"title\":\"WRITE powershell.exe -> temp.txt\",\"severity\":\"high\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_007 action=WRITE technique=T1070 score=0.72\",\"raw_log_ref\":\"attack:idx_stress:evt_007\",\"action\":\"WRITE\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"file\",\"src_process\":\"powershell.exe\",\"dst_process\":\"temp.txt\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1070\",\"anomaly_score\":\"0.72\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.036Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.97353",
+      "timestamp": "2026-07-03T02:20:35.036+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "procdump.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_008 action=EXEC technique=T1003 score=0.91",
+        "title": "EXEC powershell.exe -> procdump.exe",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.91",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_008",
+        "action": "EXEC",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T10:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_008",
+        "trace_step": "exec",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_008",
+        "mitre_technique": "T1003",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 69,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_008\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_008\",\"trace_step\":\"exec\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T10:00:00.000Z\",\"title\":\"EXEC powershell.exe -> procdump.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_008 action=EXEC technique=T1003 score=0.91\",\"raw_log_ref\":\"attack:idx_stress:evt_008\",\"action\":\"EXEC\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"powershell.exe\",\"dst_process\":\"procdump.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1003\",\"anomaly_score\":\"0.91\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.038Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.142498",
+      "timestamp": "2026-07-03T02:20:35.038+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "SMB",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_009 action=CONNECT technique=T1016 score=0.8",
+        "title": "CONNECT powershell.exe -> SMB",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.8",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_009",
+        "action": "CONNECT",
+        "dstip": "10.0.3.11",
+        "dst_entity_type": "netconn",
+        "timestamp": "2026-06-10T12:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_009",
+        "trace_step": "connect",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_009",
+        "mitre_technique": "T1016",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 108,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_009\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_009\",\"trace_step\":\"connect\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T12:00:00.000Z\",\"title\":\"CONNECT powershell.exe -> SMB\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_009 action=CONNECT technique=T1016 score=0.8\",\"raw_log_ref\":\"attack:idx_stress:evt_009\",\"action\":\"CONNECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"netconn\",\"src_process\":\"powershell.exe\",\"dst_process\":\"SMB\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.11\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1016\",\"anomaly_score\":\"0.8\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.041Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.207486",
+      "timestamp": "2026-07-03T02:20:35.041+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.11",
+        "agent_id": "WS-USER-01",
+        "agent_name": "WS-USER-01",
+        "dst_process": "svchost.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_010 action=INJECT technique=T1021.001 score=0.9",
+        "title": "INJECT powershell.exe -> svchost.exe",
+        "alert_type": "attack_chain",
+        "src_process": "powershell.exe",
+        "anomaly_score": "0.9",
+        "hostname": "WS-USER-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_010",
+        "action": "INJECT",
+        "dstip": "10.0.3.12",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T13:30:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_010",
+        "trace_step": "inject",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_010",
+        "mitre_technique": "T1021.001",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 124,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_010\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_010\",\"trace_step\":\"inject\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T13:30:00.000Z\",\"title\":\"INJECT powershell.exe -> svchost.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_010 action=INJECT technique=T1021.001 score=0.9\",\"raw_log_ref\":\"attack:idx_stress:evt_010\",\"action\":\"INJECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"powershell.exe\",\"dst_process\":\"svchost.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.11\",\"dstip\":\"10.0.3.12\",\"hostname\":\"WS-USER-01\",\"agent_id\":\"WS-USER-01\",\"agent_name\":\"WS-USER-01\",\"mitre_technique\":\"T1021.001\",\"anomaly_score\":\"0.9\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.041Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.234104",
+      "timestamp": "2026-07-03T02:20:35.041+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.12",
+        "agent_id": "WS-USER-02",
+        "agent_name": "WS-USER-02",
+        "dst_process": "data.zip",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_011 action=WRITE technique=T1005 score=0.83",
+        "title": "WRITE svchost.exe -> data.zip",
+        "alert_type": "attack_chain",
+        "src_process": "svchost.exe",
+        "anomaly_score": "0.83",
+        "hostname": "WS-USER-02",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_011",
+        "action": "WRITE",
+        "dstip": "",
+        "dst_entity_type": "file",
+        "timestamp": "2026-06-10T15:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_011",
+        "trace_step": "write",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_011",
+        "mitre_technique": "T1005",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 150,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_011\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_011\",\"trace_step\":\"write\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T15:00:00.000Z\",\"title\":\"WRITE svchost.exe -> data.zip\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_011 action=WRITE technique=T1005 score=0.83\",\"raw_log_ref\":\"attack:idx_stress:evt_011\",\"action\":\"WRITE\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"file\",\"src_process\":\"svchost.exe\",\"dst_process\":\"data.zip\",\"dst_path\":\"\",\"srcip\":\"10.0.3.12\",\"dstip\":\"\",\"hostname\":\"WS-USER-02\",\"agent_id\":\"WS-USER-02\",\"agent_name\":\"WS-USER-02\",\"mitre_technique\":\"T1005\",\"anomaly_score\":\"0.83\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.042Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.277363",
+      "timestamp": "2026-07-03T02:20:35.042+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.12",
+        "agent_id": "WS-USER-02",
+        "agent_name": "WS-USER-02",
+        "dst_process": "RDP",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_012 action=CONNECT technique=T1570 score=0.76",
+        "title": "CONNECT svchost.exe -> RDP",
+        "alert_type": "attack_chain",
+        "src_process": "svchost.exe",
+        "anomaly_score": "0.76",
+        "hostname": "WS-USER-02",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_012",
+        "action": "CONNECT",
+        "dstip": "10.0.3.12",
+        "dst_entity_type": "netconn",
+        "timestamp": "2026-06-10T16:30:00.000Z",
+        "severity": "high",
+        "trace_id": "attack:idx_stress:evt_012",
+        "trace_step": "connect",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_012",
+        "mitre_technique": "T1570",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 184,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_012\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_012\",\"trace_step\":\"connect\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T16:30:00.000Z\",\"title\":\"CONNECT svchost.exe -> RDP\",\"severity\":\"high\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_012 action=CONNECT technique=T1570 score=0.76\",\"raw_log_ref\":\"attack:idx_stress:evt_012\",\"action\":\"CONNECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"netconn\",\"src_process\":\"svchost.exe\",\"dst_process\":\"RDP\",\"dst_path\":\"\",\"srcip\":\"10.0.3.12\",\"dstip\":\"10.0.3.12\",\"hostname\":\"WS-USER-02\",\"agent_id\":\"WS-USER-02\",\"agent_name\":\"WS-USER-02\",\"mitre_technique\":\"T1570\",\"anomaly_score\":\"0.76\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.043Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.334130",
+      "timestamp": "2026-07-03T02:20:35.043+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.3.12",
+        "agent_id": "WS-USER-02",
+        "agent_name": "WS-USER-02",
+        "dst_process": "w3wp.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_013 action=INJECT technique=T1021.001 score=0.93",
+        "title": "INJECT svchost.exe -> w3wp.exe",
+        "alert_type": "attack_chain",
+        "src_process": "svchost.exe",
+        "anomaly_score": "0.93",
+        "hostname": "WS-USER-02",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_013",
+        "action": "INJECT",
+        "dstip": "10.0.1.50",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T18:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_013",
+        "trace_step": "inject",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_013",
+        "mitre_technique": "T1021.001",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 250,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_013\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_013\",\"trace_step\":\"inject\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T18:00:00.000Z\",\"title\":\"INJECT svchost.exe -> w3wp.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_013 action=INJECT technique=T1021.001 score=0.93\",\"raw_log_ref\":\"attack:idx_stress:evt_013\",\"action\":\"INJECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"svchost.exe\",\"dst_process\":\"w3wp.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.3.12\",\"dstip\":\"10.0.1.50\",\"hostname\":\"WS-USER-02\",\"agent_id\":\"WS-USER-02\",\"agent_name\":\"WS-USER-02\",\"mitre_technique\":\"T1021.001\",\"anomaly_score\":\"0.93\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.044Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.443641",
+      "timestamp": "2026-07-03T02:20:35.044+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.1.50",
+        "agent_id": "SRV-WEB-03",
+        "agent_name": "SRV-WEB-03",
+        "dst_process": "cmd.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_014 action=FORK technique=T1059.003 score=0.87",
+        "title": "FORK w3wp.exe -> cmd.exe",
+        "alert_type": "attack_chain",
+        "src_process": "w3wp.exe",
+        "anomaly_score": "0.87",
+        "hostname": "SRV-WEB-03",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_014",
+        "action": "FORK",
+        "dstip": "10.0.1.50",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-10T20:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_014",
+        "trace_step": "fork",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_014",
+        "mitre_technique": "T1059.003",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 228,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_014\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_014\",\"trace_step\":\"fork\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-10T20:00:00.000Z\",\"title\":\"FORK w3wp.exe -> cmd.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_014 action=FORK technique=T1059.003 score=0.87\",\"raw_log_ref\":\"attack:idx_stress:evt_014\",\"action\":\"FORK\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"w3wp.exe\",\"dst_process\":\"cmd.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.1.50\",\"dstip\":\"10.0.1.50\",\"hostname\":\"SRV-WEB-03\",\"agent_id\":\"SRV-WEB-03\",\"agent_name\":\"SRV-WEB-03\",\"mitre_technique\":\"T1059.003\",\"anomaly_score\":\"0.87\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.045Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.406998",
+      "timestamp": "2026-07-03T02:20:35.045+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.1.50",
+        "agent_id": "SRV-WEB-03",
+        "agent_name": "SRV-WEB-03",
+        "dst_process": "MSSQL",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_015 action=CONNECT technique=T1021.001 score=0.89",
+        "title": "CONNECT cmd.exe -> MSSQL",
+        "alert_type": "attack_chain",
+        "src_process": "cmd.exe",
+        "anomaly_score": "0.89",
+        "hostname": "SRV-WEB-03",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_015",
+        "action": "CONNECT",
+        "dstip": "10.0.1.50",
+        "dst_entity_type": "netconn",
+        "timestamp": "2026-06-11T00:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_015",
+        "trace_step": "connect",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_015",
+        "mitre_technique": "T1021.001",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 251,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_015\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_015\",\"trace_step\":\"connect\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-11T00:00:00.000Z\",\"title\":\"CONNECT cmd.exe -> MSSQL\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_015 action=CONNECT technique=T1021.001 score=0.89\",\"raw_log_ref\":\"attack:idx_stress:evt_015\",\"action\":\"CONNECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"netconn\",\"src_process\":\"cmd.exe\",\"dst_process\":\"MSSQL\",\"dst_path\":\"\",\"srcip\":\"10.0.1.50\",\"dstip\":\"10.0.1.50\",\"hostname\":\"SRV-WEB-03\",\"agent_id\":\"SRV-WEB-03\",\"agent_name\":\"SRV-WEB-03\",\"mitre_technique\":\"T1021.001\",\"anomaly_score\":\"0.89\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.046Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.445369",
+      "timestamp": "2026-07-03T02:20:35.046+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.1.50",
+        "agent_id": "SRV-WEB-03",
+        "agent_name": "SRV-WEB-03",
+        "dst_process": "sqlservr.exe",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_016 action=INJECT technique=T1068 score=0.95",
+        "title": "INJECT cmd.exe -> sqlservr.exe",
+        "alert_type": "attack_chain",
+        "src_process": "cmd.exe",
+        "anomaly_score": "0.95",
+        "hostname": "SRV-WEB-03",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_016",
+        "action": "INJECT",
+        "dstip": "10.0.2.100",
+        "dst_entity_type": "process",
+        "timestamp": "2026-06-11T02:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_016",
+        "trace_step": "inject",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_016",
+        "mitre_technique": "T1068",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 248,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_016\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_016\",\"trace_step\":\"inject\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-11T02:00:00.000Z\",\"title\":\"INJECT cmd.exe -> sqlservr.exe\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_016 action=INJECT technique=T1068 score=0.95\",\"raw_log_ref\":\"attack:idx_stress:evt_016\",\"action\":\"INJECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"process\",\"src_process\":\"cmd.exe\",\"dst_process\":\"sqlservr.exe\",\"dst_path\":\"\",\"srcip\":\"10.0.1.50\",\"dstip\":\"10.0.2.100\",\"hostname\":\"SRV-WEB-03\",\"agent_id\":\"SRV-WEB-03\",\"agent_name\":\"SRV-WEB-03\",\"mitre_technique\":\"T1068\",\"anomaly_score\":\"0.95\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.046Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.440294",
+      "timestamp": "2026-07-03T02:20:35.046+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.2.100",
+        "agent_id": "DB-PROD-01",
+        "agent_name": "DB-PROD-01",
+        "dst_process": "export.sql",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_017 action=WRITE technique=T1115 score=0.84",
+        "title": "WRITE sqlservr.exe -> export.sql",
+        "alert_type": "attack_chain",
+        "src_process": "sqlservr.exe",
+        "anomaly_score": "0.84",
+        "hostname": "DB-PROD-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_017",
+        "action": "WRITE",
+        "dstip": "",
+        "dst_entity_type": "file",
+        "timestamp": "2026-06-11T04:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_017",
+        "trace_step": "write",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_017",
+        "mitre_technique": "T1115",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 258,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_017\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_017\",\"trace_step\":\"write\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-11T04:00:00.000Z\",\"title\":\"WRITE sqlservr.exe -> export.sql\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_017 action=WRITE technique=T1115 score=0.84\",\"raw_log_ref\":\"attack:idx_stress:evt_017\",\"action\":\"WRITE\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"file\",\"src_process\":\"sqlservr.exe\",\"dst_process\":\"export.sql\",\"dst_path\":\"\",\"srcip\":\"10.0.2.100\",\"dstip\":\"\",\"hostname\":\"DB-PROD-01\",\"agent_id\":\"DB-PROD-01\",\"agent_name\":\"DB-PROD-01\",\"mitre_technique\":\"T1115\",\"anomaly_score\":\"0.84\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.046Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.456985",
+      "timestamp": "2026-07-03T02:20:35.046+0000"
+    },
+    {
+      "agent": {
+        "name": "wazuh.manager",
+        "id": "000"
+      },
+      "manager": {
+        "name": "wazuh.manager"
+      },
+      "data": {
+        "srcip": "10.0.2.100",
+        "agent_id": "DB-PROD-01",
+        "agent_name": "DB-PROD-01",
+        "dst_process": "HTTPS",
+        "description": "SOAR entity event ref=attack:idx_stress:evt_018 action=CONNECT technique=T1041 score=0.92",
+        "title": "CONNECT sqlservr.exe -> HTTPS",
+        "alert_type": "attack_chain",
+        "src_process": "sqlservr.exe",
+        "anomaly_score": "0.92",
+        "hostname": "DB-PROD-01",
+        "incident_id": "INC-PIPELINE_18",
+        "source_vendor": "my-soar",
+        "scenario": "pipeline_18",
+        "alert_id": "attack_idx_stress_evt_018",
+        "action": "CONNECT",
+        "dstip": "10.0.2.100",
+        "dst_entity_type": "netconn",
+        "timestamp": "2026-06-11T06:00:00.000Z",
+        "severity": "critical",
+        "trace_id": "attack:idx_stress:evt_018",
+        "trace_step": "connect",
+        "src_entity_type": "process",
+        "raw_log_ref": "attack:idx_stress:evt_018",
+        "mitre_technique": "T1041",
+        "event_kind": "soar_entity_event",
+        "is_attack": "true"
+      },
+      "rule": {
+        "firedtimes": 264,
+        "mail": false,
+        "level": 5,
+        "description": "SOAR scenario uploaded: pipeline_18",
+        "groups": [
+          "soar",
+          "trace",
+          "soar",
+          "scenario"
+        ],
+        "id": "100010"
+      },
+      "decoder": {
+        "name": "json"
+      },
+      "full_log": "{\"alert_id\":\"attack_idx_stress_evt_018\",\"source_vendor\":\"my-soar\",\"scenario\":\"pipeline_18\",\"incident_id\":\"INC-PIPELINE_18\",\"trace_id\":\"attack:idx_stress:evt_018\",\"trace_step\":\"connect\",\"event_kind\":\"soar_entity_event\",\"timestamp\":\"2026-06-11T06:00:00.000Z\",\"title\":\"CONNECT sqlservr.exe -> HTTPS\",\"severity\":\"critical\",\"alert_type\":\"attack_chain\",\"description\":\"SOAR entity event ref=attack:idx_stress:evt_018 action=CONNECT technique=T1041 score=0.92\",\"raw_log_ref\":\"attack:idx_stress:evt_018\",\"action\":\"CONNECT\",\"src_entity_type\":\"process\",\"dst_entity_type\":\"netconn\",\"src_process\":\"sqlservr.exe\",\"dst_process\":\"HTTPS\",\"dst_path\":\"\",\"srcip\":\"10.0.2.100\",\"dstip\":\"10.0.2.100\",\"hostname\":\"DB-PROD-01\",\"agent_id\":\"DB-PROD-01\",\"agent_name\":\"DB-PROD-01\",\"mitre_technique\":\"T1041\",\"anomaly_score\":\"0.92\",\"is_attack\":\"true\"}",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2026-07-03T02:20:35.046Z",
+      "location": "/var/log/soar/events-stream.jsonl",
+      "id": "1783045235.466885",
+      "timestamp": "2026-07-03T02:20:35.046+0000"
+    }
+  ],
+  "chain_summary": [
+    {
+      "step": 1,
+      "raw_log_ref": "attack:idx_stress:evt_001",
+      "mitre_technique": "T1566.001",
+      "hostname": "WS-USER-01",
+      "trace_step": "exec",
+      "src_process": "outlook.exe",
+      "dst_process": "cmd.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 2,
+      "raw_log_ref": "attack:idx_stress:evt_002",
+      "mitre_technique": "T1059.001",
+      "hostname": "WS-USER-01",
+      "trace_step": "fork",
+      "src_process": "cmd.exe",
+      "dst_process": "powershell.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 3,
+      "raw_log_ref": "attack:idx_stress:evt_003",
+      "mitre_technique": "T1053.005",
+      "hostname": "WS-USER-01",
+      "trace_step": "exec",
+      "src_process": "powershell.exe",
+      "dst_process": "schtasks.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 4,
+      "raw_log_ref": "attack:idx_stress:evt_004",
+      "mitre_technique": "T1053.005",
+      "hostname": "WS-USER-01",
+      "trace_step": "write",
+      "src_process": "schtasks.exe",
+      "dst_process": "Run key",
+      "src_entity_type": "process",
+      "dst_entity_type": "registry"
+    },
+    {
+      "step": 5,
+      "raw_log_ref": "attack:idx_stress:evt_005",
+      "mitre_technique": "T1548",
+      "hostname": "WS-USER-01",
+      "trace_step": "exec",
+      "src_process": "powershell.exe",
+      "dst_process": "whoami.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 6,
+      "raw_log_ref": "attack:idx_stress:evt_006",
+      "mitre_technique": "T1055",
+      "hostname": "WS-USER-01",
+      "trace_step": "fork",
+      "src_process": "powershell.exe",
+      "dst_process": "rundll32.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 7,
+      "raw_log_ref": "attack:idx_stress:evt_007",
+      "mitre_technique": "T1070",
+      "hostname": "WS-USER-01",
+      "trace_step": "write",
+      "src_process": "powershell.exe",
+      "dst_process": "temp.txt",
+      "src_entity_type": "process",
+      "dst_entity_type": "file"
+    },
+    {
+      "step": 8,
+      "raw_log_ref": "attack:idx_stress:evt_008",
+      "mitre_technique": "T1003",
+      "hostname": "WS-USER-01",
+      "trace_step": "exec",
+      "src_process": "powershell.exe",
+      "dst_process": "procdump.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 9,
+      "raw_log_ref": "attack:idx_stress:evt_009",
+      "mitre_technique": "T1016",
+      "hostname": "WS-USER-01",
+      "trace_step": "connect",
+      "src_process": "powershell.exe",
+      "dst_process": "SMB",
+      "src_entity_type": "process",
+      "dst_entity_type": "netconn"
+    },
+    {
+      "step": 10,
+      "raw_log_ref": "attack:idx_stress:evt_010",
+      "mitre_technique": "T1021.001",
+      "hostname": "WS-USER-01",
+      "trace_step": "inject",
+      "src_process": "powershell.exe",
+      "dst_process": "svchost.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 11,
+      "raw_log_ref": "attack:idx_stress:evt_011",
+      "mitre_technique": "T1005",
+      "hostname": "WS-USER-02",
+      "trace_step": "write",
+      "src_process": "svchost.exe",
+      "dst_process": "data.zip",
+      "src_entity_type": "process",
+      "dst_entity_type": "file"
+    },
+    {
+      "step": 12,
+      "raw_log_ref": "attack:idx_stress:evt_012",
+      "mitre_technique": "T1570",
+      "hostname": "WS-USER-02",
+      "trace_step": "connect",
+      "src_process": "svchost.exe",
+      "dst_process": "RDP",
+      "src_entity_type": "process",
+      "dst_entity_type": "netconn"
+    },
+    {
+      "step": 13,
+      "raw_log_ref": "attack:idx_stress:evt_013",
+      "mitre_technique": "T1021.001",
+      "hostname": "WS-USER-02",
+      "trace_step": "inject",
+      "src_process": "svchost.exe",
+      "dst_process": "w3wp.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 14,
+      "raw_log_ref": "attack:idx_stress:evt_014",
+      "mitre_technique": "T1059.003",
+      "hostname": "SRV-WEB-03",
+      "trace_step": "fork",
+      "src_process": "w3wp.exe",
+      "dst_process": "cmd.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 15,
+      "raw_log_ref": "attack:idx_stress:evt_015",
+      "mitre_technique": "T1021.001",
+      "hostname": "SRV-WEB-03",
+      "trace_step": "connect",
+      "src_process": "cmd.exe",
+      "dst_process": "MSSQL",
+      "src_entity_type": "process",
+      "dst_entity_type": "netconn"
+    },
+    {
+      "step": 16,
+      "raw_log_ref": "attack:idx_stress:evt_016",
+      "mitre_technique": "T1068",
+      "hostname": "SRV-WEB-03",
+      "trace_step": "inject",
+      "src_process": "cmd.exe",
+      "dst_process": "sqlservr.exe",
+      "src_entity_type": "process",
+      "dst_entity_type": "process"
+    },
+    {
+      "step": 17,
+      "raw_log_ref": "attack:idx_stress:evt_017",
+      "mitre_technique": "T1115",
+      "hostname": "DB-PROD-01",
+      "trace_step": "write",
+      "src_process": "sqlservr.exe",
+      "dst_process": "export.sql",
+      "src_entity_type": "process",
+      "dst_entity_type": "file"
+    },
+    {
+      "step": 18,
+      "raw_log_ref": "attack:idx_stress:evt_018",
+      "mitre_technique": "T1041",
+      "hostname": "DB-PROD-01",
+      "trace_step": "connect",
+      "src_process": "sqlservr.exe",
+      "dst_process": "HTTPS",
+      "src_entity_type": "process",
+      "dst_entity_type": "netconn"
+    }
+  ]
+}

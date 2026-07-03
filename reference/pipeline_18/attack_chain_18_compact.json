@@ -1,0 +1,200 @@
+[
+  {
+    "step": 1,
+    "raw_log_ref": "attack:idx_stress:evt_001",
+    "mitre_technique": "T1566.001",
+    "hostname": "WS-USER-01",
+    "trace_step": "exec",
+    "src_process": "outlook.exe",
+    "dst_process": "cmd.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 2,
+    "raw_log_ref": "attack:idx_stress:evt_002",
+    "mitre_technique": "T1059.001",
+    "hostname": "WS-USER-01",
+    "trace_step": "fork",
+    "src_process": "cmd.exe",
+    "dst_process": "powershell.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 3,
+    "raw_log_ref": "attack:idx_stress:evt_003",
+    "mitre_technique": "T1053.005",
+    "hostname": "WS-USER-01",
+    "trace_step": "exec",
+    "src_process": "powershell.exe",
+    "dst_process": "schtasks.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 4,
+    "raw_log_ref": "attack:idx_stress:evt_004",
+    "mitre_technique": "T1053.005",
+    "hostname": "WS-USER-01",
+    "trace_step": "write",
+    "src_process": "schtasks.exe",
+    "dst_process": "Run key",
+    "src_entity_type": "process",
+    "dst_entity_type": "registry"
+  },
+  {
+    "step": 5,
+    "raw_log_ref": "attack:idx_stress:evt_005",
+    "mitre_technique": "T1548",
+    "hostname": "WS-USER-01",
+    "trace_step": "exec",
+    "src_process": "powershell.exe",
+    "dst_process": "whoami.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 6,
+    "raw_log_ref": "attack:idx_stress:evt_006",
+    "mitre_technique": "T1055",
+    "hostname": "WS-USER-01",
+    "trace_step": "fork",
+    "src_process": "powershell.exe",
+    "dst_process": "rundll32.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 7,
+    "raw_log_ref": "attack:idx_stress:evt_007",
+    "mitre_technique": "T1070",
+    "hostname": "WS-USER-01",
+    "trace_step": "write",
+    "src_process": "powershell.exe",
+    "dst_process": "temp.txt",
+    "src_entity_type": "process",
+    "dst_entity_type": "file"
+  },
+  {
+    "step": 8,
+    "raw_log_ref": "attack:idx_stress:evt_008",
+    "mitre_technique": "T1003",
+    "hostname": "WS-USER-01",
+    "trace_step": "exec",
+    "src_process": "powershell.exe",
+    "dst_process": "procdump.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 9,
+    "raw_log_ref": "attack:idx_stress:evt_009",
+    "mitre_technique": "T1016",
+    "hostname": "WS-USER-01",
+    "trace_step": "connect",
+    "src_process": "powershell.exe",
+    "dst_process": "SMB",
+    "src_entity_type": "process",
+    "dst_entity_type": "netconn"
+  },
+  {
+    "step": 10,
+    "raw_log_ref": "attack:idx_stress:evt_010",
+    "mitre_technique": "T1021.001",
+    "hostname": "WS-USER-01",
+    "trace_step": "inject",
+    "src_process": "powershell.exe",
+    "dst_process": "svchost.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 11,
+    "raw_log_ref": "attack:idx_stress:evt_011",
+    "mitre_technique": "T1005",
+    "hostname": "WS-USER-02",
+    "trace_step": "write",
+    "src_process": "svchost.exe",
+    "dst_process": "data.zip",
+    "src_entity_type": "process",
+    "dst_entity_type": "file"
+  },
+  {
+    "step": 12,
+    "raw_log_ref": "attack:idx_stress:evt_012",
+    "mitre_technique": "T1570",
+    "hostname": "WS-USER-02",
+    "trace_step": "connect",
+    "src_process": "svchost.exe",
+    "dst_process": "RDP",
+    "src_entity_type": "process",
+    "dst_entity_type": "netconn"
+  },
+  {
+    "step": 13,
+    "raw_log_ref": "attack:idx_stress:evt_013",
+    "mitre_technique": "T1021.001",
+    "hostname": "WS-USER-02",
+    "trace_step": "inject",
+    "src_process": "svchost.exe",
+    "dst_process": "w3wp.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 14,
+    "raw_log_ref": "attack:idx_stress:evt_014",
+    "mitre_technique": "T1059.003",
+    "hostname": "SRV-WEB-03",
+    "trace_step": "fork",
+    "src_process": "w3wp.exe",
+    "dst_process": "cmd.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 15,
+    "raw_log_ref": "attack:idx_stress:evt_015",
+    "mitre_technique": "T1021.001",
+    "hostname": "SRV-WEB-03",
+    "trace_step": "connect",
+    "src_process": "cmd.exe",
+    "dst_process": "MSSQL",
+    "src_entity_type": "process",
+    "dst_entity_type": "netconn"
+  },
+  {
+    "step": 16,
+    "raw_log_ref": "attack:idx_stress:evt_016",
+    "mitre_technique": "T1068",
+    "hostname": "SRV-WEB-03",
+    "trace_step": "inject",
+    "src_process": "cmd.exe",
+    "dst_process": "sqlservr.exe",
+    "src_entity_type": "process",
+    "dst_entity_type": "process"
+  },
+  {
+    "step": 17,
+    "raw_log_ref": "attack:idx_stress:evt_017",
+    "mitre_technique": "T1115",
+    "hostname": "DB-PROD-01",
+    "trace_step": "write",
+    "src_process": "sqlservr.exe",
+    "dst_process": "export.sql",
+    "src_entity_type": "process",
+    "dst_entity_type": "file"
+  },
+  {
+    "step": 18,
+    "raw_log_ref": "attack:idx_stress:evt_018",
+    "mitre_technique": "T1041",
+    "hostname": "DB-PROD-01",
+    "trace_step": "connect",
+    "src_process": "sqlservr.exe",
+    "dst_process": "HTTPS",
+    "src_entity_type": "process",
+    "dst_entity_type": "netconn"
+  }
+]

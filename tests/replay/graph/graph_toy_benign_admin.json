@@ -1,0 +1,84 @@
+{
+  "case_id": "graph_toy_benign_admin",
+  "title": "Toy graph: suspicious PowerShell alert, benign admin baseline",
+  "category": "benign",
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_alert",
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "timestamp": 1735689660.0,
+    "anomaly_score": 0.42,
+    "attributes": {
+      "host_id": "workstation-1",
+      "simulation": true,
+      "known_admin_host": true,
+      "admin_baseline": true
+    }
+  },
+  "alert": {
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.42,
+    "attributes": {
+      "host_id": "workstation-1",
+      "simulation": true,
+      "known_admin_host": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_alert",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735689660.0,
+        "source": "process_creation",
+        "attributes": { "host_id": "workstation-1", "benign": true }
+      },
+      {
+        "id": "e_inventory",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735689600.0,
+        "source": "process_creation",
+        "attributes": { "host_id": "workstation-1", "benign": true, "admin_baseline": true }
+      }
+    ],
+    "edges": [
+      { "id": "edge_benign_inv", "src": "e_inventory", "dst": "e_alert", "relation": "causes", "role": "benign" }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": ["e_inventory"],
+    "attack_nodes": [],
+    "attack_edges": [],
+    "benign_edges": ["edge_benign_inv"],
+    "oos_edges": []
+  },
+  "replay_driver": {
+    "reveal_queue": ["e_inventory"],
+    "pollute_queue": []
+  },
+  "replay_config": {
+    "max_rounds": 6,
+    "fanout_per_round": 2,
+    "min_attack_recall": 0.0,
+    "min_boundary_precision": 0.0,
+    "max_benign_pollution": 2
+  },
+  "expected_decision": {
+    "action": "dismiss",
+    "allowed_actions": ["dismiss", "dismiss_benign", "monitor"],
+    "must_include_boundaries": [],
+    "must_exclude_boundaries": [],
+    "counterfactuals": []
+  },
+  "evaluation": { "calibration_eligible": false }
+}

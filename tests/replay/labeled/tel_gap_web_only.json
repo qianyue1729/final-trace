@@ -1,0 +1,31 @@
+{
+  "case_id": "tel_gap_web_only",
+  "title": "Web app log only",
+  "category": "telemetry-gap",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1190",
+    "tactic": "initial-access",
+    "platform": "linux",
+    "log_source": "web_application_log",
+    "anomaly_score": 0.55,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "web_exploit",
+    "true_boundary": "uncertain",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1190"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

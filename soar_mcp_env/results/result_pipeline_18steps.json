@@ -1,0 +1,39 @@
+{
+  "scenario_name": "full_pipeline_test",
+  "total_events": 1818,
+  "attack_events": 18,
+  "noise_events": 1800,
+  "signal_noise_ratio": "1:100",
+  "precision": 1.0,
+  "recall": 0.0556,
+  "f1": 0.1053,
+  "rca_accuracy": 0.0,
+  "ttd_seconds": 0.03,
+  "mcp_calls": 3,
+  "llm_calls": 0,
+  "total_tokens": 0,
+  "stop_reason": "frontier_exhausted",
+  "found_attack_refs": [
+    "attack:idx_stress:evt_018"
+  ],
+  "missed_attack_refs": [
+    "attack:idx_stress:evt_001",
+    "attack:idx_stress:evt_002",
+    "attack:idx_stress:evt_003",
+    "attack:idx_stress:evt_004",
+    "attack:idx_stress:evt_005",
+    "attack:idx_stress:evt_006",
+    "attack:idx_stress:evt_007",
+    "attack:idx_stress:evt_008",
+    "attack:idx_stress:evt_009",
+    "attack:idx_stress:evt_010",
+    "attack:idx_stress:evt_011",
+    "attack:idx_stress:evt_012",
+    "attack:idx_stress:evt_013",
+    "attack:idx_stress:evt_014",
+    "attack:idx_stress:evt_015",
+    "attack:idx_stress:evt_016",
+    "attack:idx_stress:evt_017"
+  ],
+  "false_positive_refs": []
+}

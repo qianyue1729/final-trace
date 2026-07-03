@@ -1,0 +1,975 @@
+{
+  "metadata": {
+    "version": "2.0",
+    "generated_date": "2026-06-30",
+    "data_source": "attack-flow-corpus + mitre-stix-cooccurrence",
+    "total_apt_groups": 167,
+    "total_tactics_observed": 13,
+    "stix_objects": 25842,
+    "smoothing": "dirichlet",
+    "alpha": 0.5,
+    "flow_stats": {
+      "afb_files": 40,
+      "tactic_transition_pairs": 42,
+      "flow_weighted_transitions": 173
+    },
+    "source_weights": {
+      "attack_flow": 1.0,
+      "stix_cooccurrence": 0.2
+    }
+  },
+  "tactics": [
+    "TA0043",
+    "TA0042",
+    "TA0001",
+    "TA0002",
+    "TA0003",
+    "TA0004",
+    "TA0005",
+    "TA0006",
+    "TA0007",
+    "TA0008",
+    "TA0009",
+    "TA0011",
+    "TA0010",
+    "TA0040"
+  ],
+  "matrix": {
+    "TA0042": {
+      "TA0043": {
+        "probability": 1.0,
+        "log_odds": 5.0,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8.8,
+          "stix_cooccurrence": 44
+        },
+        "confidence": 0.527
+      }
+    },
+    "TA0001": {
+      "TA0043": {
+        "probability": 0.3344,
+        "log_odds": -0.688,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 10.0,
+          "stix_cooccurrence": 45
+        },
+        "confidence": 0.589
+      },
+      "TA0042": {
+        "probability": 0.6656,
+        "log_odds": 0.688,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 20.4,
+          "stix_cooccurrence": 102
+        },
+        "confidence": 1.0
+      }
+    },
+    "TA0002": {
+      "TA0043": {
+        "probability": 0.135,
+        "log_odds": -1.858,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8.8,
+          "stix_cooccurrence": 44
+        },
+        "confidence": 0.527
+      },
+      "TA0042": {
+        "probability": 0.3208,
+        "log_odds": -0.75,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 21.6,
+          "stix_cooccurrence": 103
+        },
+        "confidence": 1.0
+      },
+      "TA0001": {
+        "probability": 0.5443,
+        "log_odds": 0.178,
+        "support": {
+          "attack_flow_edges": 10,
+          "report_edges": 37.0,
+          "stix_cooccurrence": 135
+        },
+        "confidence": 1.0
+      }
+    },
+    "TA0003": {
+      "TA0043": {
+        "probability": 0.1105,
+        "log_odds": -2.086,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 9.4,
+          "stix_cooccurrence": 42
+        },
+        "confidence": 0.553
+      },
+      "TA0042": {
+        "probability": 0.2109,
+        "log_odds": -1.319,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 18.4,
+          "stix_cooccurrence": 92
+        },
+        "confidence": 1.0
+      },
+      "TA0001": {
+        "probability": 0.3136,
+        "log_odds": -0.783,
+        "support": {
+          "attack_flow_edges": 5,
+          "report_edges": 27.6,
+          "stix_cooccurrence": 113
+        },
+        "confidence": 1.0
+      },
+      "TA0002": {
+        "probability": 0.365,
+        "log_odds": -0.554,
+        "support": {
+          "attack_flow_edges": 10,
+          "report_edges": 32.2,
+          "stix_cooccurrence": 111
+        },
+        "confidence": 1.0
+      }
+    },
+    "TA0004": {
+      "TA0043": {
+        "probability": 0.0834,
+        "log_odds": -2.397,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 7.6,
+          "stix_cooccurrence": 38
+        },
+        "confidence": 0.455
+      },
+      "TA0042": {
+        "probability": 0.1885,
+        "log_odds": -1.46,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 17.8,
+          "stix_cooccurrence": 89
+        },
+        "confidence": 1.0
+      },
+      "TA0001": {
+        "probability": 0.2441,
+        "log_odds": -1.13,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 23.2,
+          "stix_cooccurrence": 111
+        },
+        "confidence": 1.0
+      },
+      "TA0002": {
+        "probability": 0.2461,
+        "log_odds": -1.119,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 23.4,
+          "stix_cooccurrence": 112
+        },
+        "confidence": 1.0
+      },
+      "TA0003": {
+        "probability": 0.2379,
+        "log_odds": -1.164,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 22.6,
+          "stix_cooccurrence": 113
+        },
+        "confidence": 1.0
+      }
+    },
+    "TA0005": {
+      "TA0043": {
+        "probability": 0.1667,
+        "log_odds": -1.609,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8,
+          "stix_cooccurrence": 8
+        },
+        "confidence": 0.32
+      },
+      "TA0042": {
+        "probability": 0.1667,
+        "log_odds": -1.609,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8,
+          "stix_cooccurrence": 8
+        },
+        "confidence": 0.32
+      },
+      "TA0001": {
+        "probability": 0.1667,
+        "log_odds": -1.609,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8,
+          "stix_cooccurrence": 8
+        },
+        "confidence": 0.32
+      },
+      "TA0002": {
+        "probability": 0.1667,
+        "log_odds": -1.609,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8,
+          "stix_cooccurrence": 8
+        },
+        "confidence": 0.32
+      },
+      "TA0003": {
+        "probability": 0.1667,
+        "log_odds": -1.609,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8,
+          "stix_cooccurrence": 8
+        },
+        "confidence": 0.32
+      },
+      "TA0004": {
+        "probability": 0.1667,
+        "log_odds": -1.609,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8,
+          "stix_cooccurrence": 8
+        },
+        "confidence": 0.32
+      }
+    },
+    "TA0006": {
+      "TA0043": {
+        "probability": 0.075,
+        "log_odds": -2.512,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 7.4,
+          "stix_cooccurrence": 37
+        },
+        "confidence": 0.443
+      },
+      "TA0042": {
+        "probability": 0.1472,
+        "log_odds": -1.757,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 15.0,
+          "stix_cooccurrence": 75
+        },
+        "confidence": 0.898
+      },
+      "TA0001": {
+        "probability": 0.1757,
+        "log_odds": -1.546,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 18.0,
+          "stix_cooccurrence": 85
+        },
+        "confidence": 1.0
+      },
+      "TA0002": {
+        "probability": 0.2308,
+        "log_odds": -1.204,
+        "support": {
+          "attack_flow_edges": 6,
+          "report_edges": 23.8,
+          "stix_cooccurrence": 89
+        },
+        "confidence": 1.0
+      },
+      "TA0003": {
+        "probability": 0.1909,
+        "log_odds": -1.444,
+        "support": {
+          "attack_flow_edges": 3,
+          "report_edges": 19.6,
+          "stix_cooccurrence": 83
+        },
+        "confidence": 1.0
+      },
+      "TA0004": {
+        "probability": 0.1662,
+        "log_odds": -1.613,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 17.0,
+          "stix_cooccurrence": 85
+        },
+        "confidence": 1.0
+      },
+      "TA0005": {
+        "probability": 0.0142,
+        "log_odds": -4.237,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      }
+    },
+    "TA0007": {
+      "TA0043": {
+        "probability": 0.053,
+        "log_odds": -2.883,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 7.8,
+          "stix_cooccurrence": 39
+        },
+        "confidence": 0.467
+      },
+      "TA0042": {
+        "probability": 0.1117,
+        "log_odds": -2.073,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 17.0,
+          "stix_cooccurrence": 85
+        },
+        "confidence": 1.0
+      },
+      "TA0001": {
+        "probability": 0.1424,
+        "log_odds": -1.795,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 21.8,
+          "stix_cooccurrence": 104
+        },
+        "confidence": 1.0
+      },
+      "TA0002": {
+        "probability": 0.3008,
+        "log_odds": -0.844,
+        "support": {
+          "attack_flow_edges": 25,
+          "report_edges": 46.6,
+          "stix_cooccurrence": 108
+        },
+        "confidence": 1.0
+      },
+      "TA0003": {
+        "probability": 0.1526,
+        "log_odds": -1.714,
+        "support": {
+          "attack_flow_edges": 4,
+          "report_edges": 23.4,
+          "stix_cooccurrence": 97
+        },
+        "confidence": 1.0
+      },
+      "TA0004": {
+        "probability": 0.1232,
+        "log_odds": -1.962,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 18.8,
+          "stix_cooccurrence": 94
+        },
+        "confidence": 1.0
+      },
+      "TA0005": {
+        "probability": 0.0096,
+        "log_odds": -4.639,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      },
+      "TA0006": {
+        "probability": 0.1066,
+        "log_odds": -2.126,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 16.2,
+          "stix_cooccurrence": 81
+        },
+        "confidence": 0.97
+      }
+    },
+    "TA0008": {
+      "TA0043": {
+        "probability": 0.062,
+        "log_odds": -2.716,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 7.2,
+          "stix_cooccurrence": 31
+        },
+        "confidence": 0.421
+      },
+      "TA0042": {
+        "probability": 0.1072,
+        "log_odds": -2.12,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 12.8,
+          "stix_cooccurrence": 64
+        },
+        "confidence": 0.766
+      },
+      "TA0001": {
+        "probability": 0.1201,
+        "log_odds": -1.992,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 14.4,
+          "stix_cooccurrence": 72
+        },
+        "confidence": 0.862
+      },
+      "TA0002": {
+        "probability": 0.1523,
+        "log_odds": -1.717,
+        "support": {
+          "attack_flow_edges": 4,
+          "report_edges": 18.4,
+          "stix_cooccurrence": 72
+        },
+        "confidence": 1.0
+      },
+      "TA0003": {
+        "probability": 0.1426,
+        "log_odds": -1.794,
+        "support": {
+          "attack_flow_edges": 3,
+          "report_edges": 17.2,
+          "stix_cooccurrence": 71
+        },
+        "confidence": 1.0
+      },
+      "TA0004": {
+        "probability": 0.1152,
+        "log_odds": -2.038,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 13.8,
+          "stix_cooccurrence": 69
+        },
+        "confidence": 0.826
+      },
+      "TA0005": {
+        "probability": 0.0121,
+        "log_odds": -4.403,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      },
+      "TA0006": {
+        "probability": 0.1668,
+        "log_odds": -1.608,
+        "support": {
+          "attack_flow_edges": 8,
+          "report_edges": 20.2,
+          "stix_cooccurrence": 61
+        },
+        "confidence": 1.0
+      },
+      "TA0007": {
+        "probability": 0.1217,
+        "log_odds": -1.977,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 14.6,
+          "stix_cooccurrence": 68
+        },
+        "confidence": 0.864
+      }
+    },
+    "TA0009": {
+      "TA0043": {
+        "probability": 0.0508,
+        "log_odds": -2.927,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 7.4,
+          "stix_cooccurrence": 37
+        },
+        "confidence": 0.443
+      },
+      "TA0042": {
+        "probability": 0.0972,
+        "log_odds": -2.229,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 14.6,
+          "stix_cooccurrence": 73
+        },
+        "confidence": 0.874
+      },
+      "TA0001": {
+        "probability": 0.1126,
+        "log_odds": -2.064,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 17.0,
+          "stix_cooccurrence": 85
+        },
+        "confidence": 1.0
+      },
+      "TA0002": {
+        "probability": 0.1551,
+        "log_odds": -1.695,
+        "support": {
+          "attack_flow_edges": 6,
+          "report_edges": 23.6,
+          "stix_cooccurrence": 88
+        },
+        "confidence": 1.0
+      },
+      "TA0003": {
+        "probability": 0.119,
+        "log_odds": -2.001,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 18.0,
+          "stix_cooccurrence": 80
+        },
+        "confidence": 1.0
+      },
+      "TA0004": {
+        "probability": 0.1113,
+        "log_odds": -2.077,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 16.8,
+          "stix_cooccurrence": 79
+        },
+        "confidence": 0.996
+      },
+      "TA0005": {
+        "probability": 0.0097,
+        "log_odds": -4.631,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      },
+      "TA0006": {
+        "probability": 0.1139,
+        "log_odds": -2.052,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 17.2,
+          "stix_cooccurrence": 76
+        },
+        "confidence": 1.0
+      },
+      "TA0007": {
+        "probability": 0.1358,
+        "log_odds": -1.851,
+        "support": {
+          "attack_flow_edges": 5,
+          "report_edges": 20.6,
+          "stix_cooccurrence": 78
+        },
+        "confidence": 1.0
+      },
+      "TA0008": {
+        "probability": 0.0946,
+        "log_odds": -2.259,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 14.2,
+          "stix_cooccurrence": 61
+        },
+        "confidence": 0.831
+      }
+    },
+    "TA0011": {
+      "TA0043": {
+        "probability": 0.0394,
+        "log_odds": -3.194,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 8.4,
+          "stix_cooccurrence": 42
+        },
+        "confidence": 0.503
+      },
+      "TA0042": {
+        "probability": 0.0952,
+        "log_odds": -2.252,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 21.0,
+          "stix_cooccurrence": 95
+        },
+        "confidence": 1.0
+      },
+      "TA0001": {
+        "probability": 0.1138,
+        "log_odds": -2.053,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 25.2,
+          "stix_cooccurrence": 116
+        },
+        "confidence": 1.0
+      },
+      "TA0002": {
+        "probability": 0.1952,
+        "log_odds": -1.416,
+        "support": {
+          "attack_flow_edges": 20,
+          "report_edges": 43.6,
+          "stix_cooccurrence": 118
+        },
+        "confidence": 1.0
+      },
+      "TA0003": {
+        "probability": 0.104,
+        "log_odds": -2.153,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 23.0,
+          "stix_cooccurrence": 105
+        },
+        "confidence": 1.0
+      },
+      "TA0004": {
+        "probability": 0.0943,
+        "log_odds": -2.262,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 20.8,
+          "stix_cooccurrence": 104
+        },
+        "confidence": 1.0
+      },
+      "TA0005": {
+        "probability": 0.0066,
+        "log_odds": -5.008,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      },
+      "TA0006": {
+        "probability": 0.0784,
+        "log_odds": -2.465,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 17.2,
+          "stix_cooccurrence": 81
+        },
+        "confidence": 1.0
+      },
+      "TA0007": {
+        "probability": 0.1164,
+        "log_odds": -2.027,
+        "support": {
+          "attack_flow_edges": 7,
+          "report_edges": 25.8,
+          "stix_cooccurrence": 94
+        },
+        "confidence": 1.0
+      },
+      "TA0008": {
+        "probability": 0.0739,
+        "log_odds": -2.528,
+        "support": {
+          "attack_flow_edges": 3,
+          "report_edges": 16.2,
+          "stix_cooccurrence": 66
+        },
+        "confidence": 0.94
+      },
+      "TA0009": {
+        "probability": 0.0828,
+        "log_odds": -2.405,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 18.2,
+          "stix_cooccurrence": 81
+        },
+        "confidence": 1.0
+      }
+    },
+    "TA0010": {
+      "TA0043": {
+        "probability": 0.0456,
+        "log_odds": -3.041,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 5.4,
+          "stix_cooccurrence": 27
+        },
+        "confidence": 0.323
+      },
+      "TA0042": {
+        "probability": 0.0827,
+        "log_odds": -2.406,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 10.2,
+          "stix_cooccurrence": 51
+        },
+        "confidence": 0.611
+      },
+      "TA0001": {
+        "probability": 0.0889,
+        "log_odds": -2.327,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 11.0,
+          "stix_cooccurrence": 55
+        },
+        "confidence": 0.659
+      },
+      "TA0002": {
+        "probability": 0.0904,
+        "log_odds": -2.309,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 11.2,
+          "stix_cooccurrence": 56
+        },
+        "confidence": 0.671
+      },
+      "TA0003": {
+        "probability": 0.0904,
+        "log_odds": -2.309,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 11.2,
+          "stix_cooccurrence": 56
+        },
+        "confidence": 0.671
+      },
+      "TA0004": {
+        "probability": 0.0873,
+        "log_odds": -2.347,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 10.8,
+          "stix_cooccurrence": 54
+        },
+        "confidence": 0.647
+      },
+      "TA0005": {
+        "probability": 0.0116,
+        "log_odds": -4.446,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      },
+      "TA0006": {
+        "probability": 0.0827,
+        "log_odds": -2.406,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 10.2,
+          "stix_cooccurrence": 46
+        },
+        "confidence": 0.601
+      },
+      "TA0007": {
+        "probability": 0.1028,
+        "log_odds": -2.167,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 12.8,
+          "stix_cooccurrence": 54
+        },
+        "confidence": 0.747
+      },
+      "TA0008": {
+        "probability": 0.075,
+        "log_odds": -2.513,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 9.2,
+          "stix_cooccurrence": 46
+        },
+        "confidence": 0.551
+      },
+      "TA0009": {
+        "probability": 0.1213,
+        "log_odds": -1.98,
+        "support": {
+          "attack_flow_edges": 5,
+          "report_edges": 15.2,
+          "stix_cooccurrence": 51
+        },
+        "confidence": 0.861
+      },
+      "TA0011": {
+        "probability": 0.1213,
+        "log_odds": -1.98,
+        "support": {
+          "attack_flow_edges": 4,
+          "report_edges": 15.2,
+          "stix_cooccurrence": 56
+        },
+        "confidence": 0.871
+      }
+    },
+    "TA0040": {
+      "TA0043": {
+        "probability": 0.0393,
+        "log_odds": -3.196,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 3.2,
+          "stix_cooccurrence": 16
+        },
+        "confidence": 0.192
+      },
+      "TA0042": {
+        "probability": 0.0691,
+        "log_odds": -2.601,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 6.0,
+          "stix_cooccurrence": 30
+        },
+        "confidence": 0.359
+      },
+      "TA0001": {
+        "probability": 0.0776,
+        "log_odds": -2.476,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 6.8,
+          "stix_cooccurrence": 34
+        },
+        "confidence": 0.407
+      },
+      "TA0002": {
+        "probability": 0.1711,
+        "log_odds": -1.578,
+        "support": {
+          "attack_flow_edges": 9,
+          "report_edges": 15.6,
+          "stix_cooccurrence": 33
+        },
+        "confidence": 0.795
+      },
+      "TA0003": {
+        "probability": 0.084,
+        "log_odds": -2.39,
+        "support": {
+          "attack_flow_edges": 1,
+          "report_edges": 7.4,
+          "stix_cooccurrence": 32
+        },
+        "confidence": 0.433
+      },
+      "TA0004": {
+        "probability": 0.0755,
+        "log_odds": -2.506,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 6.6,
+          "stix_cooccurrence": 33
+        },
+        "confidence": 0.395
+      },
+      "TA0005": {
+        "probability": 0.0159,
+        "log_odds": -4.123,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 1,
+          "stix_cooccurrence": 1
+        },
+        "confidence": 0.04
+      },
+      "TA0006": {
+        "probability": 0.0691,
+        "log_odds": -2.601,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 6.0,
+          "stix_cooccurrence": 30
+        },
+        "confidence": 0.359
+      },
+      "TA0007": {
+        "probability": 0.0946,
+        "log_odds": -2.259,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 8.4,
+          "stix_cooccurrence": 32
+        },
+        "confidence": 0.483
+      },
+      "TA0008": {
+        "probability": 0.0606,
+        "log_odds": -2.741,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 5.2,
+          "stix_cooccurrence": 26
+        },
+        "confidence": 0.311
+      },
+      "TA0009": {
+        "probability": 0.0584,
+        "log_odds": -2.779,
+        "support": {
+          "attack_flow_edges": 0,
+          "report_edges": 5.0,
+          "stix_cooccurrence": 25
+        },
+        "confidence": 0.299
+      },
+      "TA0011": {
+        "probability": 0.1073,
+        "log_odds": -2.118,
+        "support": {
+          "attack_flow_edges": 3,
+          "report_edges": 9.6,
+          "stix_cooccurrence": 33
+        },
+        "confidence": 0.545
+      },
+      "TA0010": {
+        "probability": 0.0776,
+        "log_odds": -2.476,
+        "support": {
+          "attack_flow_edges": 2,
+          "report_edges": 6.8,
+          "stix_cooccurrence": 24
+        },
+        "confidence": 0.387
+      }
+    }
+  }
+}

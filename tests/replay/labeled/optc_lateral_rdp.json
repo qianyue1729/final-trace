@@ -1,0 +1,31 @@
+{
+  "case_id": "optc_lateral_rdp",
+  "title": "OpTC-style RDP lateral",
+  "category": "attack-like",
+  "source": "optc",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1021.001",
+    "tactic": "lateral-movement",
+    "platform": "windows",
+    "log_source": "authentication",
+    "anomaly_score": 0.8,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "lateral_rdp",
+    "true_boundary": "in_attack",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1021.001"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

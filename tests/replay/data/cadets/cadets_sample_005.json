@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "performer": "CADETS",
+    "scenario_id": "cadets_sample_005",
+    "title": "CADETS: log clearing / anti-forensics before impact",
+    "category": "attack-like"
+  },
+  "ground_truth": {
+    "entry_event_id": "cadets:e_log_clear",
+    "anomaly_score": 0.94,
+    "attack_technique_pairs": [
+      ["T1059.004", "T1070.001"],
+      ["T1070.001", "T1486"]
+    ],
+    "benign_technique_pairs": [["T1070.001", "T1070.002"]],
+    "oos_technique_pairs": [["T1562.001", "T1070.001"]]
+  },
+  "events": [
+    {"event_id": "cadets:e_prep", "timestamp": "2018-04-10T18:00:00Z", "host_id": "cadets-host-5", "subject": {"id": "proc:bash:1", "type": "process", "name": "bash"}, "object": {"id": "proc:encrypt:2", "type": "process", "name": "encrypt"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "attack"},
+    {"event_id": "cadets:e_log_clear", "timestamp": "2018-04-10T18:00:30Z", "host_id": "cadets-host-5", "parent_event_id": "cadets:e_prep", "subject": {"id": "proc:encrypt:2", "type": "process", "name": "encrypt"}, "object": {"id": "file:/var/log/auth.log", "type": "file", "name": "/var/log/auth.log"}, "relation": "log_delete", "tactic": "defense-evasion", "technique": "T1070.001", "role": "attack"},
+    {"event_id": "cadets:e_impact", "timestamp": "2018-04-10T18:01:00Z", "host_id": "cadets-host-5", "parent_event_id": "cadets:e_log_clear", "subject": {"id": "proc:encrypt:2", "type": "process", "name": "encrypt"}, "object": {"id": "file:/home/user/docs", "type": "file", "name": "/home/user/docs"}, "relation": "file_write", "tactic": "impact", "technique": "T1486", "role": "attack"},
+    {"event_id": "cadets:e_log_rotate", "timestamp": "2018-04-10T17:59:00Z", "host_id": "cadets-host-5", "subject": {"id": "proc:logrotate:9", "type": "process", "name": "logrotate"}, "object": {"id": "file:/var/log/syslog", "type": "file", "name": "/var/log/syslog"}, "relation": "log_delete", "tactic": "defense-evasion", "technique": "T1070.001", "role": "benign"},
+    {"event_id": "cadets:e_rotate_done", "timestamp": "2018-04-10T17:59:10Z", "host_id": "cadets-host-5", "parent_event_id": "cadets:e_log_rotate", "subject": {"id": "proc:logrotate:9", "type": "process", "name": "logrotate"}, "object": {"id": "file:/var/log/syslog.1", "type": "file", "name": "/var/log/syslog.1"}, "relation": "log_delete", "tactic": "defense-evasion", "technique": "T1070.002", "role": "benign"},
+    {"event_id": "cadets:e_oos_av", "timestamp": "2018-04-10T18:00:40Z", "host_id": "cadets-host-5", "subject": {"id": "proc:malware:8", "type": "process", "name": "malware"}, "object": {"id": "file:/etc/av/config", "type": "file", "name": "/etc/av/config"}, "relation": "file_write", "tactic": "defense-evasion", "technique": "T1562.001", "role": "oos"}
+  ]
+}

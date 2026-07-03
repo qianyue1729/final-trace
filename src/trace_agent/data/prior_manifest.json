@@ -1,0 +1,200 @@
+{
+  "version": "2026.06.30",
+  "schema_version": "2.0",
+  "generated_at": "2026-06-30",
+  "architecture": "RFC-004-02 DecisionLedger LOCK",
+  "sources": {
+    "build_mode": "opensource",
+    "production_eligible": true,
+    "fallback_reasons": [],
+    "build_context": {
+      "version": "1.0",
+      "generated_at": "2026-06-30T03:13:01.873782+00:00",
+      "l1_builder": "opensource",
+      "l2_builder": "opensource",
+      "offline": true,
+      "raw_manifest_path": "prior_knowledge\\raw\\raw_manifest.json"
+    },
+    "raw_manifest_generated_at": "2026-06-30T03:12:42.813921+00:00",
+    "source_registry": {
+      "mitre_enterprise_attack_stix": {
+        "name": "MITRE ATT&CK Enterprise STIX",
+        "required": true,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": "fc783039f17fba646f79448f1322996457c658a9474f6d14c3bc924a2cf1c97d",
+        "object_count": 25842,
+        "bytes": 47450483,
+        "used_by": [
+          "L1",
+          "L2",
+          "score_v3.threat_prevalence",
+          "DecisionLedger.seed"
+        ],
+        "build_role": "intrusion-set × technique × tactic 共现；L1 反向战术转移",
+        "path": "mitre/enterprise-attack.json"
+      },
+      "atomic_enterprise_matrix": {
+        "name": "Atomic Red Team — Enterprise Matrix Index",
+        "required": false,
+        "fetched": false,
+        "status": "missing_offline",
+        "checksum_sha256": null,
+        "object_count": null,
+        "bytes": null,
+        "used_by": [
+          "L2.is_observable",
+          "L3.technique_visibility"
+        ],
+        "build_role": "technique 可执行测试覆盖；验证 L2 节点可观测性",
+        "path": "atomic/enterprise-attack-index.json"
+      },
+      "lolbas_csv": {
+        "name": "LOLBAS Project — CSV export",
+        "required": false,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": "e1862f43b4d2f56b697b9d2e2e819c0172418fd9d5a8f89c614f771c6ec8623c",
+        "object_count": null,
+        "bytes": 630154,
+        "used_by": [
+          "L2.tools.lolbas",
+          "boundary_prior.benign",
+          "DecisionLedger.null_anchor"
+        ],
+        "build_role": "Living-off-the-land 双用途工具 → 分支 null 锚 benign 先验升高",
+        "path": "lolbas/lolbas.csv"
+      },
+      "sigma_rules_index": {
+        "name": "SigmaHQ — rules directory listing (stub index)",
+        "required": false,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": "88d97bb4dd8995b4a17a7b591ee3f71fff825e8c6f765a3fc345c828b7794087",
+        "object_count": null,
+        "bytes": 6688,
+        "used_by": [
+          "L2.sigma_rules",
+          "L3.log_source_mapping"
+        ],
+        "build_role": "detection → log source；不当攻击因果依据",
+        "path": "sigma/rules_index.json"
+      },
+      "gtfobins_data_functions": {
+        "name": "GTFOBins — functions index (GitHub API)",
+        "required": false,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": "1b72e201b426dac00cc9c1740d18d5ac7a81c7523b5d5510f6ef1814374d83d8",
+        "object_count": null,
+        "bytes": 1740,
+        "used_by": [
+          "L2.tools.gtfobins",
+          "boundary_prior.benign"
+        ],
+        "build_role": "Linux 双用途二进制 → benign/oos 边界先验",
+        "path": "gtfobins/data_index.json"
+      },
+      "attack_flow_corpus": {
+        "name": "attack_flow_corpus",
+        "required": false,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": null,
+        "object_count": 40,
+        "bytes": null,
+        "used_by": [
+          "L1",
+          "L2",
+          "L3"
+        ],
+        "build_role": "corpus",
+        "path": "attack_flow/corpus/"
+      },
+      "sigma_rules_corpus": {
+        "name": "sigma_rules_corpus",
+        "required": false,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": null,
+        "object_count": 1262,
+        "bytes": null,
+        "used_by": [
+          "L1",
+          "L2",
+          "L3"
+        ],
+        "build_role": "corpus",
+        "path": "sigma/rules/"
+      },
+      "gtfobins_binaries": {
+        "name": "gtfobins_binaries",
+        "required": false,
+        "fetched": true,
+        "status": "cached",
+        "checksum_sha256": null,
+        "object_count": 477,
+        "bytes": null,
+        "used_by": [
+          "L1",
+          "L2",
+          "L3"
+        ],
+        "build_role": "corpus",
+        "path": "gtfobins/binaries/"
+      }
+    },
+    "attack_stix_version": "sha256:fc783039f17fba64…",
+    "attack_stix_bytes": 47450483,
+    "attack_flow_version": "40 .afb corpus files",
+    "sigma_commit": "1262 rules",
+    "lolbas_version": "sha256:e1862f43b4d2f56b…",
+    "gtfobins_commit": "477 binaries",
+    "atomic_red_team_commit": "pending_integration"
+  },
+  "parameters": {
+    "dirichlet_alpha": 0.5,
+    "boundary_prior_max_p_in_attack": 0.55,
+    "score_v3_temperature": 2.0,
+    "lambda_miss": 10,
+    "lambda_over": 2,
+    "lambda_oos": 4
+  },
+  "artifacts": {
+    "l1_attack_matrix": {
+      "path": "src\\trace_agent\\data\\attack_matrix.json",
+      "checksum_sha256_16": "f21a20422bcbc3d3",
+      "exists": true
+    },
+    "l2_causal_graph": {
+      "path": "src\\trace_agent\\data\\causal_graph.json",
+      "checksum_sha256_16": "695c9edbfec5efc1",
+      "exists": true
+    },
+    "l3_env_config": {
+      "path": "src\\trace_agent\\data\\env_config.json",
+      "checksum_sha256_16": "f58e967a8bd40cf2",
+      "exists": true
+    },
+    "l3_log_source_trust": {
+      "path": "src\\trace_agent\\data\\log_source_trust.json",
+      "checksum_sha256_16": "f40cb1ca0e6861ed",
+      "exists": true
+    },
+    "l4_lifecycle_templates": {
+      "path": "src\\trace_agent\\data\\lifecycle_templates.json",
+      "checksum_sha256_16": "50162587713bd05f",
+      "exists": true
+    },
+    "score_v3_weights": {
+      "path": "src\\trace_agent\\data\\score_v3_weights.json",
+      "checksum_sha256_16": "aab6439d9d3ad1d9",
+      "exists": true
+    },
+    "loss_baseline": {
+      "path": "src\\trace_agent\\data\\loss_baseline.json",
+      "checksum_sha256_16": "5ed854a8c75e885c",
+      "exists": true
+    }
+  }
+}

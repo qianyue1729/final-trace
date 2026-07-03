@@ -1,0 +1,48 @@
+{
+  "case_id": "stix_only_weak_tech",
+  "title": "STIX only weak tech",
+  "category": "adversarial",
+  "alert": {
+    "technique_id": "T1595.001",
+    "tactic": "reconnaissance",
+    "platform": "linux",
+    "log_source": "network_connection",
+    "anomaly_score": 0.55,
+    "attributes": {}
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "oos_anchor_min": 0.12,
+    "expected_log_sources": [
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

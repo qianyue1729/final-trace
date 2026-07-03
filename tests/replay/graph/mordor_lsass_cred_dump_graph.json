@@ -1,0 +1,247 @@
+{
+  "case_id": "mordor_lsass_cred_dump_graph",
+  "title": "Mordor graph: LSASS cred dump vs EDR benign vs registry OOS",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_lsass_dump",
+    "technique_id": "T1003.001",
+    "tactic": "credential-access",
+    "platform": "windows",
+    "log_source": "process_access",
+    "timestamp": 1735690040.0,
+    "anomaly_score": 0.92,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1003.001",
+    "tactic": "credential-access",
+    "platform": "windows",
+    "log_source": "process_access",
+    "anomaly_score": 0.92,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_mal_proc",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735690000.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_lsass_dump",
+        "technique": "T1003.001",
+        "tactic": "credential-access",
+        "timestamp": 1735690040.0,
+        "source": "process_access",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_dump_write",
+        "technique": "T1005",
+        "tactic": "collection",
+        "timestamp": 1735690070.0,
+        "source": "file_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_archive",
+        "technique": "T1560.001",
+        "tactic": "collection",
+        "timestamp": 1735690100.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_edr_lsass",
+        "technique": "T1003.001",
+        "tactic": "credential-access",
+        "timestamp": 1735690035.0,
+        "source": "process_access",
+        "attributes": {
+          "benign": true,
+          "edr_baseline": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_registry",
+        "technique": "T1112",
+        "tactic": "defense-evasion",
+        "timestamp": 1735690050.0,
+        "source": "registry_modification",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "atk_proc_lsass",
+        "src": "e_mal_proc",
+        "dst": "e_lsass_dump",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "atk_lsass_write",
+        "src": "e_lsass_dump",
+        "dst": "e_dump_write",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "atk_write_archive",
+        "src": "e_dump_write",
+        "dst": "e_archive",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "ben_edr_touch",
+        "src": "e_edr_lsass",
+        "dst": "e_lsass_dump",
+        "relation": "precedes",
+        "role": "benign"
+      },
+      {
+        "id": "oos_reg",
+        "src": "e_oos_registry",
+        "dst": "e_lsass_dump",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_mal_proc",
+      "T1059.001"
+    ],
+    "attack_edges": [
+      [
+        "T1059.001",
+        "T1003.001"
+      ],
+      [
+        "T1003.001",
+        "T1005"
+      ],
+      [
+        "T1005",
+        "T1560.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1003.001",
+        "T1003.001"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1112",
+        "T1003.001"
+      ]
+    ],
+    "attack_nodes": [
+      "e_mal_proc",
+      "e_lsass_dump",
+      "e_dump_write",
+      "e_archive"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_mal_proc",
+      "e_dump_write",
+      "e_archive"
+    ],
+    "pollute_queue": [
+      "e_edr_lsass",
+      "e_oos_registry"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree"
+          ],
+          "tactics": [
+            "execution",
+            "credential-access"
+          ]
+        },
+        "reveals": [
+          "e_mal_proc"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "credential_access_check",
+            "file_hash_lookup"
+          ],
+          "tactics": [
+            "collection"
+          ]
+        },
+        "reveals": [
+          "e_dump_write",
+          "e_archive"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 10,
+    "fanout_per_round": 3,
+    "min_attack_recall": 0.6,
+    "min_boundary_precision": 0.6,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.001",
+        "T1003.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1112",
+        "T1003.001"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "step": 5,
+  "scenario_id": "pipeline_18",
+  "all_pass": true,
+  "raw_fanout_count": 10,
+  "routed_counts": {
+    "ATTACH": 0,
+    "WEAK": 10,
+    "PARK": 0,
+    "DISCARD": 0,
+    "SPAWN": 0
+  },
+  "confirmed_count": 1,
+  "attack_ref_hits": [],
+  "hosts_seen": [
+    "DB-PROD-01"
+  ],
+  "chosen": [
+    {
+      "id": "P-c66c996e",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0007",
+      "source": "prior",
+      "dedup_key": "DB-PROD-01::process_tree::ta0007",
+      "explanation_ids": [],
+      "priority_hint": 0.5,
+      "metadata": {
+        "origin_technique": "T1041",
+        "neighbor_technique": "T1018"
+      },
+      "voi_score": -0.020545,
+      "risk_now": 14.22493,
+      "expected_risk_after": 14.195475,
+      "cost": 0.05
+    },
+    {
+      "id": "P-44649edd",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0009",
+      "source": "prior",
+      "dedup_key": "DB-PROD-01::process_tree::ta0009",
+      "explanation_ids": [],
+      "priority_hint": 0.5,
+      "metadata": {
+        "origin_technique": "T1041",
+        "neighbor_technique": "T1119"
+      },
+      "voi_score": -0.020545,
+      "risk_now": 14.22493,
+      "expected_risk_after": 14.195475,
+      "cost": 0.05
+    },
+    {
+      "id": "P-549de853",
+      "target": "DB-PROD-01",
+      "target_type": "host",
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "source": "rule_gap",
+      "dedup_key": "DB-PROD-01::auth_log::initial-access",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "initial-access"
+      },
+      "voi_score": -0.020545,
+      "risk_now": 14.22493,
+      "expected_risk_after": 14.195475,
+      "cost": 0.05
+    }
+  ],
+  "checks": [
+    {
+      "id": "c_chosen_executed",
+      "status": "pass",
+      "message": "C 拍 probes_used += len(chosen)",
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "id": "c_raw_fanout_non_empty",
+      "status": "pass",
+      "message": "对齐告警时间窗后 execute_fanout 返回事件",
+      "expected": null,
+      "actual": 10
+    },
+    {
+      "id": "c_ingest_routes_events",
+      "status": "pass",
+      "message": "ingest.triage 将 raw 路由到 5 桶",
+      "expected": null,
+      "actual": {
+        "ATTACH": 0,
+        "WEAK": 10,
+        "PARK": 0,
+        "DISCARD": 0,
+        "SPAWN": 0
+      }
+    },
+    {
+      "id": "c_trust_annotated",
+      "status": "pass",
+      "message": "每条路由事件有 L2 trust 标注",
+      "expected": 10,
+      "actual": 10
+    },
+    {
+      "id": "c_graph_readonly",
+      "status": "pass",
+      "message": "C 拍不入图（K 拍 add_events）",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "c_ledger_readonly",
+      "status": "pass",
+      "message": "C 拍不更新 DecisionLedger（K 拍 update）",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "c_beta_readonly",
+      "status": "pass",
+      "message": "C 拍不更新 BetaLedger（K 拍 update）",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "c_confirmed_from_routing",
+      "status": "pass",
+      "message": "confirmed 列表已填充（ATTACH 或 WEAK 提升）",
+      "expected": null,
+      "actual": 1
+    },
+    {
+      "id": "gt_attack_ref_in_routed",
+      "status": "warn",
+      "message": "首轮 C 拍未命中 GT 攻击边（跨主机场景常见，需多轮）",
+      "expected": null,
+      "actual": []
+    },
+    {
+      "id": "gt_root_cause_progress",
+      "status": "warn",
+      "message": "向根因推进：根因主机/technique 出现或 GT 攻击边命中",
+      "expected": {
+        "root_entity": "WS-USER-01",
+        "root_technique": "T1566.001",
+        "cross_host": true
+      },
+      "actual": {
+        "root_host_seen": false,
+        "root_technique_seen": false,
+        "attack_ref_hits": [],
+        "hosts_seen": [
+          "DB-PROD-01"
+        ]
+      }
+    },
+    {
+      "id": "gt_root_cause_reachability_executed",
+      "status": "pass",
+      "message": "已执行探针含跨主机追根 operator（C 拍执行层）",
+      "expected": null,
+      "actual": [
+        "auth_log",
+        "process_tree"
+      ]
+    }
+  ],
+  "report_md": "# Step 5 · C 拍 · 扇出取证 + 入图判假 [PASS]\n场景: pipeline_18 · 入口: attack:idx_stress:evt_018\n根因 GT: WS-USER-01 · T1566.001\n时间窗对齐: alert_ts=1781157600\n\n## ① 做了什么\nexecute_fanout(chosen) -> ingest.triage L0-L4 -> 5 桶路由；可选 WEAK 提升 confirmed。\n\n## ② 输入（读了什么）\n- chosen 3 条 MCP 探针\n- ScenarioExecutor 场景 JSON（soar_mcp_env）\n\n## ③ 产出（生成了什么）\n- raw_fanout: 10 条\n- routed: {'ATTACH': 0, 'WEAK': 10, 'PARK': 0, 'DISCARD': 0, 'SPAWN': 0}\n- confirmed: 1 · trust_annotations: 10\n- probes_used: 3\n- GT attack_ref 命中: []\n- hosts_seen: ['DB-PROD-01']\n  - process_tree · ta0007 @ DB-PROD-01\n  - process_tree · ta0009 @ DB-PROD-01\n  - auth_log · initial-access @ DB-PROD-01\n\n## ④ 怎么算的\nL0 去噪 -> L1 结构 -> L2 信任 -> L3 归属 -> L4 ATTACH/WEAK/PARK/DISCARD/SPAWN\n\n## ⑤ 维护了什么\n【图/决策/Beta】只读（本拍）\n【证据信任】ingest L2 标注\n【budget】probes_used 增加\n\n## Ground truth 校验\n- [OK] c_chosen_executed: C 拍 probes_used += len(chosen)\n- [OK] c_raw_fanout_non_empty: 对齐告警时间窗后 execute_fanout 返回事件\n- [OK] c_ingest_routes_events: ingest.triage 将 raw 路由到 5 桶\n- [OK] c_trust_annotated: 每条路由事件有 L2 trust 标注\n- [OK] c_graph_readonly: C 拍不入图（K 拍 add_events）\n- [OK] c_ledger_readonly: C 拍不更新 DecisionLedger（K 拍 update）\n- [OK] c_beta_readonly: C 拍不更新 BetaLedger（K 拍 update）\n- [OK] c_confirmed_from_routing: confirmed 列表已填充（ATTACH 或 WEAK 提升）\n- [WARN] gt_attack_ref_in_routed: 首轮 C 拍未命中 GT 攻击边（跨主机场景常见，需多轮）\n- [WARN] gt_root_cause_progress: 向根因推进：根因主机/technique 出现或 GT 攻击边命中\n    expected={'root_entity': 'WS-USER-01', 'root_technique': 'T1566.001', 'cross_host': True}\n    actual={'root_host_seen': False, 'root_technique_seen': False, 'attack_ref_hits': [], 'hosts_seen': ['DB-PROD-01']}\n- [OK] gt_root_cause_reachability_executed: 已执行探针含跨主机追根 operator（C 拍执行层）"
+}

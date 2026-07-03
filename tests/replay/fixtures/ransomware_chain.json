@@ -1,0 +1,70 @@
+{
+  "case_id": "ransomware_chain",
+  "title": "Ransomware chain",
+  "alert": {
+    "technique_id": "T1486",
+    "tactic": "impact",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.95
+  },
+  "expect": {
+    "lifecycle_template_any": [
+      "ransomware_enterprise_v1"
+    ],
+    "explanation_title_contains_any": [
+      "ransomware",
+      "T1486"
+    ],
+    "min_contested_edges": 0,
+    "max_max_prior": 0.55
+  },
+  "category": "attack-like",
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "expected_behavior": {
+    "lifecycle_template_any": [
+      "ransomware_enterprise_v1"
+    ],
+    "explanation_title_contains_any": [
+      "ransomware",
+      "T1486"
+    ],
+    "min_contested_edges": 0,
+    "max_max_prior": 0.55,
+    "expected_log_sources": [
+      "process_creation",
+      "file_system"
+    ],
+    "expected_probe_sources": [
+      "process_creation",
+      "file_system"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation",
+      "file_system"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1,
+      "file_system": 3
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage",
+      "file_system": "confirm_or_refute"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

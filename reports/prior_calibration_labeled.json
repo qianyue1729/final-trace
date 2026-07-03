@@ -1,0 +1,26 @@
+{
+  "calibration_status": "experimental",
+  "eligible_cases": 30,
+  "required_min_cases": 30,
+  "brier_score": 0.3296,
+  "ece": {
+    "ece": 0.2982,
+    "reliability_bins": [
+      {
+        "bin": 2,
+        "mean_pred": 0.261,
+        "empirical": 0.5517,
+        "count": 29
+      },
+      {
+        "bin": 5,
+        "mean_pred": 0.5157,
+        "empirical": 0.0,
+        "count": 1
+      }
+    ]
+  },
+  "family_level_hit_rate": 1.0,
+  "warning": "small labeled set; do not treat as production calibration",
+  "family_hit_caution": "family_level_hit_rate=1.0 on all-weak_label set; coarse family granularity \u2014 not generalization"
+}

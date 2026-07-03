@@ -1,0 +1,56 @@
+{
+  "case_id": "edr_health_check",
+  "title": "EDR health check",
+  "category": "benign",
+  "alert": {
+    "technique_id": "T1059.001",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.22,
+    "attributes": {
+      "simulation": true
+    }
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "benign_anchor_min": 0.2,
+    "expected_log_sources": [
+      "network_connection",
+      "process_creation",
+      "script_execution"
+    ],
+    "expected_probe_sources": [
+      "network_connection",
+      "process_creation"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "network_connection",
+      "process_creation"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "network_connection": 2,
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "network_connection": "confirm_payload_download_or_c2",
+      "process_creation": "confirm_parent_lineage"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

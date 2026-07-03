@@ -1,0 +1,101 @@
+# trace-engine 配置示例
+# 复制为 configs/engine.yaml 后按环境修改；也可用环境变量覆盖：
+#   TRACE_ENGINE_BACKEND / TRACE_ENGINE_MCP_ENDPOINT / TRACE_ENGINE_API_KEYS /
+#   TRACE_ENGINE_DB_PATH / TRACE_ENGINE_PORT
+
+# scenario = 验收态（soar_mcp_env 场景回放）；soar_mcp = 生产态（真实 SOAR MCP）
+backend: scenario
+
+soar_mcp:
+  # 生产 SOAR MCP 服务端（streamable-HTTP JSON-RPC）
+  endpoint: "http://soar.internal:9100/mcp"
+  tool_name: "soar_query"
+  # 认证头（按平台要求）
+  headers:
+    Authorization: "Bearer <token>"
+  timeout_seconds: 30
+  max_retries: 2
+  page_limit: 200
+  lookback_seconds: 2592000        # 30 天回看
+  lookahead_seconds: 0             # 实时调查默认不查询告警之后
+  allowed_clock_skew_seconds: 300  # 最大容忍 5 分钟未来时间戳
+  # 探针算子 → 数据源提示（SOAR 侧内部分片路由）
+  operator_datasource_map:
+    process_tree: "EDR"
+    script_execution: "EDR"
+    credential_access_check: "EDR"
+    persistence_scan: "EDR"
+    registry_query: "EDR"
+    file_hash_lookup: "EDR"
+    network_flow: "NDR"
+    dns_query: "NDR"
+    lateral_movement_check: "SIEM"
+    auth_log: "SIEM"
+  query_template: "host:{host} source:{datasource}"
+
+# 第三方 SOAR 记录 → LOCK 事件的字段映射（点分路径）
+normalizer:
+  field_map:
+    ref: "raw_log_ref"
+    timestamp: "ts"
+    technique: "technique"
+    tactic: "tactic"
+    action: "action"
+    anomaly_score: "anomaly_score"
+    host: "src_entity.attrs.host_uid"
+    host_fallback: "dst_entity.attrs.host_uid"
+    process_name: "src_entity.attrs.name"
+    ocsf_class_uid: "ocsf_class_uid"
+
+budget:
+  total_rounds: 50
+  total_probes: 400
+  fanout_per_round: 8
+  min_rounds_before_robust: 4
+  min_rounds_after_root: 8
+
+calibration:
+  # 留空时概率与自动化资格均不可用；不得用调查分数替代。
+  artifact_path: ""
+  max_age_days: 90
+  min_slice_support: 80
+  min_precision: 0.90
+  min_recall: 0.80
+  contain_threshold: 0.70
+  dismiss_threshold: 0.30
+
+model_planner:
+  # shadow 只记录建议，绝不执行；assist 必须经过独立毕业门禁后显式开启。
+  mode: "shadow"
+  max_intents_per_round: 4
+  cost_budget_per_round: 1.0
+  max_graph_nodes: 40
+
+model_judgement:
+  mode: "off"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"  # 只引用环境变量名，不在配置中存密钥
+  ca_bundle: ""
+  verify_tls: true
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 60
+  max_retries: 2
+  max_calls_per_round: 3
+  max_calls_per_case: 20
+  max_tokens_per_case: 20000
+  max_context_nodes: 40
+  ambiguity_margin: 0.35
+  deterministic_fallback: true
+
+service:
+  host: "0.0.0.0"
+  port: 8100
+  # 生产必配；留空 = 不鉴权（仅限开发）
+  api_keys:
+    - "change-me-prod-key"
+  db_path: "data/trace_engine.db"
+  audit_log_path: "data/audit.log"
+  max_workers: 4
+  retention_days: 90

@@ -1,0 +1,193 @@
+{
+  "case_id": "mordor_defense_evasion_log_clear_graph",
+  "title": "Mordor graph: log clearing before impact (anti-forensics)",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_log_clear",
+    "technique_id": "T1070.001",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "timestamp": 1735694050.0,
+    "anomaly_score": 0.93,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1070.001",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.93,
+    "attributes": {
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_ransom_prep",
+        "technique": "T1486",
+        "tactic": "impact",
+        "timestamp": 1735694000.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_log_clear",
+        "technique": "T1070.001",
+        "tactic": "defense-evasion",
+        "timestamp": 1735694050.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_impact",
+        "technique": "T1486",
+        "tactic": "impact",
+        "timestamp": 1735694120.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_benign_rotate",
+        "technique": "T1070.001",
+        "tactic": "defense-evasion",
+        "timestamp": 1735694045.0,
+        "source": "process_creation",
+        "attributes": {
+          "benign": true,
+          "simulation": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_av_stop",
+        "technique": "T1562.001",
+        "tactic": "defense-evasion",
+        "timestamp": 1735694055.0,
+        "source": "registry_modification",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-a"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "a1",
+        "src": "e_ransom_prep",
+        "dst": "e_log_clear",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "a2",
+        "src": "e_log_clear",
+        "dst": "e_impact",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "b1",
+        "src": "e_benign_rotate",
+        "dst": "e_log_clear",
+        "relation": "precedes",
+        "role": "benign"
+      },
+      {
+        "id": "o1",
+        "src": "e_oos_av_stop",
+        "dst": "e_log_clear",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_ransom_prep",
+      "T1486"
+    ],
+    "attack_edges": [
+      [
+        "T1486",
+        "T1070.001"
+      ],
+      [
+        "T1070.001",
+        "T1486"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1070.001",
+        "T1070.001"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1562.001",
+        "T1070.001"
+      ]
+    ],
+    "attack_nodes": [
+      "e_ransom_prep",
+      "e_log_clear",
+      "e_impact"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_ransom_prep",
+      "e_impact"
+    ],
+    "pollute_queue": [
+      "e_benign_rotate",
+      "e_oos_av_stop"
+    ],
+    "probe_bindings": []
+  },
+  "replay_config": {
+    "max_rounds": 10,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.6,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1486",
+        "T1070.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1562.001",
+        "T1070.001"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

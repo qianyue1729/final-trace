@@ -1,0 +1,31 @@
+{
+  "case_id": "tel_gap_timestamp",
+  "title": "File timestamp only",
+  "category": "telemetry-gap",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1070.006",
+    "tactic": "defense-evasion",
+    "platform": "linux",
+    "log_source": "file_system_timestamp",
+    "anomaly_score": 0.4,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "timestomp",
+    "true_boundary": "uncertain",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1070.006"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

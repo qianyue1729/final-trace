@@ -1,0 +1,31 @@
+{
+  "case_id": "manual_defense_evasion",
+  "title": "Disable AV pattern",
+  "category": "attack-like",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1562.001",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.81,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "defense_evasion",
+    "true_boundary": "in_attack",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1562.001"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "case_id": "log_clearing",
+  "title": "日志被清理",
+  "alert": {
+    "technique_id": "T1070.001",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "windows_event_log_security",
+    "anomaly_score": 0.8
+  },
+  "expect": {
+    "max_max_prior": 0.55,
+    "explanation_types_any": [
+      "lifecycle",
+      "l1_predecessor",
+      "technique_context",
+      "dual_use_boundary"
+    ],
+    "log_source_contains_any": [
+      "authentication",
+      "process",
+      "registry"
+    ]
+  },
+  "category": "attack-like",
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "explanation_types_any": [
+      "lifecycle",
+      "l1_predecessor",
+      "technique_context",
+      "dual_use_boundary"
+    ],
+    "log_source_contains_any": [
+      "authentication",
+      "process",
+      "registry"
+    ],
+    "expected_log_sources": [
+      "process_creation",
+      "event_log"
+    ],
+    "expected_probe_sources": [
+      "process_creation",
+      "event_log"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation",
+      "event_log"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage",
+      "event_log": "confirm_or_refute"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

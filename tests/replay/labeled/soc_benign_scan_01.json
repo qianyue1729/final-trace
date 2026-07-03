@@ -1,0 +1,33 @@
+{
+  "case_id": "soc_benign_scan_01",
+  "title": "SOC: vuln scanner",
+  "category": "benign",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1046",
+    "tactic": "discovery",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "anomaly_score": 0.32,
+    "attributes": {
+      "simulation": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "vuln_scan",
+    "true_boundary": "benign",
+    "benign": true,
+    "oos": false,
+    "expected_techniques": [
+      "T1046"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

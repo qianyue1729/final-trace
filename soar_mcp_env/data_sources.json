@@ -1,0 +1,19 @@
+{
+  "mcp_mode": "soar",
+  "source_id": "soar:global",
+  "description": "单 SOAR MCP 统一查询，内部分片路由至多类数据源",
+  "data_sources": [
+    "EDR",
+    "SIEM",
+    "Firewall",
+    "NDR",
+    "WAF",
+    "Email",
+    "CloudAudit"
+  ],
+  "pivot_operators": [
+    "pivot_soar_cross_source",
+    "pivot_soar_firewall",
+    "pivot_soar_ndr"
+  ]
+}

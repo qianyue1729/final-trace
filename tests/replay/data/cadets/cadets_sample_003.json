@@ -1,0 +1,26 @@
+{
+  "metadata": {
+    "performer": "CADETS",
+    "scenario_id": "cadets_sample_003",
+    "title": "CADETS: process → network_connect → C2 beacon",
+    "category": "attack-like"
+  },
+  "ground_truth": {
+    "entry_event_id": "cadets:e_beacon",
+    "anomaly_score": 0.9,
+    "attack_technique_pairs": [
+      ["T1059.004", "T1071.001"],
+      ["T1071.001", "T1071.001"]
+    ],
+    "benign_technique_pairs": [["T1071.001", "T1102.001"]],
+    "oos_technique_pairs": [["T1090.003", "T1071.001"]]
+  },
+  "events": [
+    {"event_id": "cadets:e_implant", "timestamp": "2018-04-08T08:00:00Z", "host_id": "cadets-host-3", "subject": {"id": "proc:bash:1", "type": "process", "name": "bash"}, "object": {"id": "proc:implant:2", "type": "process", "name": "implant"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "attack"},
+    {"event_id": "cadets:e_connect", "timestamp": "2018-04-08T08:01:00Z", "host_id": "cadets-host-3", "parent_event_id": "cadets:e_implant", "subject": {"id": "proc:implant:2", "type": "process", "name": "implant"}, "object": {"id": "socket:198.51.100.5:443", "type": "socket", "name": "c2"}, "relation": "network_connect", "tactic": "command-and-control", "technique": "T1071.001", "role": "attack"},
+    {"event_id": "cadets:e_beacon", "timestamp": "2018-04-08T08:05:00Z", "host_id": "cadets-host-3", "parent_event_id": "cadets:e_connect", "subject": {"id": "proc:implant:2", "type": "process", "name": "implant"}, "object": {"id": "socket:198.51.100.5:443", "type": "socket", "name": "c2"}, "relation": "network_connect", "tactic": "command-and-control", "technique": "T1071.001", "role": "attack"},
+    {"event_id": "cadets:e_benign_cdn", "timestamp": "2018-04-08T08:00:30Z", "host_id": "cadets-host-3", "subject": {"id": "proc:firefox:9", "type": "process", "name": "firefox"}, "object": {"id": "socket:cdn.example:443", "type": "socket", "name": "cdn"}, "relation": "network_connect", "tactic": "command-and-control", "technique": "T1071.001", "role": "benign"},
+    {"event_id": "cadets:e_benign_page", "timestamp": "2018-04-08T08:00:35Z", "host_id": "cadets-host-3", "parent_event_id": "cadets:e_benign_cdn", "subject": {"id": "proc:firefox:9", "type": "process", "name": "firefox"}, "object": {"id": "socket:cdn.example:443", "type": "socket", "name": "cdn"}, "relation": "network_connect", "tactic": "command-and-control", "technique": "T1102.001", "role": "benign"},
+    {"event_id": "cadets:e_oos_tor", "timestamp": "2018-04-08T08:02:00Z", "host_id": "cadets-host-3", "subject": {"id": "proc:tor:8", "type": "process", "name": "tor"}, "object": {"id": "socket:tor.exit:9001", "type": "socket", "name": "tor"}, "relation": "network_connect", "tactic": "command-and-control", "technique": "T1090.003", "role": "oos"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "case_id": "ambig_oos_c2_01",
+  "title": "Cross-case C2",
+  "category": "ambiguous",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1071.001",
+    "tactic": "command-and-control",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "anomaly_score": 0.62,
+    "attributes": {
+      "weak_case_link": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "cross_case_c2",
+    "true_boundary": "oos",
+    "benign": false,
+    "oos": true,
+    "expected_techniques": [
+      "T1071.001"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

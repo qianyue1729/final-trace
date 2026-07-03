@@ -1,0 +1,24 @@
+{
+  "metadata": {
+    "performer": "CADETS",
+    "scenario_id": "cadets_sample_006",
+    "title": "CADETS: benign admin shell and config activity",
+    "category": "benign"
+  },
+  "ground_truth": {
+    "entry_event_id": "cadets:e_admin_shell",
+    "anomaly_score": 0.35,
+    "attack_technique_pairs": [],
+    "benign_technique_pairs": [
+      ["T1059.004", "T1082"],
+      ["T1082", "T1071.001"]
+    ],
+    "oos_technique_pairs": []
+  },
+  "events": [
+    {"event_id": "cadets:e_admin_shell", "timestamp": "2018-04-11T09:00:00Z", "host_id": "cadets-host-6", "subject": {"id": "proc:bash:1", "type": "process", "name": "bash"}, "object": {"id": "proc:admin:2", "type": "process", "name": "admin-script"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "benign"},
+    {"event_id": "cadets:e_config_read", "timestamp": "2018-04-11T09:00:20Z", "host_id": "cadets-host-6", "parent_event_id": "cadets:e_admin_shell", "subject": {"id": "proc:admin:2", "type": "process", "name": "admin-script"}, "object": {"id": "file:/etc/app.conf", "type": "file", "name": "/etc/app.conf"}, "relation": "file_read", "tactic": "discovery", "technique": "T1082", "role": "benign"},
+    {"event_id": "cadets:e_repo_sync", "timestamp": "2018-04-11T09:00:40Z", "host_id": "cadets-host-6", "parent_event_id": "cadets:e_config_read", "subject": {"id": "proc:git:3", "type": "process", "name": "git"}, "object": {"id": "socket:git.internal:443", "type": "socket", "name": "git"}, "relation": "network_connect", "tactic": "command-and-control", "technique": "T1071.001", "role": "benign"},
+    {"event_id": "cadets:e_oos_scan", "timestamp": "2018-04-11T09:01:00Z", "host_id": "cadets-host-6", "subject": {"id": "proc:scanner:8", "type": "process", "name": "scanner"}, "object": {"id": "socket:10.0.0.0/24", "type": "socket", "name": "scan"}, "relation": "network_connect", "tactic": "discovery", "technique": "T1046", "role": "oos"}
+  ]
+}

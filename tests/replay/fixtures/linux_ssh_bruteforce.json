@@ -1,0 +1,52 @@
+{
+  "case_id": "linux_ssh_bruteforce",
+  "title": "SSH brute force",
+  "category": "attack-like",
+  "alert": {
+    "technique_id": "T1110.001",
+    "tactic": "credential-access",
+    "platform": "linux",
+    "log_source": "authentication",
+    "anomaly_score": 0.68,
+    "attributes": {}
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "expected_log_sources": [
+      "process_creation",
+      "authentication"
+    ],
+    "expected_probe_sources": [
+      "process_creation",
+      "authentication"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation",
+      "authentication"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1,
+      "authentication": 2
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage",
+      "authentication": "confirm_logon_context"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

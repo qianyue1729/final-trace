@@ -1,0 +1,45 @@
+{
+  "modes": {
+    "full": {
+      "pass_rate": 1.0,
+      "mean_entropy": 1.3369,
+      "mean_max_prior": 0.2777,
+      "benign_anchor_precision": 1.0,
+      "oos_anchor_precision": 1.0,
+      "top_k_behavior_hit_rate": 1.0
+    },
+    "no_flow": {
+      "pass_rate": 0.8,
+      "mean_entropy": 0.658,
+      "mean_max_prior": 0.5401,
+      "benign_anchor_precision": 1.0,
+      "oos_anchor_precision": 1.0,
+      "top_k_behavior_hit_rate": 0.4
+    },
+    "no_sigma": {
+      "pass_rate": 1.0,
+      "mean_entropy": 1.3369,
+      "mean_max_prior": 0.2777,
+      "benign_anchor_precision": 1.0,
+      "oos_anchor_precision": 1.0,
+      "top_k_behavior_hit_rate": 1.0
+    },
+    "no_dual_use": {
+      "pass_rate": 0.988,
+      "mean_entropy": 1.049,
+      "mean_max_prior": 0.3684,
+      "benign_anchor_precision": 1.0,
+      "oos_anchor_precision": 1.0,
+      "top_k_behavior_hit_rate": 1.0
+    },
+    "no_lifecycle": {
+      "pass_rate": 0.938,
+      "mean_entropy": 1.032,
+      "mean_max_prior": 0.3731,
+      "benign_anchor_precision": 1.0,
+      "oos_anchor_precision": 1.0,
+      "top_k_behavior_hit_rate": 0.9
+    }
+  },
+  "fixture_count": 80
+}

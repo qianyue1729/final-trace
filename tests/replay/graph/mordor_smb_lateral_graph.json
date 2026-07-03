@@ -1,0 +1,228 @@
+{
+  "case_id": "mordor_smb_lateral_graph",
+  "title": "Mordor graph: SMB lateral movement host-a →host-b",
+  "category": "attack-like",
+  "source": "mordor",
+  "label_quality": "synthetic",
+  "schema_version": "graph_replay_v1",
+  "entry_alert": {
+    "event_id": "e_smb_lateral",
+    "technique_id": "T1021.002",
+    "tactic": "lateral-movement",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "timestamp": 1735690560.0,
+    "anomaly_score": 0.87,
+    "attributes": {
+      "dst_host": "host-b",
+      "host_id": "host-a"
+    }
+  },
+  "alert": {
+    "technique_id": "T1021.002",
+    "tactic": "lateral-movement",
+    "platform": "windows",
+    "log_source": "network_connection",
+    "anomaly_score": 0.87,
+    "attributes": {
+      "dst_host": "host-b",
+      "host_id": "host-a"
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "e_cred_a",
+        "technique": "T1003.001",
+        "tactic": "credential-access",
+        "timestamp": 1735690500.0,
+        "source": "process_access",
+        "attributes": {
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_smb_lateral",
+        "technique": "T1021.002",
+        "tactic": "lateral-movement",
+        "timestamp": 1735690560.0,
+        "source": "network_connection",
+        "attributes": {
+          "dst_host": "host-b",
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_remote_exec_b",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1735690620.0,
+        "source": "process_creation",
+        "attributes": {
+          "host_id": "host-b"
+        }
+      },
+      {
+        "id": "e_benign_share",
+        "technique": "T1021.002",
+        "tactic": "lateral-movement",
+        "timestamp": 1735690555.0,
+        "source": "network_connection",
+        "attributes": {
+          "benign": true,
+          "backup_baseline": true,
+          "host_id": "host-a"
+        }
+      },
+      {
+        "id": "e_oos_scan_c",
+        "technique": "T1046",
+        "tactic": "discovery",
+        "timestamp": 1735690570.0,
+        "source": "network_connection",
+        "attributes": {
+          "oos": true,
+          "host_id": "host-c"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "atk_cred_smb",
+        "src": "e_cred_a",
+        "dst": "e_smb_lateral",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "atk_smb_exec",
+        "src": "e_smb_lateral",
+        "dst": "e_remote_exec_b",
+        "relation": "causes",
+        "role": "attack"
+      },
+      {
+        "id": "ben_share",
+        "src": "e_benign_share",
+        "dst": "e_smb_lateral",
+        "relation": "precedes",
+        "role": "benign"
+      },
+      {
+        "id": "oos_scan",
+        "src": "e_oos_scan_c",
+        "dst": "e_smb_lateral",
+        "relation": "precedes",
+        "role": "oos"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "e_cred_a",
+      "T1003.001"
+    ],
+    "attack_edges": [
+      [
+        "T1003.001",
+        "T1021.002"
+      ],
+      [
+        "T1021.002",
+        "T1059.001"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1021.002",
+        "T1021.002"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1046",
+        "T1021.002"
+      ]
+    ],
+    "attack_nodes": [
+      "e_cred_a",
+      "e_smb_lateral",
+      "e_remote_exec_b"
+    ]
+  },
+  "replay_driver": {
+    "reveal_queue": [
+      "e_cred_a",
+      "e_remote_exec_b"
+    ],
+    "pollute_queue": [
+      "e_benign_share",
+      "e_oos_scan_c"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "credential_access_check",
+            "auth_log"
+          ],
+          "tactics": [
+            "credential-access"
+          ]
+        },
+        "reveals": [
+          "e_cred_a"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "lateral_movement_check",
+            "network_flow"
+          ],
+          "tactics": [
+            "lateral-movement"
+          ]
+        },
+        "reveals": [
+          "e_remote_exec_b"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 80,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1003.001",
+        "T1021.002"
+      ],
+      [
+        "T1021.002",
+        "T1059.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1046",
+        "T1021.002"
+      ]
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  }
+}

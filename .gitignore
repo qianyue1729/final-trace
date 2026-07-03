@@ -1,0 +1,51 @@
+# Secrets & local credentials — never commit
+.env
+.env.local
+host-client.env
+mcp-ca.crt
+*.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+
+# Node / frontend
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Deep Agent runtime
+.langgraph_api/
+
+# IDE & local tooling
+.qoder/
+.vscode/
+.idea/
+*.swp
+*.suo
+Thumbs.db
+.DS_Store
+
+# Large local bundles (use soar_mcp_env/ in repo instead)
+soar_mcp_env_bundle.zip
+
+# Scratch diagnostics at repo root
+/_*.py
+
+# Live test outputs (may contain production data)
+wazuh_real_lock_test_output.json
+wazuh_validation_output.json
+
+# Keep examples
+!.env.example
+!host-client.env.example
+!**/.env.example
+!**/.env.local.example

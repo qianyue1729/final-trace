@@ -1,0 +1,60 @@
+{
+  "case_id": "gap_auth_only",
+  "title": "Gap auth log only",
+  "category": "telemetry-gap",
+  "alert": {
+    "technique_id": "T1110.003",
+    "tactic": "credential-access",
+    "platform": "windows",
+    "log_source": "authentication",
+    "anomaly_score": 0.46,
+    "attributes": {
+      "available_log_sources": [
+        "authentication"
+      ]
+    }
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true,
+    "expected_log_sources": [
+      "process_creation",
+      "authentication"
+    ],
+    "expected_probe_sources": [
+      "process_creation",
+      "authentication"
+    ],
+    "missing_expected_log_sources": [
+      "process_creation"
+    ],
+    "visibility_annotation_source": "manual_gap_design"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "manual_gap_design"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation",
+      "authentication"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1,
+      "authentication": 2
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage",
+      "authentication": "confirm_logon_context"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "manual_expected"
+  }
+}

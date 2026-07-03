@@ -1,0 +1,32 @@
+{
+  "_comment": "Loss baseline for bayes_risk() - RFC-004-02 §6/§7/§11.1. LAMBDA_OVER > 0 is the true floor for treating over-attribution.",
+  "version": "1.0",
+  "lambda_miss": 10,
+  "lambda_over": 2,
+  "lambda_oos": 4,
+  "sensitivity_ranges": {
+    "lambda_miss": [8, 20],
+    "lambda_over": [1, 5],
+    "lambda_oos": [2, 8]
+  },
+  "profiles": {
+    "conservative": {
+      "_description": "Critical assets, early deployment - maximize miss penalty",
+      "lambda_miss": 15,
+      "lambda_over": 1,
+      "lambda_oos": 3
+    },
+    "boundary": {
+      "_description": "Focus on attack boundary precision",
+      "lambda_miss": 12,
+      "lambda_over": 4,
+      "lambda_oos": 6
+    },
+    "multi_incident": {
+      "_description": "Multi-event concurrent / MSSP scenario - high oos penalty",
+      "lambda_miss": 10,
+      "lambda_over": 2,
+      "lambda_oos": 8
+    }
+  }
+}

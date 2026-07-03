@@ -1,0 +1,58 @@
+{
+  "_comment": "Environment configuration template for trace_agent prior V2 system. Copy this file to env_config.json and customize for your environment.",
+  "os_type": "Windows",
+  "available_log_sources": [
+    "Sysmon",
+    "Windows Security",
+    "Windows PowerShell",
+    "Microsoft-Windows-DNS-Client",
+    "Microsoft-Windows-TerminalServices-LocalSessionManager"
+  ],
+  "excluded_techniques": [],
+  "high_value_assets": {
+    "domain_controllers": ["DC01", "DC02"],
+    "critical_servers": [],
+    "management_subnets": ["10.0.0.0/24"]
+  },
+  "environment_profiles": {
+    "windows_enterprise": {
+      "os_type": "Windows",
+      "log_sources": [
+        "Sysmon",
+        "Windows Security",
+        "Windows PowerShell",
+        "Microsoft-Windows-WMI-Activity",
+        "Microsoft-Windows-DNS-Client",
+        "Microsoft-Windows-TerminalServices-LocalSessionManager"
+      ],
+      "description": "Standard Windows enterprise environment with Sysmon deployed"
+    },
+    "linux_server": {
+      "os_type": "Linux",
+      "log_sources": [
+        "auditd",
+        "syslog",
+        "auth.log",
+        "systemd-journald",
+        "osquery"
+      ],
+      "description": "Linux server environment with auditd and osquery"
+    },
+    "cloud_hybrid": {
+      "os_type": "Linux",
+      "log_sources": [
+        "CloudTrail",
+        "VPC Flow Logs",
+        "GuardDuty",
+        "auditd",
+        "container-runtime"
+      ],
+      "description": "Cloud/hybrid environment with AWS security tooling"
+    }
+  },
+  "tuning": {
+    "min_observable_techniques_per_tactic": 1,
+    "fallback_on_empty_filter": true,
+    "log_filtered_tactics": true
+  }
+}

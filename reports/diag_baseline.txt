@@ -1,0 +1,496 @@
+﻿
+================================================================================
+场景: pipeline_18 | GT总量: 18 | GT主机分布:
+  DB-PROD-01: 3条GT (attack:idx_stress:evt_016, attack:idx_stress:evt_017, attack:idx_stress:evt_018)
+  SRV-WEB-03: 3条GT (attack:idx_stress:evt_013, attack:idx_stress:evt_014, attack:idx_stress:evt_015)
+  WS-USER-01: 9条GT (attack:idx_stress:evt_001, attack:idx_stress:evt_002, attack:idx_stress:evt_003...)
+  WS-USER-02: 3条GT (attack:idx_stress:evt_010, attack:idx_stress:evt_011, attack:idx_stress:evt_012)
+入口: attack:idx_stress:evt_018 | 告警主机: DB-PROD-01
+================================================================================
+  [STOP] R1 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=False | tactics=11 | stop=True(robust)
+
+R1: pool=32 chosen=8 confirmed=4 graph_eligible=19 all_events=79
+  探针: [('network_flow', 'WS-USER-01'), ('process_tree', 'DB-PROD-01'), ('auth_log', 'WS-USER-01'), ('file_hash_lookup', 'DB-PROD-01'), ('network_flow', 'WS-USER-02'), ('network_flow', 'WS-USER-03'), ('network_flow', 'SRV-BACKUP-01'), ('network_flow', 'SRV-FILE-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'SRV-BACKUP-01', 'SRV-FILE-01', 'WS-USER-01', 'WS-USER-02', 'WS-USER-03']
+  路由: ATTACH=16 WEAK=63 PARK=0 DISCARD=0 SPAWN=0
+  GT命中: 新增15 累计15/18 (83.3%)
+    + attack:idx_stress:evt_001 | tech=T1566.001 host=WS-USER-01
+    + attack:idx_stress:evt_002 | tech=T1059.001 host=WS-USER-01
+    + attack:idx_stress:evt_003 | tech=T1053.005 host=WS-USER-01
+    + attack:idx_stress:evt_004 | tech=T1053.005 host=WS-USER-01
+    + attack:idx_stress:evt_005 | tech=T1548 host=WS-USER-01
+    + attack:idx_stress:evt_006 | tech=T1055 host=WS-USER-01
+    + attack:idx_stress:evt_007 | tech=T1070 host=WS-USER-01
+    + attack:idx_stress:evt_008 | tech=T1003 host=WS-USER-01
+    + attack:idx_stress:evt_009 | tech=T1016 host=WS-USER-01
+    + attack:idx_stress:evt_010 | tech=T1021.001 host=WS-USER-02
+    + attack:idx_stress:evt_011 | tech=T1005 host=WS-USER-02
+    + attack:idx_stress:evt_012 | tech=T1570 host=WS-USER-02
+    + attack:idx_stress:evt_013 | tech=T1021.001 host=SRV-WEB-03
+    + attack:idx_stress:evt_017 | tech=T1115 host=DB-PROD-01
+    + attack:idx_stress:evt_018 | tech=T1041 host=DB-PROD-01
+  图中主机(6): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=20 stop=False(continue)
+  [STOP] R2 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=False | tactics=12 | stop=True(robust)
+
+R2: pool=166 chosen=8 confirmed=0 graph_eligible=5 all_events=72
+  探针: [('auth_log', 'SRV-JUMP-01'), ('network_flow', 'SRV-JUMP-01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('auth_log', 'SRV-MAIL-01'), ('auth_log', 'SRV-WEB-03'), ('auth_log', 'DC01'), ('network_flow', 'SRV-MAIL-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-JUMP-01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01']
+  路由: ATTACH=3 WEAK=2 PARK=3 DISCARD=0 SPAWN=64
+  GT命中: 新增3 累计18/18 (100.0%)
+    + attack:idx_stress:evt_014 | tech=T1059.003 host=SRV-WEB-03
+    + attack:idx_stress:evt_015 | tech=T1021.001 host=SRV-WEB-03
+    + attack:idx_stress:evt_016 | tech=T1068 host=DB-PROD-01
+  图中主机(8): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=25 stop=False(continue)
+  [STOP] R3 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R3: pool=204 chosen=8 confirmed=0 graph_eligible=1 all_events=66
+  探针: [('auth_log', 'SRV-MAIL-01'), ('network_flow', 'SRV-MAIL-01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('auth_log', 'DC01'), ('network_flow', 'DC01'), ('lateral_movement_check', 'DB-PROD-01'), ('persistence_scan', 'SRV-WEB-03')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01']
+  路由: ATTACH=0 WEAK=1 PARK=2 DISCARD=0 SPAWN=63
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(8): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=26 stop=False(continue)
+  [STOP] R4 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R4: pool=205 chosen=8 confirmed=1 graph_eligible=3 all_events=67
+  探针: [('auth_log', 'SRV-MAIL-01'), ('network_flow', 'SRV-MAIL-01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('auth_log', 'DC01'), ('network_flow', 'DC01'), ('persistence_scan', 'SRV-WEB-03'), ('credential_access_check', 'SRV-WEB-03')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01']
+  路由: ATTACH=1 WEAK=2 PARK=4 DISCARD=0 SPAWN=60
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(9): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=29 stop=False(continue)
+  [STOP] R5 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R5: pool=220 chosen=8 confirmed=0 graph_eligible=0 all_events=58
+  探针: [('auth_log', 'DC01'), ('network_flow', 'DC01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('credential_access_check', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('auth_log', 'DB-PROD-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01']
+  路由: ATTACH=0 WEAK=0 PARK=3 DISCARD=0 SPAWN=55
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(9): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=29 stop=False(continue)
+  [STOP] R6 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R6: pool=220 chosen=8 confirmed=0 graph_eligible=0 all_events=59
+  探针: [('auth_log', 'DC01'), ('network_flow', 'DC01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('credential_access_check', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('auth_log', 'DB-PROD-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01']
+  路由: ATTACH=0 WEAK=0 PARK=1 DISCARD=0 SPAWN=58
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(9): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=29 stop=False(continue)
+  [STOP] R7 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R7: pool=220 chosen=10 confirmed=0 graph_eligible=0 all_events=64
+  探针: [('auth_log', 'DC01'), ('network_flow', 'DC01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('credential_access_check', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('process_tree', 'WS-USER-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01']
+  路由: ATTACH=0 WEAK=0 PARK=2 DISCARD=0 SPAWN=62
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(9): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=29 stop=False(continue)
+  [STOP] R8 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R8: pool=220 chosen=10 confirmed=0 graph_eligible=1 all_events=82
+  探针: [('auth_log', 'DC01'), ('network_flow', 'DC01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('process_tree', 'WS-USER-01'), ('process_tree', 'WS-USER-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01', 'WS-USER-02']
+  路由: ATTACH=0 WEAK=1 PARK=2 DISCARD=0 SPAWN=79
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(9): ['db-prod-01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=30 stop=False(continue)
+  [STOP] R9 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R9: pool=221 chosen=10 confirmed=0 graph_eligible=2 all_events=80
+  探针: [('auth_log', 'DC01'), ('network_flow', 'DC01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('process_tree', 'WS-USER-01'), ('process_tree', 'WS-USER-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01', 'WS-USER-02']
+  路由: ATTACH=0 WEAK=2 PARK=0 DISCARD=0 SPAWN=78
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(10): ['db-prod-01', 'dc01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=32 stop=False(continue)
+  [STOP] R10 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R10: pool=229 chosen=10 confirmed=0 graph_eligible=2 all_events=81
+  探针: [('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('process_tree', 'WS-USER-01'), ('process_tree', 'WS-USER-02'), ('process_tree', 'WS-USER-03'), ('process_tree', 'SRV-BACKUP-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'SRV-BACKUP-01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01', 'WS-USER-02', 'WS-USER-03']
+  路由: ATTACH=0 WEAK=2 PARK=2 DISCARD=0 SPAWN=77
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(10): ['db-prod-01', 'dc01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=34 stop=False(continue)
+  [STOP] R11 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R11: pool=231 chosen=10 confirmed=0 graph_eligible=1 all_events=74
+  探针: [('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('process_tree', 'DB-PROD-01'), ('process_tree', 'DB-PROD-01'), ('network_flow', 'WS-USER-01'), ('network_flow', 'WS-USER-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01', 'WS-USER-02']
+  路由: ATTACH=0 WEAK=1 PARK=0 DISCARD=0 SPAWN=73
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(10): ['db-prod-01', 'dc01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=35 stop=False(continue)
+  [STOP] R12 | P_atk=1.000 P_null=0.000 | margin=0.456 entropy=0.585 | voi=0.3187 | debt_clear=True | tactics=12 | stop=True(robust)
+
+R12: pool=232 chosen=10 confirmed=0 graph_eligible=2 all_events=68
+  探针: [('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('process_tree', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('persistence_scan', 'SRV-WEB-03'), ('lateral_movement_check', 'SRV-MAIL-01'), ('process_tree', 'DB-PROD-01'), ('process_tree', 'DB-PROD-01'), ('network_flow', 'WS-USER-01'), ('network_flow', 'WS-USER-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'SRV-MAIL-01', 'SRV-WEB-03', 'WS-USER-01', 'WS-USER-02']
+  路由: ATTACH=0 WEAK=2 PARK=0 DISCARD=0 SPAWN=66
+  GT命中: 新增0 累计18/18 (100.0%)
+  图中主机(10): ['db-prod-01', 'dc01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=37 stop=False(continue)
+
+================================================================================
+最终结果: GT命中=18/18 (100.0%)
+图中主机(10): ['db-prod-01', 'dc01', 'srv-backup-01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+
+漏失GT (0条) 按主机:
+
+================================================================================
+场景: apt_5host | GT总量: 25 | GT主机分布:
+  DB-PROD-01: 4条GT (attack:idx_stress:evt_021, attack:idx_stress:evt_022, attack:idx_stress:evt_023...)
+  DC01: 1条GT (attack:idx_stress:evt_025)
+  SRV-JUMP-01: 2条GT (attack:idx_stress:evt_019, attack:idx_stress:evt_020)
+  WS-USER-01: 18条GT (attack:idx_stress:evt_001, attack:idx_stress:evt_002, attack:idx_stress:evt_003...)
+入口: attack:idx_stress:evt_015 | 告警主机: WS-USER-01
+================================================================================
+  [STOP] R1 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=False | tactics=8 | stop=True(voi_floor)
+
+R1: pool=30 chosen=8 confirmed=4 graph_eligible=17 all_events=73
+  探针: [('network_flow', 'ws-user-02'), ('persistence_scan', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('auth_log', 'ws-user-02'), ('network_flow', 'SRV-JUMP-01'), ('network_flow', 'srv-file-01'), ('network_flow', 'srv-jump-01'), ('network_flow', 'srv-web-03')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['SRV-JUMP-01', 'WS-USER-01', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-02']
+  路由: ATTACH=4 WEAK=69 PARK=0 DISCARD=0 SPAWN=0
+  GT命中: 新增11 累计11/25 (44.0%)
+    + attack:idx_stress:evt_002 | tech=T1059.001 host=WS-USER-01
+    + attack:idx_stress:evt_003 | tech=T1053.005 host=WS-USER-01
+    + attack:idx_stress:evt_004 | tech=T1548.002 host=WS-USER-01
+    + attack:idx_stress:evt_005 | tech=T1055 host=WS-USER-01
+    + attack:idx_stress:evt_006 | tech=T1003 host=WS-USER-01
+    + attack:idx_stress:evt_007 | tech=T1087 host=WS-USER-01
+    + attack:idx_stress:evt_011 | tech=T1566.001 host=WS-USER-01
+    + attack:idx_stress:evt_013 | tech=T1055 host=WS-USER-01
+    + attack:idx_stress:evt_014 | tech=T1053.005 host=WS-USER-01
+    + attack:idx_stress:evt_015 | tech=T1068 host=WS-USER-01
+    + attack:idx_stress:evt_016 | tech=T1082 host=WS-USER-01
+  图中主机(5): ['srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=18 stop=False(continue)
+  [STOP] R2 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=False | tactics=9 | stop=True(voi_floor)
+
+R2: pool=128 chosen=8 confirmed=0 graph_eligible=6 all_events=68
+  探针: [('auth_log', 'DB-PROD-01'), ('network_flow', 'DB-PROD-01'), ('file_hash_lookup', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('auth_log', 'DC01'), ('auth_log', 'db-prod-01'), ('auth_log', 'dc01-corp-local'), ('network_flow', 'DC01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'WS-USER-01', 'db-prod-01', 'dc01-corp-local']
+  路由: ATTACH=0 WEAK=6 PARK=0 DISCARD=0 SPAWN=62
+  GT命中: 新增4 累计15/25 (60.0%)
+    + attack:idx_stress:evt_009 | tech=T1005 host=WS-USER-01
+    + attack:idx_stress:evt_017 | tech=T1003 host=WS-USER-01
+    + attack:idx_stress:evt_018 | tech=T1021.001 host=WS-USER-01
+    + attack:idx_stress:evt_020 | tech=T1570 host=SRV-JUMP-01
+  图中主机(7): ['db-prod-01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=24 stop=False(continue)
+  [STOP] R3 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=11 | stop=True(voi_floor)
+
+R3: pool=161 chosen=8 confirmed=1 graph_eligible=8 all_events=76
+  探针: [('auth_log', 'DC01'), ('network_flow', 'DC01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('lateral_movement_check', 'dc01-corp-local'), ('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('persistence_scan', 'dc01-corp-local')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DC01', 'WS-USER-01', 'dc01-corp-local', 'ws-user-02']
+  路由: ATTACH=1 WEAK=9 PARK=0 DISCARD=0 SPAWN=66
+  GT命中: 新增8 累计23/25 (92.0%)
+    + attack:idx_stress:evt_001 | tech=T1190 host=WS-USER-01
+    + attack:idx_stress:evt_008 | tech=T1016 host=WS-USER-01
+    + attack:idx_stress:evt_010 | tech=T1071.001 host=WS-USER-01
+    + attack:idx_stress:evt_012 | tech=T1059.001 host=WS-USER-01
+    + attack:idx_stress:evt_022 | tech=T1005 host=DB-PROD-01
+    + attack:idx_stress:evt_023 | tech=T1041 host=DB-PROD-01
+    + attack:idx_stress:evt_024 | tech=T1570 host=DB-PROD-01
+    + attack:idx_stress:evt_025 | tech=T1003 host=DC01
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=32 stop=False(continue)
+  [STOP] R4 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=11 | stop=True(voi_floor)
+
+R4: pool=204 chosen=8 confirmed=0 graph_eligible=2 all_events=81
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('lateral_movement_check', 'dc01-corp-local'), ('persistence_scan', 'dc01-corp-local'), ('process_tree', 'ws-user-02'), ('process_tree', 'srv-jump-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'dc01-corp-local', 'srv-jump-01', 'ws-user-02']
+  路由: ATTACH=0 WEAK=2 PARK=0 DISCARD=0 SPAWN=79
+  GT命中: 新增1 累计24/25 (96.0%)
+    + attack:idx_stress:evt_019 | tech=T1059.001 host=SRV-JUMP-01
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=34 stop=False(continue)
+  [STOP] R5 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=11 | stop=True(voi_floor)
+
+R5: pool=216 chosen=8 confirmed=0 graph_eligible=1 all_events=74
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('persistence_scan', 'srv-jump-01'), ('credential_access_check', 'srv-jump-01'), ('lateral_movement_check', 'dc01-corp-local'), ('process_tree', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'dc01-corp-local', 'srv-jump-01', 'ws-user-02']
+  路由: ATTACH=0 WEAK=1 PARK=0 DISCARD=0 SPAWN=73
+  GT命中: 新增0 累计24/25 (96.0%)
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=35 stop=False(continue)
+  [STOP] R6 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=11 | stop=True(voi_floor)
+
+R6: pool=217 chosen=8 confirmed=0 graph_eligible=1 all_events=80
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('persistence_scan', 'srv-jump-01'), ('credential_access_check', 'srv-jump-01'), ('lateral_movement_check', 'dc01-corp-local'), ('process_tree', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'dc01-corp-local', 'srv-jump-01', 'ws-user-02']
+  路由: ATTACH=0 WEAK=1 PARK=0 DISCARD=0 SPAWN=79
+  GT命中: 新增0 累计24/25 (96.0%)
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=36 stop=False(continue)
+  [STOP] R7 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=12 | stop=True(voi_floor)
+
+R7: pool=218 chosen=8 confirmed=0 graph_eligible=3 all_events=81
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('persistence_scan', 'srv-jump-01'), ('credential_access_check', 'srv-jump-01'), ('lateral_movement_check', 'dc01-corp-local'), ('process_tree', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'dc01-corp-local', 'srv-jump-01', 'ws-user-02']
+  路由: ATTACH=0 WEAK=3 PARK=0 DISCARD=0 SPAWN=78
+  GT命中: 新增0 累计24/25 (96.0%)
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=39 stop=False(continue)
+  [STOP] R8 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=12 | stop=True(voi_floor)
+
+R8: pool=220 chosen=8 confirmed=0 graph_eligible=1 all_events=81
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('persistence_scan', 'srv-jump-01'), ('lateral_movement_check', 'dc01-corp-local'), ('process_tree', 'ws-user-02'), ('process_tree', 'srv-jump-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'dc01-corp-local', 'srv-jump-01', 'ws-user-02']
+  路由: ATTACH=0 WEAK=1 PARK=0 DISCARD=0 SPAWN=80
+  GT命中: 新增0 累计24/25 (96.0%)
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=40 stop=False(continue)
+  [STOP] R9 | P_atk=1.000 P_null=0.000 | margin=1.000 entropy=0.000 | voi=0.0000 | debt_clear=True | tactics=12 | stop=True(voi_floor)
+
+R9: pool=220 chosen=8 confirmed=0 graph_eligible=0 all_events=77
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'ws-user-02'), ('lateral_movement_check', 'dc01-corp-local'), ('persistence_scan', 'WS-USER-01'), ('process_tree', 'ws-user-02'), ('process_tree', 'srv-jump-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'dc01-corp-local', 'srv-jump-01', 'ws-user-02']
+  路由: ATTACH=0 WEAK=0 PARK=0 DISCARD=0 SPAWN=77
+  GT命中: 新增0 累计24/25 (96.0%)
+  图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+  节点数=40 stop=True(voi_floor)
+
+================================================================================
+最终结果: GT命中=24/25 (96.0%)
+图中主机(8): ['db-prod-01', 'dc01', 'dc01-corp-local', 'srv-file-01', 'srv-jump-01', 'srv-web-03', 'ws-user-01', 'ws-user-02']
+
+漏失GT (1条) 按主机:
+  DB-PROD-01 (已入图): 1条未命中
+    - attack:idx_stress:evt_021 | tech=T1505.003 tactic=?
+
+================================================================================
+场景: multipath_12host | GT总量: 31 | GT主机分布:
+  DB-PROD-01: 3条GT (attack:idx_stress:evt_029, attack:idx_stress:evt_030, attack:idx_stress:evt_031)
+  DC01: 7条GT (attack:idx_stress:evt_021, attack:idx_stress:evt_022, attack:idx_stress:evt_023...)
+  SRV-FILE-01: 1条GT (attack:idx_stress:evt_027)
+  SRV-JUMP-01: 3条GT (attack:idx_stress:evt_015, attack:idx_stress:evt_016, attack:idx_stress:evt_020)
+  SRV-WEB-03: 2条GT (attack:idx_stress:evt_009, attack:idx_stress:evt_010)
+  SRV-WEB-04: 1条GT (attack:idx_stress:evt_011)
+  WS-USER-01: 11条GT (attack:idx_stress:evt_001, attack:idx_stress:evt_002, attack:idx_stress:evt_003...)
+  dc01: 3条GT (attack:idx_stress:evt_017, attack:idx_stress:evt_018, attack:idx_stress:evt_019)
+入口: attack:idx_stress:evt_005 | 告警主机: WS-USER-01
+================================================================================
+  [STOP] R1 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=False | tactics=7 | stop=True(robust)
+
+R1: pool=29 chosen=8 confirmed=18 graph_eligible=26 all_events=74
+  探针: [('network_flow', 'ws-user-02'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('auth_log', 'ws-user-02'), ('network_flow', 'ws-user-03'), ('network_flow', 'SRV-JUMP-01'), ('network_flow', 'srv-file-01'), ('network_flow', 'srv-jump-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['SRV-JUMP-01', 'WS-USER-01', 'srv-file-01', 'srv-jump-01', 'ws-user-02', 'ws-user-03']
+  路由: ATTACH=18 WEAK=56 PARK=0 DISCARD=0 SPAWN=0
+  GT命中: 新增8 累计8/31 (25.8%)
+    + attack:idx_stress:evt_002 | tech=T1566.001 host=WS-USER-01
+    + attack:idx_stress:evt_003 | tech=T1059.001 host=WS-USER-01
+    + attack:idx_stress:evt_004 | tech=T1059.001 host=WS-USER-01
+    + attack:idx_stress:evt_005 | tech=T1053.005 host=WS-USER-01
+    + attack:idx_stress:evt_006 | tech=T1053.005 host=WS-USER-01
+    + attack:idx_stress:evt_007 | tech=T1548 host=WS-USER-01
+    + attack:idx_stress:evt_008 | tech=T1548 host=WS-USER-01
+    + attack:idx_stress:evt_012 | tech=T1055 host=WS-USER-01
+  图中主机(5): ['srv-file-01', 'srv-jump-01', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=27 stop=False(continue)
+  [STOP] R2 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=False | tactics=8 | stop=True(robust)
+
+R2: pool=132 chosen=8 confirmed=3 graph_eligible=7 all_events=75
+  探针: [('auth_log', 'srv-mail-01'), ('network_flow', 'srv-mail-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('auth_log', 'srv-waf-01'), ('auth_log', 'srv-web-03'), ('auth_log', 'srv-web-04')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04']
+  路由: ATTACH=3 WEAK=6 PARK=12 DISCARD=0 SPAWN=54
+  GT命中: 新增4 累计12/31 (38.7%)
+    + attack:idx_stress:evt_009 | tech=T1190 host=SRV-WEB-03
+    + attack:idx_stress:evt_010 | tech=T1190 host=SRV-WEB-03
+    + attack:idx_stress:evt_013 | tech=T1055 host=WS-USER-01
+    + attack:idx_stress:evt_014 | tech=T1021.001 host=WS-USER-01
+  图中主机(8): ['srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=34 stop=False(continue)
+  [STOP] R3 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=9 | stop=True(robust)
+
+R3: pool=176 chosen=8 confirmed=3 graph_eligible=9 all_events=67
+  探针: [('auth_log', 'srv-web-04'), ('network_flow', 'srv-web-04'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('auth_log', 'DB-PROD-01'), ('auth_log', 'DC01'), ('auth_log', 'cloud-app-01'), ('auth_log', 'db-prod-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DB-PROD-01', 'DC01', 'WS-USER-01', 'cloud-app-01', 'db-prod-01', 'srv-web-04']
+  路由: ATTACH=3 WEAK=8 PARK=13 DISCARD=0 SPAWN=43
+  GT命中: 新增8 累计20/31 (64.5%)
+    + attack:idx_stress:evt_011 | tech=T1190 host=SRV-WEB-04
+    + attack:idx_stress:evt_015 | tech=T1021.001 host=SRV-JUMP-01
+    + attack:idx_stress:evt_016 | tech=T1082 host=SRV-JUMP-01
+    + attack:idx_stress:evt_017 | tech=T1110 host=dc01
+    + attack:idx_stress:evt_018 | tech=T1110 host=dc01
+    + attack:idx_stress:evt_019 | tech=T1110 host=dc01
+    + attack:idx_stress:evt_021 | tech=T1021.001 host=DC01
+    + attack:idx_stress:evt_022 | tech=T1003 host=DC01
+  图中主机(10): ['db-prod-01', 'dc01', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=43 stop=False(continue)
+  [STOP] R4 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=9 | stop=True(robust)
+
+R4: pool=221 chosen=8 confirmed=1 graph_eligible=4 all_events=78
+  探针: [('auth_log', 'srv-web-04'), ('network_flow', 'srv-web-04'), ('file_hash_lookup', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('auth_log', 'cloud-app-01'), ('auth_log', 'dc01-corp-local'), ('auth_log', 'external'), ('network_flow', 'cloud-app-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'cloud-app-01', 'dc01-corp-local', 'external', 'srv-web-04']
+  路由: ATTACH=1 WEAK=3 PARK=14 DISCARD=0 SPAWN=60
+  GT命中: 新增1 累计21/31 (67.7%)
+    + attack:idx_stress:evt_001 | tech=T1566.001 host=WS-USER-01
+  图中主机(13): ['db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=47 stop=False(continue)
+  [STOP] R5 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=9 | stop=True(robust)
+
+R5: pool=239 chosen=8 confirmed=3 graph_eligible=8 all_events=69
+  探针: [('auth_log', 'cloud-app-01'), ('network_flow', 'cloud-app-01'), ('file_hash_lookup', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('lateral_movement_check', 'DC01'), ('persistence_scan', 'external'), ('auth_log', 'WS-USER-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['DC01', 'WS-USER-01', 'cloud-app-01', 'external']
+  路由: ATTACH=3 WEAK=6 PARK=24 DISCARD=0 SPAWN=36
+  GT命中: 新增5 累计26/31 (83.9%)
+    + attack:idx_stress:evt_020 | tech=T1021.001 host=SRV-JUMP-01
+    + attack:idx_stress:evt_023 | tech=T1003 host=DC01
+    + attack:idx_stress:evt_024 | tech=T1003 host=DC01
+    + attack:idx_stress:evt_025 | tech=T1016 host=DC01
+    + attack:idx_stress:evt_026 | tech=T1021.002 host=DC01
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=55 stop=False(continue)
+  [STOP] R6 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=10 | stop=True(robust)
+
+R6: pool=267 chosen=8 confirmed=5 graph_eligible=6 all_events=66
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('file_hash_lookup', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external', 'ws-user-02']
+  路由: ATTACH=5 WEAK=1 PARK=26 DISCARD=0 SPAWN=34
+  GT命中: 新增2 累计28/31 (90.3%)
+    + attack:idx_stress:evt_028 | tech=T1021.001 host=DC01
+    + attack:idx_stress:evt_030 | tech=T1005 host=DB-PROD-01
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=61 stop=False(continue)
+  [STOP] R7 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=10 | stop=True(robust)
+
+R7: pool=285 chosen=8 confirmed=1 graph_eligible=2 all_events=55
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('network_flow', 'WS-USER-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external']
+  路由: ATTACH=1 WEAK=1 PARK=20 DISCARD=0 SPAWN=33
+  GT命中: 新增0 累计28/31 (90.3%)
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=63 stop=False(continue)
+  [STOP] R8 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=10 | stop=True(robust)
+
+R8: pool=289 chosen=8 confirmed=1 graph_eligible=2 all_events=52
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('network_flow', 'WS-USER-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external']
+  路由: ATTACH=1 WEAK=1 PARK=19 DISCARD=0 SPAWN=31
+  GT命中: 新增0 累计28/31 (90.3%)
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=65 stop=False(continue)
+  [STOP] R9 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=11 | stop=True(robust)
+
+R9: pool=291 chosen=8 confirmed=1 graph_eligible=3 all_events=51
+  探针: [('auth_log', 'WS-USER-01'), ('network_flow', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('network_flow', 'WS-USER-01')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external']
+  路由: ATTACH=1 WEAK=2 PARK=19 DISCARD=0 SPAWN=29
+  GT命中: 新增1 累计29/31 (93.5%)
+    + attack:idx_stress:evt_031 | tech=T1048 host=DB-PROD-01
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=68 stop=False(continue)
+  [STOP] R10 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=11 | stop=True(robust)
+
+R10: pool=292 chosen=8 confirmed=1 graph_eligible=3 all_events=57
+  探针: [('network_flow', 'WS-USER-01'), ('auth_log', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('network_flow', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external', 'ws-user-02']
+  路由: ATTACH=1 WEAK=3 PARK=21 DISCARD=0 SPAWN=32
+  GT命中: 新增0 累计29/31 (93.5%)
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=71 stop=False(continue)
+  [STOP] R11 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=11 | stop=True(robust)
+
+R11: pool=295 chosen=8 confirmed=0 graph_eligible=2 all_events=55
+  探针: [('network_flow', 'WS-USER-01'), ('auth_log', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('network_flow', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external', 'ws-user-02']
+  路由: ATTACH=0 WEAK=3 PARK=11 DISCARD=0 SPAWN=41
+  GT命中: 新增0 累计29/31 (93.5%)
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=73 stop=False(continue)
+  [STOP] R12 | P_atk=1.000 P_null=0.000 | margin=0.566 entropy=0.523 | voi=0.2266 | debt_clear=True | tactics=11 | stop=True(robust)
+
+R12: pool=297 chosen=8 confirmed=0 graph_eligible=0 all_events=56
+  探针: [('network_flow', 'WS-USER-01'), ('auth_log', 'WS-USER-01'), ('process_tree', 'WS-USER-01'), ('file_hash_lookup', 'WS-USER-01'), ('credential_access_check', 'WS-USER-01'), ('persistence_scan', 'external'), ('lateral_movement_check', 'external'), ('network_flow', 'ws-user-02')]
+  候选池算子分布: {}
+  候选池目标主机(0): []
+  选中目标主机: ['WS-USER-01', 'external', 'ws-user-02']
+  路由: ATTACH=0 WEAK=0 PARK=10 DISCARD=0 SPAWN=46
+  GT命中: 新增0 累计29/31 (93.5%)
+  图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+  节点数=73 stop=True(robust)
+
+================================================================================
+最终结果: GT命中=29/31 (93.5%)
+图中主机(14): ['cloud-app-01', 'db-prod-01', 'dc01', 'dc01-corp-local', 'external', 'srv-file-01', 'srv-jump-01', 'srv-mail-01', 'srv-waf-01', 'srv-web-03', 'srv-web-04', 'ws-user-01', 'ws-user-02', 'ws-user-03']
+
+漏失GT (2条) 按主机:
+  DB-PROD-01 (已入图): 1条未命中
+    - attack:idx_stress:evt_029 | tech=T1021.001 tactic=?
+  SRV-FILE-01 (已入图): 1条未命中
+    - attack:idx_stress:evt_027 | tech=T1005 tactic=?
+
+================================================================================
+汇总:
+场景                       GT总量       命中        覆盖率      图主机     GT主机     漏失主机
+pipeline_18                18       18     100.0%       10        4        0
+apt_5host                  25       24      96.0%        8        4        0
+multipath_12host           31       29      93.5%       14        7        0

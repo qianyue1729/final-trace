@@ -1,0 +1,362 @@
+{
+  "case_id": "darpa_cadets_sample_002",
+  "title": "CADETS: shell → suspicious child → file write → execution",
+  "category": "attack-like",
+  "source": "darpa_tc_cadets",
+  "label_quality": "ground_truth",
+  "schema_version": "graph_replay_v1",
+  "primary_tactic": "execution",
+  "entry_alert": {
+    "event_id": "cadets:e_exec",
+    "technique_id": "T1204.002",
+    "tactic": "execution",
+    "platform": "linux",
+    "log_source": "process_creation",
+    "timestamp": 1523095260.0,
+    "anomaly_score": 0.87,
+    "attributes": {
+      "host_id": "cadets-host-2",
+      "relation": "execve",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "CADETS",
+      "cadets": true
+    },
+    "selection_strategy": "explicit"
+  },
+  "alert": {
+    "technique_id": "T1204.002",
+    "tactic": "execution",
+    "platform": "linux",
+    "log_source": "process_creation",
+    "anomaly_score": 0.87,
+    "attributes": {
+      "host_id": "cadets-host-2",
+      "relation": "execve",
+      "role": "attack",
+      "subject_type": "process",
+      "object_type": "file",
+      "performer": "CADETS",
+      "cadets": true
+    }
+  },
+  "world_graph": {
+    "nodes": [
+      {
+        "id": "cadets:e_shell",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1523095200.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_child",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1523095220.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "process_spawn",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_write",
+        "technique": "T1059.001",
+        "tactic": "execution",
+        "timestamp": 1523095240.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "file_write",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_exec",
+        "technique": "T1204.002",
+        "tactic": "execution",
+        "timestamp": 1523095260.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "execve",
+          "role": "attack",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_benign_ps",
+        "technique": "T1059.004",
+        "tactic": "execution",
+        "timestamp": 1523095215.0,
+        "source": "process_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "process_spawn",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "process",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_benign_info",
+        "technique": "T1082",
+        "tactic": "discovery",
+        "timestamp": 1523095218.0,
+        "source": "file_creation",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "file_read",
+          "role": "benign",
+          "subject_type": "process",
+          "object_type": "file",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      },
+      {
+        "id": "cadets:e_oos_scan",
+        "technique": "T1046",
+        "tactic": "discovery",
+        "timestamp": 1523095230.0,
+        "source": "network_connection",
+        "trust_tier": "high",
+        "attributes": {
+          "host_id": "cadets-host-2",
+          "relation": "network_connect",
+          "role": "oos",
+          "subject_type": "process",
+          "object_type": "socket",
+          "performer": "CADETS",
+          "cadets": true
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "edge:cadets:e_shell->cadets:e_child",
+        "src": "cadets:e_shell",
+        "dst": "cadets:e_child",
+        "relation": "process_spawn",
+        "role": "attack"
+      },
+      {
+        "id": "edge:cadets:e_child->cadets:e_write",
+        "src": "cadets:e_child",
+        "dst": "cadets:e_write",
+        "relation": "file_write",
+        "role": "attack"
+      },
+      {
+        "id": "edge:cadets:e_write->cadets:e_exec",
+        "src": "cadets:e_write",
+        "dst": "cadets:e_exec",
+        "relation": "execve",
+        "role": "attack"
+      },
+      {
+        "id": "edge:cadets:e_benign_ps->cadets:e_benign_info",
+        "src": "cadets:e_benign_ps",
+        "dst": "cadets:e_benign_info",
+        "relation": "file_read",
+        "role": "benign"
+      }
+    ]
+  },
+  "ground_truth_subgraph": {
+    "root_causes": [
+      "cadets:e_shell",
+      "T1059.004"
+    ],
+    "attack_nodes": [
+      "cadets:e_shell",
+      "cadets:e_child",
+      "cadets:e_write",
+      "cadets:e_exec"
+    ],
+    "attack_edges": [
+      [
+        "T1059.004",
+        "T1059.004"
+      ],
+      [
+        "T1059.004",
+        "T1059.001"
+      ],
+      [
+        "T1059.001",
+        "T1204.002"
+      ]
+    ],
+    "benign_edges": [
+      [
+        "T1059.004",
+        "T1082"
+      ]
+    ],
+    "oos_edges": [
+      [
+        "T1046",
+        "T1059.004"
+      ]
+    ]
+  },
+  "replay_driver": {
+    "mode": "offline",
+    "entry_event_id": "cadets:e_exec",
+    "reveal_queue": [
+      "cadets:e_shell",
+      "cadets:e_child",
+      "cadets:e_write"
+    ],
+    "pollute_queue": [
+      "cadets:e_benign_ps",
+      "cadets:e_benign_info",
+      "cadets:e_oos_scan"
+    ],
+    "probe_bindings": [
+      {
+        "match": {
+          "operators": [
+            "process_tree",
+            "script_execution"
+          ],
+          "tactics": [
+            "execution",
+            "initial-access"
+          ]
+        },
+        "reveals": [
+          "cadets:e_shell"
+        ]
+      },
+      {
+        "match": {
+          "operators": [
+            "network_flow",
+            "dns_query"
+          ],
+          "tactics": [
+            "command-and-control",
+            "exfiltration"
+          ]
+        },
+        "reveals": [
+          "cadets:e_oos_scan"
+        ]
+      }
+    ]
+  },
+  "replay_config": {
+    "max_rounds": 12,
+    "fanout_per_round": 3,
+    "max_probes": 45,
+    "min_attack_recall": 0.5,
+    "max_benign_pollution": 0,
+    "root_cause_k": 3
+  },
+  "expected_decision": {
+    "action": "contain",
+    "allowed_actions": [
+      "contain",
+      "contain_escalate",
+      "escalate",
+      "monitor",
+      "spawn"
+    ],
+    "must_include_technique_pairs": [
+      [
+        "T1059.004",
+        "T1059.004"
+      ],
+      [
+        "T1059.004",
+        "T1059.001"
+      ]
+    ],
+    "must_exclude_technique_pairs": [
+      [
+        "T1059.004",
+        "T1082"
+      ],
+      [
+        "T1046",
+        "T1059.004"
+      ]
+    ],
+    "counterfactuals": []
+  },
+  "evaluation": {
+    "calibration_eligible": false
+  },
+  "adapter_meta": {
+    "performer": "CADETS",
+    "input_path": "F:\\cursor all\\final trace\\tests\\replay\\data\\cadets\\cadets_sample_002.json",
+    "event_count": 7,
+    "events_raw_count": 7,
+    "normalization_stats": {
+      "source": "darpa_tc_cadets",
+      "scenario_id": "cadets_sample_002",
+      "events_in": 7,
+      "events_kept": 7,
+      "events_dropped": 0,
+      "nodes": {
+        "process": 10,
+        "file": 3,
+        "socket": 1,
+        "user": 0,
+        "host": 0
+      },
+      "relations": {
+        "process_spawn": 3,
+        "file_write": 1,
+        "execve": 1,
+        "file_read": 1,
+        "network_connect": 1
+      },
+      "roles": {
+        "attack": 4,
+        "benign": 2,
+        "oos": 1
+      },
+      "graph_edges": 4,
+      "graph_edge_roles": {
+        "attack": 3,
+        "benign": 1
+      },
+      "dropped_events": {}
+    },
+    "entry_alert_strategy": "explicit"
+  }
+}

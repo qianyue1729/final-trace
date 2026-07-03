@@ -1,0 +1,31 @@
+{
+  "case_id": "manual_wmi_exec",
+  "title": "WMI remote exec",
+  "category": "attack-like",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1047",
+    "tactic": "execution",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.76,
+    "attributes": {}
+  },
+  "ground_truth": {
+    "true_family": "wmi_execution",
+    "true_boundary": "in_attack",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1047"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

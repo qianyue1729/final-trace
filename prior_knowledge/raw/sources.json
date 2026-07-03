@@ -1,0 +1,57 @@
+{
+  "version": "1.0",
+  "description": "先验知识 Raw 层：全部产物必须可追溯到此处登记的开源快照",
+  "license_note": "各源许可证见 OPENSOURCE.md；仅用于统计/映射/归一化，不原样再分发受限制内容",
+  "sources": [
+    {
+      "id": "mitre_enterprise_attack_stix",
+      "name": "MITRE ATT&CK Enterprise STIX",
+      "url": "https://raw.githubusercontent.com/mitre/cti/master/enterprise-attack/enterprise-attack.json",
+      "path": "mitre/enterprise-attack.json",
+      "required": true,
+      "used_by": ["L1", "L2", "score_v3.threat_prevalence", "DecisionLedger.seed"],
+      "weight_in_pipeline": 1.0,
+      "semantics": "intrusion-set × technique × tactic 共现；L1 反向战术转移"
+    },
+    {
+      "id": "atomic_enterprise_matrix",
+      "name": "Atomic Red Team — Enterprise Matrix Index",
+      "url": "https://raw.githubusercontent.com/redcanaryco/atomic-red-team/master/atomics/Indexes/Matrices/enterprise-attack.json",
+      "path": "atomic/enterprise-attack-index.json",
+      "required": false,
+      "used_by": ["L2.is_observable", "L3.technique_visibility"],
+      "weight_in_pipeline": 0.6,
+      "semantics": "technique 可执行测试覆盖；验证 L2 节点可观测性"
+    },
+    {
+      "id": "lolbas_csv",
+      "name": "LOLBAS Project — CSV export",
+      "url": "https://lolbas-project.github.io/api/lolbas.csv",
+      "path": "lolbas/lolbas.csv",
+      "required": false,
+      "used_by": ["L2.tools.lolbas", "boundary_prior.benign", "DecisionLedger.null_anchor"],
+      "weight_in_pipeline": 0.7,
+      "semantics": "Living-off-the-land 双用途工具 → 分支 null 锚 benign 先验升高"
+    },
+    {
+      "id": "sigma_rules_index",
+      "name": "SigmaHQ — rules directory listing (stub index)",
+      "url": "https://api.github.com/repos/SigmaHQ/sigma/contents/rules",
+      "path": "sigma/rules_index.json",
+      "required": false,
+      "used_by": ["L2.sigma_rules", "L3.log_source_mapping"],
+      "weight_in_pipeline": 0.5,
+      "semantics": "detection → log source；不当攻击因果依据"
+    },
+    {
+      "id": "gtfobins_data_functions",
+      "name": "GTFOBins — functions index (GitHub API)",
+      "url": "https://api.github.com/repos/GTFOBins/GTFOBins.github.io/contents/_data",
+      "path": "gtfobins/data_index.json",
+      "required": false,
+      "used_by": ["L2.tools.gtfobins", "boundary_prior.benign"],
+      "weight_in_pipeline": 0.6,
+      "semantics": "Linux 双用途二进制 → benign/oos 边界先验"
+    }
+  ]
+}

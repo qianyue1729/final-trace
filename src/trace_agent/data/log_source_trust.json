@@ -1,0 +1,236 @@
+{
+  "_comment": "Log Source Trust Registry template - RFC-004-02 §5 EvidenceTrust. Copy and customize for your environment. tier: forge-resistant > high > medium > low. Only forge-resistant sources can trigger hard VETO.",
+  "edr_kernel_process_event": {
+    "integrity": 0.95,
+    "tier": "forge-resistant",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ],
+    "observes": [
+      "process_creation",
+      "module_load",
+      "network_connection",
+      "file_system"
+    ],
+    "sigma_technique_coverage": 35
+  },
+  "sysmon": {
+    "integrity": 0.9,
+    "tier": "forge-resistant",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "windows"
+    ],
+    "observes": [
+      "process_creation",
+      "network_connection",
+      "file_system",
+      "registry",
+      "dns_query"
+    ],
+    "sigma_technique_coverage": 50
+  },
+  "cloudtrail_management_event": {
+    "integrity": 0.9,
+    "tier": "high",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "aws"
+    ],
+    "observes": [
+      "cloud_api_call",
+      "iam_change"
+    ]
+  },
+  "windows_event_log_security": {
+    "integrity": 0.6,
+    "tier": "medium",
+    "adversary_controllable_base": "contextual",
+    "hard_veto_allowed": false,
+    "platforms": [
+      "windows"
+    ],
+    "observes": [
+      "logon",
+      "privilege_use",
+      "account_management"
+    ]
+  },
+  "windows_event_log_powershell": {
+    "integrity": 0.55,
+    "tier": "medium",
+    "adversary_controllable_base": "contextual",
+    "hard_veto_allowed": false,
+    "platforms": [
+      "windows"
+    ],
+    "observes": [
+      "script_execution",
+      "command_execution"
+    ]
+  },
+  "auditd": {
+    "integrity": 0.75,
+    "tier": "high",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "linux"
+    ],
+    "observes": [
+      "process_creation",
+      "file_system",
+      "authentication",
+      "network_connection"
+    ],
+    "sigma_technique_coverage": 7
+  },
+  "syslog": {
+    "integrity": 0.5,
+    "tier": "medium",
+    "adversary_controllable_base": "contextual",
+    "hard_veto_allowed": false,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "observes": [
+      "authentication",
+      "service_log"
+    ]
+  },
+  "web_application_log": {
+    "integrity": 0.45,
+    "tier": "medium",
+    "adversary_controllable_base": true,
+    "hard_veto_allowed": false,
+    "platforms": [
+      "windows",
+      "linux"
+    ],
+    "observes": [
+      "web_request",
+      "web_error"
+    ]
+  },
+  "bash_history": {
+    "integrity": 0.2,
+    "tier": "low",
+    "adversary_controllable_base": true,
+    "hard_veto_allowed": false,
+    "platforms": [
+      "linux",
+      "macos"
+    ],
+    "observes": [
+      "command_history"
+    ]
+  },
+  "file_system_timestamp": {
+    "integrity": 0.3,
+    "tier": "low",
+    "adversary_controllable_base": true,
+    "hard_veto_allowed": false,
+    "platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ],
+    "observes": [
+      "file_modification_time"
+    ]
+  },
+  "azure_activity_log": {
+    "integrity": 0.9,
+    "tier": "high",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "azure"
+    ],
+    "observes": [
+      "azure_resource_change",
+      "azure_rbac_change"
+    ]
+  },
+  "dns_query_log": {
+    "integrity": 0.85,
+    "tier": "high",
+    "adversary_controllable_base": "contextual",
+    "hard_veto_allowed": true,
+    "platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ],
+    "observes": [
+      "dns_query"
+    ]
+  },
+  "container_runtime_event": {
+    "integrity": 0.88,
+    "tier": "forge-resistant",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "linux"
+    ],
+    "observes": [
+      "container_creation",
+      "container_network",
+      "container_exec"
+    ]
+  },
+  "network_tap_flow": {
+    "integrity": 0.8,
+    "tier": "high",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "windows",
+      "linux"
+    ],
+    "observes": [
+      "network_flow",
+      "packet_capture"
+    ]
+  },
+  "_sigma_mapping": {
+    "comment": "Sigma maps detection→log source; does NOT imply attack causality",
+    "rules_parsed": 1137,
+    "techniques_with_rules": 274,
+    "trust_registry_coverage": {
+      "auditd": 7,
+      "sysmon": 50,
+      "edr_kernel_process_event": 35
+    },
+    "logsource_canonical_map": {
+      "windows/process_creation": "process_creation",
+      "windows/powershell": "script_execution",
+      "windows/ps_script": "script_execution",
+      "windows/registry_event": "registry",
+      "windows/registry_set": "registry",
+      "windows/registry_add": "registry",
+      "windows/file_event": "file_system",
+      "windows/file_delete": "file_system",
+      "windows/image_load": "module_load",
+      "windows/network_connection": "network_connection",
+      "windows/dns_query": "dns_query",
+      "windows/builtin": "windows_event_log_security",
+      "linux/process_creation": "process_creation",
+      "linux/auditd": "auditd",
+      "linux/file_event": "file_system",
+      "linux/network_connection": "network_connection",
+      "linux/builtin": "syslog",
+      "macos/process_creation": "process_creation",
+      "macos/file_event": "file_system",
+      "macos/network_connection": "network_connection"
+    }
+  }
+}

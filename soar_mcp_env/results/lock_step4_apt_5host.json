@@ -1,0 +1,206 @@
+{
+  "step": 4,
+  "scenario_id": "apt_5host",
+  "all_pass": true,
+  "fanout_budget": 3,
+  "pool_size_in": 5,
+  "chosen_count": 3,
+  "chosen": [
+    {
+      "id": "P-6e07b7de",
+      "target": "WS-USER-01",
+      "target_type": "host",
+      "operator": "process_tree",
+      "tactic": "ta0002",
+      "source": "prior",
+      "dedup_key": "WS-USER-01::process_tree::ta0002",
+      "explanation_ids": [],
+      "priority_hint": 0.306,
+      "metadata": {
+        "origin_technique": "T1068",
+        "neighbor_technique": "T1134.001"
+      },
+      "voi_score": -0.049869,
+      "risk_now": 12.079933,
+      "expected_risk_after": 12.079802,
+      "cost": 0.05
+    },
+    {
+      "id": "P-7017d6cc",
+      "target": "WS-USER-01",
+      "target_type": "host",
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "source": "rule_gap",
+      "dedup_key": "WS-USER-01::auth_log::initial-access",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "initial-access"
+      },
+      "voi_score": -0.049869,
+      "risk_now": 12.079933,
+      "expected_risk_after": 12.079802,
+      "cost": 0.05
+    },
+    {
+      "id": "P-da4bfe80",
+      "target": "WS-USER-01",
+      "target_type": "host",
+      "operator": "persistence_scan",
+      "tactic": "persistence",
+      "source": "rule_gap",
+      "dedup_key": "WS-USER-01::persistence_scan::persistence",
+      "explanation_ids": [],
+      "priority_hint": 0.25,
+      "metadata": {
+        "gap_type": "stagnation",
+        "missing_tactic": "persistence"
+      },
+      "voi_score": -0.049869,
+      "risk_now": 12.079933,
+      "expected_risk_after": 12.079802,
+      "cost": 0.05
+    }
+  ],
+  "voi_scores_all": [
+    {
+      "id": "P-6e07b7de",
+      "operator": "process_tree",
+      "tactic": "ta0002",
+      "voi_score": -0.049869,
+      "priority_hint": 0.306
+    },
+    {
+      "id": "P-7017d6cc",
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "voi_score": -0.049869,
+      "priority_hint": 0.25
+    },
+    {
+      "id": "P-da4bfe80",
+      "operator": "persistence_scan",
+      "tactic": "persistence",
+      "voi_score": -0.049869,
+      "priority_hint": 0.25
+    },
+    {
+      "id": "P-dfc5cac4",
+      "operator": "process_tree",
+      "tactic": "privilege-escalation",
+      "voi_score": -0.049869,
+      "priority_hint": 0.25
+    },
+    {
+      "id": "P-f46d7fd8",
+      "operator": "process_tree",
+      "tactic": "ta0009",
+      "voi_score": -0.049869,
+      "priority_hint": 0.21
+    }
+  ],
+  "checks": [
+    {
+      "id": "o_chosen_non_empty",
+      "status": "pass",
+      "message": "O 拍选出至少 1 条探针",
+      "expected": null,
+      "actual": 3
+    },
+    {
+      "id": "o_fanout_respected",
+      "status": "pass",
+      "message": "选中数 ≤ fanout_per_round（=3）",
+      "expected": "1..3",
+      "actual": 3
+    },
+    {
+      "id": "o_chosen_subset_of_pool",
+      "status": "pass",
+      "message": "chosen 是 ② 拍幸存池子集",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "o_pool_drained",
+      "status": "pass",
+      "message": "O 拍 drain 清空候选池",
+      "expected": null,
+      "actual": 0
+    },
+    {
+      "id": "o_voi_sorted",
+      "status": "pass",
+      "message": "chosen 按 VOI 降序（ties 允许相等）",
+      "expected": null,
+      "actual": [
+        -0.049869,
+        -0.049869,
+        -0.049869
+      ]
+    },
+    {
+      "id": "o_voi_discrimination",
+      "status": "warn",
+      "message": "全部候选 VOI 相同，排序退化为 priority_hint/稳定序",
+      "expected": null,
+      "actual": -0.049869
+    },
+    {
+      "id": "o_no_c_budget_charge",
+      "status": "pass",
+      "message": "O 拍不消耗 probes_used（C 拍才计费）",
+      "expected": null,
+      "actual": 0
+    },
+    {
+      "id": "o_graph_readonly",
+      "status": "pass",
+      "message": "O 拍不写入 SessionGraph",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "o_ledger_readonly",
+      "status": "pass",
+      "message": "O 拍不更新 DecisionLedger（只读 VOI）",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "o_beta_readonly",
+      "status": "pass",
+      "message": "O 拍不写入 BetaLedger",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "o_chosen_schema",
+      "status": "pass",
+      "message": "chosen 探针字段完整",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "id": "gt_root_cause_in_chosen",
+      "status": "pass",
+      "message": "Top fanout 中至少 1 条可追根 operator/tactic（O 拍前瞻）",
+      "expected": {
+        "entity_id": "",
+        "technique": "T1021.002",
+        "tactic": "lateral-movement"
+      },
+      "actual": [
+        {
+          "operator": "auth_log",
+          "tactic": "initial-access",
+          "target": "WS-USER-01",
+          "voi": -0.049869
+        }
+      ]
+    }
+  ],
+  "report_md": "# Step 4 · O 拍 · VOI 排序 + 填槽 [PASS]\n场景: apt_5host · 入口: attack:idx_stress:evt_015\n根因 GT: (未指定) · T1021.002\n\n## ① 做了什么\n对 ② 拍幸存池按 VOI 降序排序，取 Top-3 填入 fanout 槽位；pool.drain()。\n\n## ② 输入（读了什么）\n- 幸存候选 5 条 · margin=15.80%\n- DecisionLedger + Beta + calib + trust（VOI 一步前瞻）\n- fanout_per_round=3\n\n## ③ 产出（生成了什么）\n- chosen 3 条：\n  - process_tree · ta0002 @ WS-USER-01  VOI=-0.0499  prio=0.31\n  - auth_log · initial-access @ WS-USER-01  VOI=-0.0499  prio=0.25\n  - persistence_scan · persistence @ WS-USER-01  VOI=-0.0499  prio=0.25\n- probes_used 仍为 0（C 拍才 +1）\n\n## ④ 怎么算的\nVOI(p) = risk_now - E[risk_after] - cost(p)\nrisk = bayes_risk(session + contested boundaries)\n\n## ⑤ 维护了什么\n【图/决策/Beta】只读\n【候选池】drain 清空\n【义务】mandated 预占（当前实现未在 O 前 materialize 入池）\n\n## Ground truth 校验\n- [OK] o_chosen_non_empty: O 拍选出至少 1 条探针\n- [OK] o_fanout_respected: 选中数 ≤ fanout_per_round（=3）\n- [OK] o_chosen_subset_of_pool: chosen 是 ② 拍幸存池子集\n- [OK] o_pool_drained: O 拍 drain 清空候选池\n- [OK] o_voi_sorted: chosen 按 VOI 降序（ties 允许相等）\n- [WARN] o_voi_discrimination: 全部候选 VOI 相同，排序退化为 priority_hint/稳定序\n- [OK] o_no_c_budget_charge: O 拍不消耗 probes_used（C 拍才计费）\n- [OK] o_graph_readonly: O 拍不写入 SessionGraph\n- [OK] o_ledger_readonly: O 拍不更新 DecisionLedger（只读 VOI）\n- [OK] o_beta_readonly: O 拍不写入 BetaLedger\n- [OK] o_chosen_schema: chosen 探针字段完整\n- [OK] gt_root_cause_in_chosen: Top fanout 中至少 1 条可追根 operator/tactic（O 拍前瞻）"
+}

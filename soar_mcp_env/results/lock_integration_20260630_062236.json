@@ -1,0 +1,108 @@
+{
+  "timestamp": "20260630_062236",
+  "scenarios": {
+    "pipeline_18": {
+      "scenario_id": "pipeline_18",
+      "decision": "monitor",
+      "decision_correct": false,
+      "confidence": 0.55,
+      "stop_reason": "budget",
+      "rounds_used": 15,
+      "probes_used": 30,
+      "total_attack_edges": 18,
+      "found_attack_edges": 0,
+      "recall": 0.0,
+      "total_graph_events": 1,
+      "attack_in_graph": 0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "elapsed_seconds": 0.7765262126922607,
+      "llm_calls": 0,
+      "llm_tokens": 0,
+      "leading_explanation": "T1041 attack-fit explanation",
+      "alternatives": [
+        {
+          "id": "__null__",
+          "posterior": 0.35
+        },
+        {
+          "id": "H2",
+          "posterior": 0.24999999999999994
+        }
+      ],
+      "errors": []
+    },
+    "apt_5host": {
+      "scenario_id": "apt_5host",
+      "decision": "monitor",
+      "decision_correct": false,
+      "confidence": 0.55,
+      "stop_reason": "budget",
+      "rounds_used": 15,
+      "probes_used": 30,
+      "total_attack_edges": 25,
+      "found_attack_edges": 0,
+      "recall": 0.0,
+      "total_graph_events": 1,
+      "attack_in_graph": 0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "elapsed_seconds": 85.09725451469421,
+      "llm_calls": 0,
+      "llm_tokens": 0,
+      "leading_explanation": "T1068 attack-fit explanation",
+      "alternatives": [
+        {
+          "id": "__null__",
+          "posterior": 0.35
+        },
+        {
+          "id": "H2",
+          "posterior": 0.24999999999999994
+        }
+      ],
+      "errors": []
+    },
+    "multipath_12host": {
+      "scenario_id": "multipath_12host",
+      "decision": "monitor",
+      "decision_correct": false,
+      "confidence": 0.55,
+      "stop_reason": "budget",
+      "rounds_used": 15,
+      "probes_used": 30,
+      "total_attack_edges": 31,
+      "found_attack_edges": 0,
+      "recall": 0.0,
+      "total_graph_events": 1,
+      "attack_in_graph": 0,
+      "precision": 0.0,
+      "f1": 0.0,
+      "elapsed_seconds": 15.118430137634277,
+      "llm_calls": 0,
+      "llm_tokens": 0,
+      "leading_explanation": "T1053.005 attack-fit explanation",
+      "alternatives": [
+        {
+          "id": "__null__",
+          "posterior": 0.35
+        },
+        {
+          "id": "H2",
+          "posterior": 0.24999999999999994
+        }
+      ],
+      "errors": []
+    }
+  },
+  "summary": {
+    "total": 3,
+    "correct_decisions": 0,
+    "avg_recall": 0.0,
+    "avg_precision": 0.0,
+    "avg_f1": 0.0,
+    "total_elapsed": 100.99221086502075,
+    "total_llm_calls": 0,
+    "total_llm_tokens": 0
+  }
+}

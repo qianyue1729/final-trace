@@ -1,0 +1,61 @@
+{
+  "case_id": "cloud_iam_anomaly",
+  "title": "Cloud IAM 异常",
+  "alert": {
+    "technique_id": "T1098",
+    "tactic": "persistence",
+    "platform": "linux",
+    "log_source": "cloudtrail_management_event",
+    "anomaly_score": 0.82
+  },
+  "expect": {
+    "lifecycle_template_any": [
+      "cloud_compromise_v1"
+    ],
+    "max_max_prior": 0.55,
+    "explanation_types_any": [
+      "lifecycle"
+    ]
+  },
+  "category": "attack-like",
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "expected_behavior": {
+    "lifecycle_template_any": [
+      "cloud_compromise_v1"
+    ],
+    "max_max_prior": 0.55,
+    "explanation_types_any": [
+      "lifecycle"
+    ],
+    "expected_log_sources": [
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}

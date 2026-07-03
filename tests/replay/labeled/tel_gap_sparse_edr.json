@@ -1,0 +1,35 @@
+{
+  "case_id": "tel_gap_sparse_edr",
+  "title": "Sparse EDR coverage",
+  "category": "telemetry-gap",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1055",
+    "tactic": "defense-evasion",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.52,
+    "attributes": {
+      "tenant_profile": {
+        "edr_coverage": "low"
+      }
+    }
+  },
+  "ground_truth": {
+    "true_family": "process_injection",
+    "true_boundary": "uncertain",
+    "benign": false,
+    "oos": false,
+    "expected_techniques": [
+      "T1055"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "case_id": "gap_no_network_telemetry",
+  "title": "Gap no network telemetry",
+  "category": "telemetry-gap",
+  "alert": {
+    "technique_id": "T1105",
+    "tactic": "command-and-control",
+    "platform": "windows",
+    "log_source": "process_creation",
+    "anomaly_score": 0.48,
+    "attributes": {
+      "available_log_sources": [
+        "process_creation"
+      ]
+    }
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true,
+    "expected_log_sources": [
+      "network_connection",
+      "dns_query",
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "network_connection",
+      "dns_query"
+    ],
+    "missing_expected_log_sources": [
+      "network_connection"
+    ],
+    "visibility_annotation_source": "manual_gap_design"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "manual_gap_design"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "network_connection",
+      "dns_query"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "network_connection": 2,
+      "dns_query": 2
+    },
+    "expected_probe_outcome": {
+      "network_connection": "confirm_payload_download_or_c2",
+      "dns_query": "confirm_c2_domain"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "manual_expected"
+  }
+}

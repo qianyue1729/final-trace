@@ -1,0 +1,194 @@
+{
+  "step": 6,
+  "scenario_id": "multipath_12host",
+  "all_pass": true,
+  "node_count_before": 1,
+  "node_count_after": 7,
+  "margin_before": 0.23581818181818182,
+  "margin_after": 0.49983197468032137,
+  "beta_keys_after": 3,
+  "stop": {
+    "should_stop": true,
+    "reason": "robust",
+    "max_voi": 0.28437180707044174,
+    "risk_now": 7.459277575990931
+  },
+  "attack_refs_in_graph": [
+    "attack:idx_stress:evt_002",
+    "attack:idx_stress:evt_003",
+    "attack:idx_stress:evt_005"
+  ],
+  "techniques_in_graph": [
+    "T0000",
+    "T1053.005",
+    "T1059.001",
+    "T1566.001"
+  ],
+  "beta_snapshots": [
+    {
+      "operator": "auth_log",
+      "tactic": "initial-access",
+      "learning_key": "auth_log|host|initial-access",
+      "hit": true,
+      "alpha": 2.0,
+      "beta": 1.0,
+      "observations": 1
+    },
+    {
+      "operator": "process_tree",
+      "tactic": "execution",
+      "learning_key": "process_tree|process|execution",
+      "hit": true,
+      "alpha": 2.0,
+      "beta": 1.0,
+      "observations": 1
+    },
+    {
+      "operator": "process_tree",
+      "tactic": "privilege-escalation",
+      "learning_key": "process_tree|process|privilege-escalation",
+      "hit": true,
+      "alpha": 2.0,
+      "beta": 1.0,
+      "observations": 1
+    }
+  ],
+  "checks": [
+    {
+      "id": "k_prereq_c_executed",
+      "status": "pass",
+      "message": "K 拍前 C 拍已执行（probes_used == len(chosen)）",
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "id": "k_graph_adds_confirmed",
+      "status": "pass",
+      "message": "valid confirmed 经 _has_required_fields 后 graph.add_events 增节点",
+      "expected": ">1",
+      "actual": 7
+    },
+    {
+      "id": "k_ledger_bayesian_update",
+      "status": "pass",
+      "message": "confirmed 非空时 DecisionLedger.update 改变 margin 或 log_post",
+      "expected": "changed",
+      "actual": {
+        "margin_before": 0.235818,
+        "margin_after": 0.499832
+      }
+    },
+    {
+      "id": "k_beta_keys_tracked",
+      "status": "pass",
+      "message": "BetaLedger 为每条 chosen 探针 learning_key 写入观测",
+      "expected": 3,
+      "actual": 3
+    },
+    {
+      "id": "k_beta_hit_miss_per_probe",
+      "status": "pass",
+      "message": "每条 chosen 探针 Beta total_observations >= 1",
+      "expected": null,
+      "actual": [
+        {
+          "op": "auth_log",
+          "obs": 1,
+          "hit": true
+        },
+        {
+          "op": "process_tree",
+          "obs": 1,
+          "hit": true
+        },
+        {
+          "op": "process_tree",
+          "obs": 1,
+          "hit": true
+        }
+      ]
+    },
+    {
+      "id": "k_beta_alpha_beta_semantics",
+      "status": "pass",
+      "message": "hit 增 alpha、miss 增 beta（相对先验 1,1）",
+      "expected": null,
+      "actual": [
+        {
+          "op": "auth_log",
+          "alpha": 2.0,
+          "beta": 1.0,
+          "hit": true
+        },
+        {
+          "op": "process_tree",
+          "alpha": 2.0,
+          "beta": 1.0,
+          "hit": true
+        },
+        {
+          "op": "process_tree",
+          "alpha": 2.0,
+          "beta": 1.0,
+          "hit": true
+        }
+      ]
+    },
+    {
+      "id": "k_calib_recorded",
+      "status": "pass",
+      "message": "GenCalibration.record 按 probe.source 写入",
+      "expected": null,
+      "actual": [
+        "rule_gap"
+      ]
+    },
+    {
+      "id": "k_should_stop_well_formed",
+      "status": "pass",
+      "message": "should_stop() 返回合法 StopDecision.reason",
+      "expected": null,
+      "actual": {
+        "should_stop": true,
+        "reason": "robust",
+        "max_voi": 0.284372,
+        "risk_now": 7.459278
+      }
+    },
+    {
+      "id": "gt_attack_ref_in_graph",
+      "status": "pass",
+      "message": "C 拍命中的 GT attack_edge_refs 经 K 拍入图",
+      "expected": [
+        "attack:idx_stress:evt_002",
+        "attack:idx_stress:evt_003",
+        "attack:idx_stress:evt_005"
+      ],
+      "actual": [
+        "attack:idx_stress:evt_002",
+        "attack:idx_stress:evt_003",
+        "attack:idx_stress:evt_005"
+      ]
+    },
+    {
+      "id": "gt_root_technique_in_graph",
+      "status": "pass",
+      "message": "入图 techniques 含根因 technique 前缀",
+      "expected": "T1566.001",
+      "actual": [
+        "T0000",
+        "T1053.005",
+        "T1059.001",
+        "T1566.001"
+      ]
+    },
+    {
+      "id": "gt_continue_when_attack_evidence",
+      "status": "warn",
+      "message": "命中 GT 但首轮停止（reason=robust，decision_robust 或 voi_floor）",
+      "expected": null,
+      "actual": "robust"
+    }
+  ],
+  "report_md": "# Step 6 · K 拍 · 学习 + 决策账 + 停止 [PASS]\n场景: multipath_12host · 入口: attack:idx_stress:evt_005\n根因 GT: external · T1566.001\n时间窗对齐: alert_ts=1781198591\n\n## ① 做了什么\n_k_phase: graph.add_events -> ledger.update -> beta.update -> calib.record -> should_stop()\n\n## ② 输入\n- confirmed 6 (valid 6)\n- chosen 3 探针\n  - auth_log · initial-access @ WS-USER-01 (voi=-5.7e-05)\n  - process_tree · execution @ WS-USER-01 (voi=-5.7e-05)\n  - process_tree · privilege-escalation @ WS-USER-01 (voi=-5.7e-05)\n\n## ③ 产出\n- graph nodes: 1 -> 7\n- ledger margin: 0.2358 -> 0.4998\n- beta keys: 0 -> 3\n  - auth_log: hit=True beta(2.0,1.0) obs=1\n  - process_tree: hit=True beta(2.0,1.0) obs=1\n  - process_tree: hit=True beta(2.0,1.0) obs=1\n- calib sources: ['rule_gap']\n- stop: should_stop=True reason=robust\n- GT in graph: ['attack:idx_stress:evt_002', 'attack:idx_stress:evt_003', 'attack:idx_stress:evt_005']\n- techniques: ['T0000', 'T1053.005', 'T1059.001', 'T1566.001']\n\n## Ground truth 校验\n- [OK] k_prereq_c_executed: K 拍前 C 拍已执行（probes_used == len(chosen)）\n- [OK] k_graph_adds_confirmed: valid confirmed 经 _has_required_fields 后 graph.add_events 增节点\n- [OK] k_ledger_bayesian_update: confirmed 非空时 DecisionLedger.update 改变 margin 或 log_post\n- [OK] k_beta_keys_tracked: BetaLedger 为每条 chosen 探针 learning_key 写入观测\n- [OK] k_beta_hit_miss_per_probe: 每条 chosen 探针 Beta total_observations >= 1\n- [OK] k_beta_alpha_beta_semantics: hit 增 alpha、miss 增 beta（相对先验 1,1）\n- [OK] k_calib_recorded: GenCalibration.record 按 probe.source 写入\n- [OK] k_should_stop_well_formed: should_stop() 返回合法 StopDecision.reason\n- [OK] gt_attack_ref_in_graph: C 拍命中的 GT attack_edge_refs 经 K 拍入图\n- [OK] gt_root_technique_in_graph: 入图 techniques 含根因 technique 前缀\n- [WARN] gt_continue_when_attack_evidence: 命中 GT 但首轮停止（reason=robust，decision_robust 或 voi_floor）"
+}

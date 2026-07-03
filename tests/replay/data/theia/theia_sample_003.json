@@ -1,0 +1,28 @@
+{
+  "metadata": {
+    "performer": "THEIA",
+    "scenario_id": "theia_sample_003",
+    "title": "THEIA: file read → archive → staging path",
+    "category": "attack-like"
+  },
+  "ground_truth": {
+    "entry_event_id": "theia:e_stage",
+    "anomaly_score": 0.85,
+    "attack_technique_pairs": [
+      ["T1059.004", "T1005"],
+      ["T1005", "T1560.001"],
+      ["T1560.001", "T1074.001"]
+    ],
+    "benign_technique_pairs": [["T1560.001", "T1560.002"]],
+    "oos_technique_pairs": [["T1537", "T1074.001"]]
+  },
+  "events": [
+    {"event_id": "theia:e_proc", "timestamp": "2018-05-03T14:00:00Z", "host_id": "theia-host-3", "subject": {"id": "proc:bash:1", "type": "process", "name": "bash"}, "object": {"id": "proc:tar:2", "type": "process", "name": "tar"}, "relation": "process_spawn", "tactic": "execution", "technique": "T1059.004", "role": "attack"},
+    {"event_id": "theia:e_read", "timestamp": "2018-05-03T14:00:30Z", "host_id": "theia-host-3", "parent_event_id": "theia:e_proc", "subject": {"id": "proc:tar:2", "type": "process", "name": "tar"}, "object": {"id": "file:/var/data/*.csv", "type": "file", "name": "/var/data"}, "relation": "file_read", "tactic": "collection", "technique": "T1005", "role": "attack"},
+    {"event_id": "theia:e_archive", "timestamp": "2018-05-03T14:01:00Z", "host_id": "theia-host-3", "parent_event_id": "theia:e_read", "subject": {"id": "proc:tar:2", "type": "process", "name": "tar"}, "object": {"id": "file:/tmp/stage.tar.gz", "type": "file", "name": "/tmp/stage.tar.gz"}, "relation": "file_write", "tactic": "collection", "technique": "T1560.001", "role": "attack"},
+    {"event_id": "theia:e_stage", "timestamp": "2018-05-03T14:01:30Z", "host_id": "theia-host-3", "parent_event_id": "theia:e_archive", "subject": {"id": "proc:mv:3", "type": "process", "name": "mv"}, "object": {"id": "file:/var/tmp/.stage", "type": "file", "name": "/var/tmp/.stage"}, "relation": "file_write", "tactic": "collection", "technique": "T1074.001", "role": "attack"},
+    {"event_id": "theia:e_backup", "timestamp": "2018-05-03T14:00:20Z", "host_id": "theia-host-3", "subject": {"id": "proc:backup:9", "type": "process", "name": "backup"}, "object": {"id": "file:/backup/daily.tar", "type": "file", "name": "/backup/daily.tar"}, "relation": "file_write", "tactic": "collection", "technique": "T1560.001", "role": "benign"},
+    {"event_id": "theia:e_backup_copy", "timestamp": "2018-05-03T14:00:25Z", "host_id": "theia-host-3", "parent_event_id": "theia:e_backup", "subject": {"id": "proc:backup:9", "type": "process", "name": "backup"}, "object": {"id": "file:/backup/daily.tar", "type": "file", "name": "/backup/daily.tar"}, "relation": "file_write", "tactic": "collection", "technique": "T1560.002", "role": "benign"},
+    {"event_id": "theia:e_oos_cloud", "timestamp": "2018-05-03T14:02:00Z", "host_id": "theia-host-3", "subject": {"id": "proc:aws:8", "type": "process", "name": "aws"}, "object": {"id": "socket:s3.amazonaws.com:443", "type": "socket", "name": "s3"}, "relation": "network_connect", "tactic": "exfiltration", "technique": "T1537", "role": "oos"}
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "case_id": "soc_benign_helpdesk",
+  "title": "SOC: helpdesk reset",
+  "category": "benign",
+  "source": "manual",
+  "label_quality": "weak_label",
+  "alert": {
+    "technique_id": "T1098",
+    "tactic": "persistence",
+    "platform": "windows",
+    "log_source": "authentication",
+    "anomaly_score": 0.23,
+    "attributes": {
+      "known_admin_host": true
+    }
+  },
+  "ground_truth": {
+    "true_family": "helpdesk_admin",
+    "true_boundary": "benign",
+    "benign": true,
+    "oos": false,
+    "expected_techniques": [
+      "T1098"
+    ]
+  },
+  "evaluation": {
+    "calibration_eligible": true
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.75,
+    "must_not_hard_veto": true
+  }
+}

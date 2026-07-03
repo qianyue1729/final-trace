@@ -1,0 +1,47 @@
+{
+  "case_id": "cloud_s3_exfil",
+  "title": "Cloud S3 exfil",
+  "category": "attack-like",
+  "alert": {
+    "technique_id": "T1537",
+    "tactic": "exfiltration",
+    "platform": "linux",
+    "log_source": "cloudtrail_management_event",
+    "anomaly_score": 0.74,
+    "attributes": {}
+  },
+  "expected_behavior": {
+    "max_max_prior": 0.55,
+    "expected_log_sources": [
+      "process_creation"
+    ],
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "source": "synthetic",
+  "label_quality": "synthetic",
+  "evaluation": {
+    "calibration_eligible": false,
+    "visibility_annotation_source": "derived_from_prior_recommendation"
+  },
+  "probe_ground_truth": {
+    "expected_probe_sources": [
+      "process_creation"
+    ],
+    "must_not_probe": [
+      "bash_history",
+      "full_disk_scan",
+      "file_system_timestamp"
+    ],
+    "probe_cost_profile": {
+      "process_creation": 1
+    },
+    "expected_probe_outcome": {
+      "process_creation": "confirm_parent_lineage"
+    },
+    "label_quality": "synthetic",
+    "annotation_source": "derived_from_visibility_expectation"
+  }
+}
