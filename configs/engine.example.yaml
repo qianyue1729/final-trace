@@ -65,6 +65,15 @@ calibration:
   dismiss_threshold: 0.30
 
 model_planner:
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  ca_bundle: ""
+  verify_tls: true
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 60
+  max_retries: 2
   # shadow 只记录建议，绝不执行；assist 必须经过独立毕业门禁后显式开启。
   mode: "shadow"
   max_intents_per_round: 4
@@ -88,6 +97,27 @@ model_judgement:
   max_context_nodes: 40
   ambiguity_margin: 0.35
   deterministic_fallback: true
+
+model_mcp_compiler:
+  # Start in shadow. Promote to assist only after reviewing validator audit.
+  mode: "shadow"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  ca_bundle: ""
+  verify_tls: true
+  connect_timeout_seconds: 10
+  read_timeout_seconds: 60
+  max_retries: 2
+  max_plans_per_round: 4
+  max_calls_per_round: 3
+  max_calls_per_case: 30
+  max_tokens_per_case: 20000
+  max_context_nodes: 40
+  max_time_range_days: 30
+  max_filters: 4
+  fallback_to_template: true
 
 service:
   host: "0.0.0.0"

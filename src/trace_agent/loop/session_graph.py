@@ -399,6 +399,10 @@ class SessionGraph:
         """获取节点，不存在返回 None"""
         return self._nodes.get(node_id)
 
+    def all_nodes(self) -> list[GraphNode]:
+        """返回全部节点（供 L 拍生成器读取属性做 pivot）。"""
+        return list(self._nodes.values())
+
     def get_edge(self, edge_id: str) -> Optional[GraphEdge]:
         """获取边"""
         return self._edges.get(edge_id)
@@ -497,12 +501,17 @@ class SessionGraph:
         return f"E{self._edge_counter}"
 
     def _compute_max_depth(self) -> int:
-        """Compute maximum depth in graph via BFS from roots."""
+        """Compute maximum depth in graph via BFS from roots.
+
+        安全保护：限制节点最大访问次数防止环导致无限循环。
+        """
         roots = self.roots()
         if not roots:
             return 0
         max_d = 0
-        # Longest path BFS from each root
+        # 限制每个节点最多被访问的次数（防止环）
+        visit_count: dict[str, int] = {r: 1 for r in roots}
+        max_visits = len(self._nodes) + 1  # 任何节点不应被访问超过节点总数次
         depth_map: dict[str, int] = {r: 0 for r in roots}
         queue: deque[str] = deque(roots)
         while queue:
@@ -514,6 +523,10 @@ class SessionGraph:
                     continue
                 child = edge.dst
                 new_depth = current_depth + 1
+                child_visits = visit_count.get(child, 0) + 1
+                if child_visits > max_visits:
+                    continue  # 检测到环，跳过
+                visit_count[child] = child_visits
                 if child not in depth_map or depth_map[child] < new_depth:
                     depth_map[child] = new_depth
                     queue.append(child)
@@ -526,6 +539,8 @@ class SessionGraph:
         roots = self.roots()
         if not roots:
             return 0
+        visit_count: dict[str, int] = {r: 1 for r in roots}
+        max_visits = len(self._nodes) + 1
         depth_map: dict[str, int] = {r: 0 for r in roots}
         queue: deque[str] = deque(roots)
         while queue:
@@ -537,6 +552,10 @@ class SessionGraph:
                     continue
                 child = edge.dst
                 new_depth = current_depth + 1
+                child_visits = visit_count.get(child, 0) + 1
+                if child_visits > max_visits:
+                    continue
+                visit_count[child] = child_visits
                 if child not in depth_map or depth_map[child] < new_depth:
                     depth_map[child] = new_depth
                     queue.append(child)

@@ -1,0 +1,111 @@
+# real_trace_01 v2 — 真实 Wazuh 形态 + 分步 pivot 回溯
+# 对应服务端 real_trace_01 v2 / REAL_TRACE_HOST_ADAPTATION.md
+# 用法: python scripts/validate_wazuh_runtime.py --config configs/engine.real_trace.yaml
+
+backend: soar_mcp
+
+soar_mcp:
+  endpoint: "https://192.144.151.189/mcp"
+  verify_tls: false
+  ca_bundle: ""
+  tool_name: "search_security_events"
+  tool_profile: "wazuh"
+  wazuh_time_range: "24h"
+  wazuh_incident_prefix: ""
+  wazuh_attacks_only: false
+  wazuh_compact: false
+  query_template: "host:{host}"
+
+  # 种子只锁 1 条（T1048 + dst_ip），其余靠多轮 clue_pivot 回溯
+  bootstrap_strategy: "seed_only"
+
+  # pivot 探针查询模板（备用；clue_pivot 走 metadata.mcp_query 显式查询）
+  pivot_field_map:
+    clue_pivot: "srcip"
+  query_template_by_pivot:
+    host: "host:{value}"
+    srcip: "data.srcip:{value}"
+    dstuser: "data.dstuser:{value}"
+    dst_ip: "data.dst_ip:{value}"
+
+  # backward pivot 回溯链：从已确认事件属性回溯上一跳
+  # attr = normalizer 归一后的 attributes 键；field = Wazuh Lucene 字段
+  # 实测链: 种子(collected_file) → T1005(script_name) → T1059.004(src_ip)
+  #        → T1078 / T1110.001（均用 src_ip；dstuser 会混入噪声登录）
+  clue_pivot_rules:
+    - attr: "collected_file"
+      field: "data.collected_file"
+      technique: "T1005"
+      tactic: "collection"
+    - attr: "script_name"
+      field: "data.script_name"
+      technique: "T1059.004"
+      tactic: "execution"
+    - attr: "src_ip"
+      field: "data.srcip"
+      technique: "T1078"
+      tactic: "initial-access"
+    - attr: "src_ip"
+      field: "data.srcip"
+      technique: "T1110.001"
+      tactic: "credential-access"
+
+normalizer:
+  field_map:
+    ref: "id"
+    timestamp: "timestamp"
+    technique: "mitre_technique"
+    tactic: "mitre_tactic"
+    host: "hostname"
+    host_fallback: "agent_name"
+
+budget:
+  total_rounds: 10
+  total_probes: 40
+  fanout_per_round: 4
+
+# === 查询契约（v2 backward pivot）===
+# 种子:   rule.mitre.id:T1048 AND data.dst_ip:"198.51.100.77"        → 1
+# 回溯1:  data.collected_file:"..." AND rule.mitre.id:T1005          → 1
+# 回溯2:  data.script_name:"..."   AND rule.mitre.id:T1059.004       → 1
+# 回溯3:  data.dstuser:...         AND rule.mitre.id:T1078           → 1
+# 回溯4:  data.srcip:"..."         AND rule.mitre.id:T1110.001       → 2
+model_planner:
+  mode: "shadow"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  verify_tls: true
+  max_intents_per_round: 4
+  cost_budget_per_round: 1.0
+  max_graph_nodes: 40
+
+model_judgement:
+  mode: "assist"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  verify_tls: true
+  max_calls_per_round: 3
+  max_calls_per_case: 20
+  max_tokens_per_case: 20000
+  max_context_nodes: 40
+  ambiguity_margin: 0.35
+
+model_mcp_compiler:
+  mode: "shadow"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  verify_tls: true
+  max_plans_per_round: 4
+  max_calls_per_round: 3
+  max_calls_per_case: 30
+  max_tokens_per_case: 20000
+  max_context_nodes: 40
+  max_time_range_days: 30
+  max_filters: 4
+  fallback_to_template: true

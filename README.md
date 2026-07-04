@@ -90,9 +90,11 @@ python -m pytest tests/deep_agent/test_presentation.py -q
 ## 文档
 
 - [HOST_CLIENT_HANDOFF.md](HOST_CLIENT_HANDOFF.md) — Windows 主机接入 MCP
-- [docs/DEEP_AGENTS_SETUP.md](docs/DEEP_AGENTS_SETUP.md)
+- [docs/DEEP_AGENTS_SETUP.md](docs/DEEP_AGENTS_SETUP.md) — Deep Agents 前后端（唯一 UI）
 - [docs/TRACE_ENGINE_DEPLOYMENT.md](docs/TRACE_ENGINE_DEPLOYMENT.md)
 - [reports/pipeline_18.md](reports/pipeline_18.md) — 生产溯源报告样例
+
+> 旧版 `demo/` Vite 作战室已移除；LOCK 可视化请使用 `deep-agents-ui`。
 
 ## 安全说明
 

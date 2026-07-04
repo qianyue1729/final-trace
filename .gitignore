@@ -39,10 +39,46 @@ soar_mcp_env_bundle.zip
 
 # Scratch diagnostics at repo root
 /_*.py
+/_*.txt
+
+# Ad-hoc root-level test scripts (use tests/ instead)
+/test_*.py
+/quick_test_*.py
+/run_complete_*.py
 
 # Live test outputs (may contain production data)
 wazuh_real_lock_test_output.json
 wazuh_validation_output.json
+
+# Runtime / local DB artifacts
+data/trace_engine.db
+data/trace_engine.db-shm
+data/trace_engine.db-wal
+data/audit.log
+
+# Experiment & automation artifacts
+reports/_tmp*.log
+reports/ablation_*.log
+reports/browser_*.png
+reports/e2e_*.png
+reports/run_no_*.txt
+reports/timeout_variants_results.json
+reports/real_trace_diag_latest.json
+reports/phase*_*.json
+reports/wazuh_checklist_*.json
+reports/wazuh_checklist_*.md
+soar_mcp_env/results/ablation_*.json
+soar_mcp_env/results/lock_integration_*.json
+
+# Vendored third-party skill packs (not part of trace engine)
+skill/
+
+# Root-level scratch docs (keep README.md only)
+/REAL_TRACE_*.md
+/WINDOWS_*.md
+
+# Retired demo frontend (use deep-agents-ui)
+demo/
 
 # Keep examples
 !.env.example

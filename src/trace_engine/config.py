@@ -105,6 +105,19 @@ class SoarMcpConfig:
         "file_hash_lookup": "EDR",
     })
     query_template: str = "host:{host} source:{datasource}"
+    bootstrap_strategy: str = "full_case"
+    pivot_field_map: dict[str, str] = field(default_factory=dict)
+    query_template_by_pivot: dict[str, str] = field(default_factory=lambda: {
+        "host": "host:{value}",
+        "srcip": "data.srcip:{value}",
+        "dstuser": "data.dstuser:{value}",
+        "process": "data.command:*{value}*",
+        "dst_ip": "data.dst_ip:{value}",
+    })
+    # real_trace_01 v2 backward-pivot 回溯链：每条规则 = 从已确认事件的某属性
+    # 出发，查询 {field}:"{value}" AND rule.mitre.id:{technique} 定位上一跳。
+    # 空 = 关闭（pipeline_18 不受影响）。
+    clue_pivot_rules: list[dict[str, str]] = field(default_factory=list)
     page_limit: int = 200
     max_pages: int = 20              # 时间游标分页上限（单探针单轮）
     timeout_seconds: float = 30.0
@@ -207,6 +220,15 @@ class AlertEnricherConfig:
 @dataclass
 class ModelPlannerConfig:
     mode: str = "shadow"  # off | shadow | assist; assist remains default-off
+    provider: str = "deepseek"
+    model: str = "deepseek-v4-flash"
+    endpoint: str = "https://api.deepseek.com/v1"
+    credential_env: str = "DEEPSEEK_API_KEY"
+    ca_bundle: str = ""
+    verify_tls: bool = True
+    connect_timeout_seconds: float = 10.0
+    read_timeout_seconds: float = 60.0
+    max_retries: int = 2
     max_intents_per_round: int = 4
     cost_budget_per_round: float = 1.0
     max_graph_nodes: int = 40
@@ -245,6 +267,28 @@ class ModelJudgementConfig:
 
 
 @dataclass
+class ModelMcpCompilerConfig:
+    mode: str = "off"  # off | shadow | assist
+    provider: str = "deepseek"
+    model: str = "deepseek-v4-flash"
+    endpoint: str = "https://api.deepseek.com/v1"
+    credential_env: str = "DEEPSEEK_API_KEY"
+    ca_bundle: str = ""
+    verify_tls: bool = True
+    connect_timeout_seconds: float = 10.0
+    read_timeout_seconds: float = 60.0
+    max_retries: int = 2
+    max_plans_per_round: int = 4
+    max_calls_per_round: int = 3
+    max_calls_per_case: int = 30
+    max_tokens_per_case: int = 20_000
+    max_context_nodes: int = 40
+    max_time_range_days: int = 30
+    max_filters: int = 4
+    fallback_to_template: bool = True
+
+
+@dataclass
 class EngineConfig:
     # "scenario" = soar_mcp_env 场景验收态；"soar_mcp" = 生产态（真实 MCP）
     backend: str = "scenario"
@@ -257,6 +301,9 @@ class EngineConfig:
     model_planner: ModelPlannerConfig = field(default_factory=ModelPlannerConfig)
     model_judgement: ModelJudgementConfig = field(
         default_factory=ModelJudgementConfig
+    )
+    model_mcp_compiler: ModelMcpCompilerConfig = field(
+        default_factory=ModelMcpCompilerConfig
     )
     demo_profile: DemoProfileConfig = field(default_factory=DemoProfileConfig)
     service: ServiceConfig = field(default_factory=ServiceConfig)
@@ -369,3 +416,11 @@ class EngineConfig:
             self.demo_profile.enabled = True
         if env.get("TRACE_ENGINE_DEMO_PLATEAU_ROUNDS"):
             self.demo_profile.plateau_rounds = int(env["TRACE_ENGINE_DEMO_PLATEAU_ROUNDS"])
+        if env.get("TRACE_ENGINE_MODEL_PLANNER_MODE"):
+            self.model_planner.mode = env["TRACE_ENGINE_MODEL_PLANNER_MODE"].lower()
+        if env.get("TRACE_ENGINE_MODEL_JUDGEMENT_MODE"):
+            self.model_judgement.mode = env["TRACE_ENGINE_MODEL_JUDGEMENT_MODE"].lower()
+        if env.get("TRACE_ENGINE_MODEL_MCP_COMPILER_MODE"):
+            self.model_mcp_compiler.mode = env[
+                "TRACE_ENGINE_MODEL_MCP_COMPILER_MODE"
+            ].lower()

@@ -201,6 +201,27 @@
       "packet_capture"
     ]
   },
+  "wazuh": {
+    "integrity": 0.8,
+    "tier": "high",
+    "adversary_controllable_base": false,
+    "hard_veto_allowed": true,
+    "platforms": [
+      "windows",
+      "linux",
+      "macos"
+    ],
+    "observes": [
+      "process_creation",
+      "network_connection",
+      "file_system",
+      "registry",
+      "authentication",
+      "logon",
+      "command_execution"
+    ],
+    "sigma_technique_coverage": 30
+  },
   "_sigma_mapping": {
     "comment": "Sigma maps detection→log source; does NOT imply attack causality",
     "rules_parsed": 1137,

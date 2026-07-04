@@ -116,6 +116,7 @@ class DeepSeekClient:
                         {"role": "user", "content": user_prompt},
                     ],
                     temperature=0.1,
+                    max_tokens=2048,
                     response_format={"type": "json_object"},
                 )
                 self._total_latency_ms += (time.time() - _call_t0) * 1000.0

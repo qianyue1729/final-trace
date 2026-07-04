@@ -239,6 +239,11 @@ class RuntimeDecisionLedger:
                 if event_technique in related:
                     return 0.5
 
+        # Graph-aware 加分：若事件已被 L1 结构挂接（有 parent candidates），
+        # 说明它在攻击图中有位置，应获得更高的结构匹配分
+        if event.get("_l1_attachable") and event.get("_l1_parent_candidates"):
+            return 0.5
+
         # lifecycle template 阶段匹配
         if explanation.lifecycle_template and explanation.support:
             template_id = explanation.support.get("template_id", "")
@@ -254,22 +259,36 @@ class RuntimeDecisionLedger:
         if not event_tactic:
             return 0.4  # 无 tactic 信息，中性
 
-        # 与解释当前 stage 匹配
-        if explanation.stage and event_tactic == explanation.stage:
+        # 归一化格式（连字符 vs 下划线）以便比较
+        def _norm(s: str) -> str:
+            return s.replace("_", "-").strip().lower() if s else ""
+
+        norm_tactic = _norm(event_tactic)
+        norm_stage = _norm(getattr(explanation, "stage", "") or "")
+
+        # 与解释当前 stage 匹配（归一化后）
+        if norm_stage and norm_tactic == norm_stage:
             return 0.9
 
         # 在解释的 predecessor_tactics 中
         if explanation.predecessor_tactics:
-            pred_tactics = [p.get("prev_tactic", "") for p in explanation.predecessor_tactics]
-            if event_tactic in pred_tactics:
+            pred_tactics = [_norm(p.get("prev_tactic", "")) for p in explanation.predecessor_tactics]
+            if norm_tactic in pred_tactics:
                 return 0.7
+
+        # Kill-chain 感知：前驱或后继阶段都给合理分数
+        if norm_stage:
+            if self._is_kill_chain_predecessor(norm_tactic, norm_stage):
+                return 0.65  # 反向溯源正证据
+            if self._is_kill_chain_predecessor(norm_stage, norm_tactic):
+                return 0.55  # 前向扩展弱正证据
 
         # lifecycle template 的某个阶段包含此 tactic
         if explanation.support and explanation.support.get("type") == "lifecycle":
             # lifecycle explanation，任何攻击战术都有中等匹配
             return 0.4
 
-        return 0.2  # 不匹配
+        return 0.35  # 不匹配但不严重惩罚
 
     def _compute_fit_stage_v2(self, event: dict, explanation: Explanation) -> float:
         """阶段匹配 v2：支持反向溯源 — 前驱阶段是正证据。

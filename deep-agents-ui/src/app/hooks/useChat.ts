@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useStream } from "@langchain/langgraph-sdk/react";
 import {
   type Message,
@@ -9,7 +9,13 @@ import {
 } from "@langchain/langgraph-sdk";
 import { v4 as uuidv4 } from "uuid";
 import type { UseStreamThread } from "@langchain/langgraph-sdk/react";
-import type { TodoItem } from "@/app/types/types";
+import type {
+  LockProgressEvent,
+  LOCKPhaseEvent,
+  LOCKPhaseStream,
+  LOCKPhase,
+  TodoItem,
+} from "@/app/types/types";
 import { useClient } from "@/providers/ClientProvider";
 import { useQueryState } from "nuqs";
 
@@ -25,6 +31,13 @@ export type StateType = {
   ui?: any;
 };
 
+const INITIAL_PHASE_STREAM: LOCKPhaseStream = {
+  events: [],
+  currentRound: 0,
+  currentPhase: null,
+  isRunning: false,
+};
+
 export function useChat({
   activeAssistant,
   onHistoryRevalidate,
@@ -35,7 +48,14 @@ export function useChat({
   thread?: UseStreamThread<StateType>;
 }) {
   const [threadId, setThreadId] = useQueryState("threadId");
+  const [lockProgress, setLockProgress] = useState<LockProgressEvent[]>([]);
+  const [lockPhaseStream, setLockPhaseStream] =
+    useState<LOCKPhaseStream>(INITIAL_PHASE_STREAM);
   const client = useClient();
+
+  const resetPhaseStream = useCallback(() => {
+    setLockPhaseStream(INITIAL_PHASE_STREAM);
+  }, []);
 
   const stream = useStream<StateType>({
     assistantId: activeAssistant?.assistant_id || "",
@@ -50,11 +70,43 @@ export function useChat({
     onFinish: onHistoryRevalidate,
     onError: onHistoryRevalidate,
     onCreated: onHistoryRevalidate,
+    onCustomEvent: (data) => {
+      if (!data || typeof data !== "object") return;
+      const kind = (data as { kind?: string }).kind;
+
+      // Legacy: kind === "lock_progress" (backward compatible)
+      if (kind === "lock_progress") {
+        setLockProgress((previous) =>
+          [...previous, data as LockProgressEvent].slice(-300)
+        );
+        return;
+      }
+
+      // New LOCK phase progress protocol (RFC-004-02)
+      if (kind === "lock_phase") {
+        const evt = data as LOCKPhaseEvent;
+        setLockPhaseStream((prev) => {
+          const isStop = evt.event_kind === "stop_decision";
+          const nextPhase: LOCKPhase | null = isStop
+            ? null
+            : (evt.phase as LOCKPhase);
+          return {
+            events: [...prev.events, evt].slice(-500),
+            currentRound: evt.round ?? prev.currentRound,
+            currentPhase: nextPhase,
+            isRunning: !isStop,
+          };
+        });
+        return;
+      }
+    },
     experimental_thread: thread,
   });
 
   const sendMessage = useCallback(
     (content: string) => {
+      setLockProgress([]);
+      setLockPhaseStream(INITIAL_PHASE_STREAM);
       const newMessage: Message = { id: uuidv4(), type: "human", content };
       stream.submit(
         { messages: [newMessage] },
@@ -151,6 +203,9 @@ export function useChat({
     files: stream.values.files ?? {},
     email: stream.values.email,
     ui: stream.values.ui,
+    lockProgress,
+    lockPhaseStream,
+    resetPhaseStream,
     setFiles,
     messages: stream.messages,
     isLoading: stream.isLoading,

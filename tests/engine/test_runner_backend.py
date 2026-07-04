@@ -156,4 +156,28 @@ def test_runner_configures_off_shadow_and_assist_ingest(monkeypatch):
             continue
         pipeline = runner._ingest_factory(object(), SessionGraph(), None)
         assert pipeline.llm_stats["mode"] == mode
+        assert pipeline.llm_stats["provider_status"] == "unavailable"
         assert pipeline.llm_stats["client_stats"] == {}
+
+
+def test_runner_builds_structured_model_probe_planner(monkeypatch):
+    from trace_agent.loop.model_probe_planner import StructuredModelProbePlanner
+
+    base = EngineConfig.load()
+    cfg = replace(
+        base,
+        model_planner=replace(
+            base.model_planner,
+            mode="shadow",
+            credential_env="TRACE_TEST_MODEL_KEY",
+        ),
+    )
+
+    monkeypatch.delenv("TRACE_TEST_MODEL_KEY", raising=False)
+    assert InvestigationRunner(cfg).build_probe_planner() is None
+
+    monkeypatch.setenv("TRACE_TEST_MODEL_KEY", "test-key")
+    planner = InvestigationRunner(cfg).build_probe_planner()
+    assert isinstance(planner, StructuredModelProbePlanner)
+    assert planner.model_version == cfg.model_planner.model
+    planner.close()

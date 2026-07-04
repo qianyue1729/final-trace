@@ -62,6 +62,165 @@ class RecordingTransport:
         return True
 
 
+
+def test_real_trace_config_enables_seed_only_pivots():
+    from trace_engine.config import EngineConfig
+
+    cfg = EngineConfig.load("configs/engine.real_trace.yaml")
+
+    assert cfg.soar_mcp.bootstrap_strategy == "seed_only"
+    assert cfg.soar_mcp.query_template_by_pivot["srcip"] == "data.srcip:{value}"
+    # v2: backward pivot 回溯链驱动多轮溯源
+    techniques = {r["technique"] for r in cfg.soar_mcp.clue_pivot_rules}
+    assert techniques == {"T1005", "T1059.004", "T1078", "T1110.001"}
+    by_attr = {r["attr"]: r["field"] for r in cfg.soar_mcp.clue_pivot_rules}
+    assert by_attr["collected_file"] == "data.collected_file"
+    assert by_attr["src_ip"] == "data.srcip"
+
+
+def test_seed_only_bootstrap_fetches_seed_query_with_limit_override():
+    transport = RecordingTransport(pages=[[
+        {
+            "raw_log_ref": "seed-1",
+            "ts": "2026-07-04T00:00:00Z",
+            "technique": "T1048",
+            "tactic": "exfiltration",
+            "src_entity": {"attrs": {"host_uid": "real-agent"}},
+            "attributes": {"srcip": "203.0.113.50"},
+        },
+    ]])
+    transport.incident_prefix = "real_trace_01"
+    cfg = SoarMcpConfig(bootstrap_strategy="seed_only", page_limit=200)
+    executor = SoarMcpProbeExecutor(transport=transport, config=cfg)
+    executor.align_to_alert(1_800_000_000)
+
+    stats = executor.bootstrap_investigation({
+        "technique": "T1048",
+        "attributes": {
+            "srcip": "203.0.113.50",
+            "raw_log_ref": "seed-1",
+        },
+    })
+
+    assert stats["bootstrap_strategy"] == "seed_only"
+    assert stats["bootstrap_query"] == (
+        'rule.mitre.id:T1048 AND data.srcip:"203.0.113.50"'
+    )
+    assert stats["case_prefetch_events"] == 1
+    assert stats["entry_prefetch_events"] == 0
+    assert len(transport.calls) == 1
+    assert transport.calls[0]["query"] == stats["bootstrap_query"]
+    assert transport.calls[0]["limit"] == 2
+    assert executor.fetch_stats["query_diagnostics"][0]["limit"] == 2
+
+
+def test_seed_only_prefers_dst_ip_pivot():
+    transport = RecordingTransport(pages=[[
+        {
+            "raw_log_ref": "seed-exfil",
+            "ts": "2026-07-04T03:00:00Z",
+            "technique": "T1048",
+            "tactic": "exfiltration",
+            "src_entity": {"attrs": {"host_uid": "wazuh.manager"}},
+            "attributes": {"dst_ip": "198.51.100.77", "srcip": "203.0.113.50"},
+        },
+    ]])
+    transport.incident_prefix = ""
+    cfg = SoarMcpConfig(bootstrap_strategy="seed_only")
+    executor = SoarMcpProbeExecutor(transport=transport, config=cfg)
+    executor.align_to_alert(1_800_000_000)
+
+    stats = executor.bootstrap_investigation({
+        "technique": "T1048",
+        "attributes": {"dst_ip": "198.51.100.77", "srcip": "203.0.113.50"},
+    })
+
+    assert stats["bootstrap_query"] == (
+        'rule.mitre.id:T1048 AND data.dst_ip:"198.51.100.77"'
+    )
+    assert stats["bootstrap_pivot"] == "data.dst_ip"
+    assert stats["case_prefetch_events"] == 1
+
+
+def test_clue_pivot_generator_walks_backward_chain():
+    from trace_agent.loop.generators import clue_pivot_probe_generator
+    from trace_agent.loop.session_graph import SessionGraph
+
+    graph = SessionGraph()
+    rules = [
+        {"attr": "collected_file", "field": "data.collected_file", "technique": "T1005"},
+        {"attr": "src_ip", "field": "data.srcip", "technique": "T1110.001"},
+    ]
+    # 缓存里只有种子事件（seed_only 典型情形）：暴露 collected_file
+    cached = [{
+        "technique": "T1048",
+        "attributes": {"collected_file": "/tmp/collected_7f3a2c.dat"},
+    }]
+
+    probes = clue_pivot_probe_generator(graph, rules, cached)
+
+    # 种子暴露 collected_file → 发 T1005 探针；无 src_ip → 不发 T1110.001
+    assert len(probes) == 1
+    p = probes[0]
+    assert p.source == "clue_pivot"
+    assert p.metadata["mcp_query"] == (
+        'data.collected_file:"/tmp/collected_7f3a2c.dat" AND rule.mitre.id:T1005'
+    )
+    assert p.metadata["expected_technique"] == "T1005"
+
+
+def test_clue_pivot_skips_already_discovered_technique():
+    from trace_agent.loop.generators import clue_pivot_probe_generator
+    from trace_agent.loop.session_graph import SessionGraph
+
+    graph = SessionGraph()
+    rules = [
+        {"attr": "src_ip", "field": "data.srcip", "technique": "T1110.001"},
+    ]
+    # T1110.001 已在缓存 → 该回溯步骤完成，不再发探针
+    cached = [{
+        "technique": "T1110.001",
+        "attributes": {"src_ip": "203.0.113.50"},
+    }]
+
+    probes = clue_pivot_probe_generator(graph, rules, cached)
+    assert probes == []
+
+
+def test_query_for_probe_honors_explicit_mcp_query():
+    transport = RecordingTransport(pages=[[]])
+    executor = SoarMcpProbeExecutor(transport=transport, config=SoarMcpConfig())
+    probe = Probe(
+        id="P-clue",
+        target="/tmp/x.dat",
+        target_type="clue",
+        operator="clue_pivot",
+        tactic="collection",
+        source="clue_pivot",
+        metadata={"mcp_query": 'data.collected_file:"/tmp/x.dat" AND rule.mitre.id:T1005'},
+    )
+    key, query, _ds = executor._query_for_probe(probe, (0, 0))
+    assert query == 'data.collected_file:"/tmp/x.dat" AND rule.mitre.id:T1005'
+    assert key[0] == "mcp_query"
+
+
+def test_default_bootstrap_strategy_keeps_full_case_prefetch():
+    transport = RecordingTransport(pages=[[]])
+    transport.incident_prefix = "real_trace_01"
+    executor = SoarMcpProbeExecutor(transport=transport)
+
+    stats = executor.bootstrap_investigation({
+        "technique": "T1048",
+        "attributes": {"srcip": "203.0.113.50"},
+    })
+
+    assert stats["bootstrap_strategy"] == "full_case"
+    assert stats["case_prefetch_events"] == 0
+    assert len(transport.calls) == 1
+    assert transport.calls[0]["query"] == "*"
+    assert transport.calls[0]["limit"] == SoarMcpConfig().page_limit
+
+
 def test_fanout_fetches_and_matches(scenario_data):
     executor = SoarMcpProbeExecutor(
         transport=LocalScenarioTransport(scenario_data),

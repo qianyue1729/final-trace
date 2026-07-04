@@ -321,6 +321,23 @@ class IngestPipeline:
             else:
                 temporal_window = 600   # 10 minutes (single-host mature)
 
+        # ── 关键修复：生产态 bootstrap 可能加载跨天的攻击链 ──
+        # 当图中已有多个节点且时间跨度较大时，自适应扩大时间窗口
+        if node_count >= 10:
+            try:
+                ts_vals = [
+                    n.timestamp for n in self._graph._nodes.values()
+                    if n.timestamp > 0
+                ]
+                if ts_vals:
+                    graph_span = max(ts_vals) - min(ts_vals)
+                    # 确保时间窗口至少覆盖图时间跨度的 50%
+                    adaptive_window = int(graph_span * 0.5)
+                    if adaptive_window > temporal_window:
+                        temporal_window = max(adaptive_window, 86400)  # 至少24h
+            except Exception:
+                pass
+
         # 跨主机事件始终用宽窗口
         event_host = event.get("source_host", event.get("host", ""))
         probe_target = getattr(probe, "target", "") if probe else ""
@@ -675,7 +692,12 @@ class IngestPipeline:
             node = self._graph.get_node(nid)
             if node is None:
                 continue
-            host = node.attributes.get("host", node.attributes.get("source_host", ""))
+            # 优先用 host_id（GraphNode 属性），兆底 attributes
+            host = (
+                getattr(node, "host_id", "")
+                or node.attributes.get("host", "")
+                or node.attributes.get("source_host", "")
+            )
             if host:
                 hosts.add(host)
         return max(len(hosts), 1)  # At least 1

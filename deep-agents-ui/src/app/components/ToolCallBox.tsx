@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState, useMemo, useCallback, useEffect } from "react";
 import {
   ChevronDown,
   ChevronUp,
@@ -11,13 +11,23 @@ import {
   StopCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ToolCall, ActionRequest, ReviewConfig } from "@/app/types/types";
+import {
+  ToolCall,
+  ActionRequest,
+  ReviewConfig,
+  LockProgressEvent,
+  LOCKPhaseStream as LOCKPhaseStreamType,
+} from "@/app/types/types";
+import { LockLoopPanel } from "@/app/components/LockLoopPanel";
+import { LOCKPhaseStream } from "@/app/components/LOCKPhaseStream";
+import { DashboardPanel } from "@/app/components/dashboard/DashboardPanel";
 import { cn } from "@/lib/utils";
 import { LoadExternalComponent } from "@langchain/langgraph-sdk/react-ui";
 import { ToolApprovalInterrupt } from "@/app/components/ToolApprovalInterrupt";
 
 interface ToolCallBoxProps {
   toolCall: ToolCall;
+  progress?: LockProgressEvent[];
   uiComponent?: any;
   stream?: any;
   graphId?: string;
@@ -25,11 +35,13 @@ interface ToolCallBoxProps {
   reviewConfig?: ReviewConfig;
   onResume?: (value: any) => void;
   isLoading?: boolean;
+  lockPhaseStream?: LOCKPhaseStreamType;
 }
 
 export const ToolCallBox = React.memo<ToolCallBoxProps>(
   ({
     toolCall,
+    progress = [],
     uiComponent,
     stream,
     graphId,
@@ -37,6 +49,7 @@ export const ToolCallBox = React.memo<ToolCallBoxProps>(
     reviewConfig,
     onResume,
     isLoading,
+    lockPhaseStream,
   }) => {
     const [isExpanded, setIsExpanded] = useState(
       () => !!uiComponent || !!actionRequest
@@ -88,6 +101,21 @@ export const ToolCallBox = React.memo<ToolCallBoxProps>(
           );
       }
     }, [status]);
+
+    const LOCK_TOOL_NAMES = new Set([
+      "init_investigation",
+      "run_l_phase",
+      "run_veto_phase",
+      "run_o_phase",
+      "run_c_phase",
+      "run_k_phase",
+      "run_full_loop",
+    ]);
+    const isLockTool = LOCK_TOOL_NAMES.has(name);
+
+    useEffect(() => {
+      if (isLockTool && (progress.length > 0 || result)) setIsExpanded(true);
+    }, [isLockTool, progress.length, result]);
 
     const toggleExpanded = useCallback(() => {
       setIsExpanded((prev) => !prev);
@@ -206,7 +234,29 @@ export const ToolCallBox = React.memo<ToolCallBoxProps>(
                     </div>
                   </div>
                 )}
-                {result && (
+                {isLockTool && lockPhaseStream && (
+                  <div className="mt-4 space-y-3">
+                    <DashboardPanel
+                      events={lockPhaseStream.events}
+                      currentRound={lockPhaseStream.currentRound}
+                      currentPhase={lockPhaseStream.currentPhase}
+                      isRunning={lockPhaseStream.isRunning}
+                    />
+                    <LOCKPhaseStream
+                      events={lockPhaseStream.events}
+                      currentRound={lockPhaseStream.currentRound}
+                      currentPhase={lockPhaseStream.currentPhase}
+                      isRunning={lockPhaseStream.isRunning}
+                    />
+                  </div>
+                )}
+                {isLockTool && !lockPhaseStream && (
+                  <LockLoopPanel
+                    progress={progress}
+                    result={result}
+                  />
+                )}
+                {result && !isLockTool && (
                   <div className="mt-4">
                     <h4 className="mb-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                       Result

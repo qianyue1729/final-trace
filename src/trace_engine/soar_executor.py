@@ -133,19 +133,78 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
             self._bootstrap_stats = stats
             return stats
 
-        prefix = getattr(self.transport, "incident_prefix", "") or ""
-        if prefix:
-            stats["case_prefetch_events"] = self._fetch_paginated("*")
+        strategy = str(
+            getattr(self.mcp_config, "bootstrap_strategy", "full_case")
+            or "full_case"
+        ).strip().lower()
+        stats["bootstrap_strategy"] = strategy
 
+        prefix = getattr(self.transport, "incident_prefix", "") or ""
         ref = ""
+        srcip = ""
+        dst_ip = ""
+        technique = ""
         if alert_payload:
-            ref = str(
-                (alert_payload.get("attributes") or {}).get("raw_log_ref")
-                or alert_payload.get("raw_log_ref")
+            attrs = alert_payload.get("attributes") or {}
+            ref = str(attrs.get("raw_log_ref") or alert_payload.get("raw_log_ref") or "")
+            srcip = str(attrs.get("srcip") or attrs.get("src_ip") or "").strip()
+            dst_ip = str(attrs.get("dst_ip") or attrs.get("dstip") or "").strip()
+            technique = str(
+                alert_payload.get("technique")
+                or attrs.get("technique")
+                or attrs.get("mitre_technique")
+                or attrs.get("rule_mitre_id")
                 or ""
-            )
-        if ref and stats["case_prefetch_events"] == 0:
-            stats["entry_prefetch_events"] = self._fetch_paginated(f"ref:{ref}")
+            ).strip()
+
+        if strategy == "seed_only":
+            # 种子只锁 1 条：按 pivot 字段优先级 dst_ip → srcip → ref 构造最窄查询。
+            # real_trace_01 v2 种子为外传告警 (T1048 + dst_ip)。
+            seed_pivots: list[tuple[str, str]] = []
+            if dst_ip:
+                seed_pivots.append(("data.dst_ip", dst_ip))
+            if srcip:
+                seed_pivots.append(("data.srcip", srcip))
+            if technique and seed_pivots:
+                field, value = seed_pivots[0]
+                seed_q = f'rule.mitre.id:{technique} AND {field}:"{value}"'
+                stats["bootstrap_query"] = seed_q
+                stats["bootstrap_pivot"] = field
+                stats["case_prefetch_events"] = self._fetch_paginated(
+                    seed_q,
+                    limit_override=2,
+                )
+            elif technique:
+                # 无 IP pivot 时回退到 technique-only 查询
+                seed_q = f"rule.mitre.id:{technique}"
+                stats["bootstrap_query"] = seed_q
+                stats["bootstrap_pivot"] = "technique"
+                stats["case_prefetch_events"] = self._fetch_paginated(
+                    seed_q,
+                    limit_override=2,
+                )
+            elif ref:
+                seed_q = f"ref:{ref}"
+                stats["bootstrap_query"] = seed_q
+                stats["entry_prefetch_events"] = self._fetch_paginated(
+                    seed_q,
+                    limit_override=2,
+                )
+        else:
+            if prefix:
+                stats["case_prefetch_events"] = self._fetch_paginated("*")
+            if ref and stats["case_prefetch_events"] == 0:
+                stats["entry_prefetch_events"] = self._fetch_paginated(f"ref:{ref}")
+            elif not prefix and srcip and stats["case_prefetch_events"] == 0:
+                group = "real_trace"
+                if alert_payload:
+                    group = str(
+                        (alert_payload.get("attributes") or {}).get("rule_group")
+                        or group
+                    ).strip() or group
+                bootstrap_q = f"rule.groups:{group} AND data.srcip:{srcip}"
+                stats["bootstrap_query"] = bootstrap_q
+                stats["case_prefetch_events"] = self._fetch_paginated(bootstrap_q)
 
         from .asset_inventory import discover_asset_hosts
 
@@ -160,6 +219,20 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
         stats["attack_chain_events"] = sum(
             1 for event in self._events if str(event.get("raw_log_ref", "")).startswith("attack:")
         )
+        if stats["attack_chain_events"] == 0 and stats["case_prefetch_events"]:
+            stats["attack_chain_events"] = stats["case_prefetch_events"]
+
+        # ── 关键修复：推进时间游标到缓存事件的最大时间戳 ──
+        # Wazuh remote MCP 路径 advance_time=False，时间游标停在告警时刻，
+        # 导致 _execute_single_probe 的 ts<=cursor 过滤只暴露告警前的事件。
+        # 对于生产态 bootstrap（所有事件已一次性加载），需将游标推进到
+        # 最大事件时间戳，使 LOCK 循环能发现全部攻击链事件。
+        if self._all_timestamps:
+            max_ts = max(self._all_timestamps)
+            if max_ts > self._time_cursor:
+                self._time_cursor = max_ts
+                stats["time_cursor_advanced_to"] = max_ts
+
         self._bootstrap_stats = stats
         return stats
 
@@ -185,9 +258,13 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
         *,
         window: tuple[int, int] | None = None,
         context: dict[str, Any] | None = None,
+        limit_override: int | None = None,
     ) -> int:
         """Fetch records according to declared transport capabilities."""
         cfg = self.mcp_config
+        effective_limit = (
+            cfg.page_limit if limit_override is None else max(1, int(limit_override))
+        )
         requested_from_ms, requested_to_ms = window or self._window_ms()
         from_ms = requested_from_ms
         to_ms = requested_to_ms
@@ -208,6 +285,7 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
             "observed_to_ms": None,
             "pages": 0,
             "records": 0,
+            "limit": effective_limit,
             "exact_time_bounds": capabilities.exact_time_bounds,
             "coverage_truncated": False,
             "truncation_reason": None,
@@ -215,7 +293,11 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
             "error": None,
         }
         self._fetch_stats["logical_queries"] += 1
-        page_count = cfg.max_pages if capabilities.cursor_pagination else 1
+        page_count = (
+            1
+            if limit_override is not None
+            else cfg.max_pages if capabilities.cursor_pagination else 1
+        )
         query_pages = getattr(self.transport, "query_pages", None)
 
         if callable(query_pages) and capabilities.cursor_pagination:
@@ -224,7 +306,7 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
                     query=query,
                     from_ms=requested_from_ms,
                     to_ms=requested_to_ms,
-                    limit=cfg.page_limit,
+                    limit=effective_limit,
                     max_pages=page_count,
                 ):
                     self._fetch_stats["queries"] += 1
@@ -255,7 +337,10 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
                     if not pagination.get("has_more"):
                         break
                 else:
-                    if diagnostic["pages"] >= page_count and diagnostic["records"] >= cfg.page_limit:
+                    if (
+                        diagnostic["pages"] >= page_count
+                        and diagnostic["records"] >= effective_limit
+                    ):
                         diagnostic["coverage_truncated"] = True
                         diagnostic["truncation_reason"] = "max_pages_reached"
             except Exception as exc:  # noqa: BLE001
@@ -268,7 +353,7 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
                         query=query,
                         from_ms=from_ms,
                         to_ms=to_ms,
-                        limit=cfg.page_limit,
+                        limit=effective_limit,
                     )
                     self._fetch_stats["queries"] += 1
                     self._fetch_stats["records"] += len(records)
@@ -295,7 +380,7 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
                     )
                 ingested += self._ingest_events(events)
 
-                if len(records) < cfg.page_limit:
+                if len(records) < effective_limit:
                     break
                 if not capabilities.cursor_pagination:
                     diagnostic["coverage_truncated"] = True
@@ -335,6 +420,33 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
     ) -> tuple[tuple[Any, ...], str, str]:
         cfg = self.mcp_config
         datasource = cfg.operator_datasource_map.get(probe.operator, "SIEM")
+
+        # 显式查询覆盖：clue_pivot / model_mcp 探针携带完整 Lucene。
+        explicit_query = str((probe.metadata or {}).get("mcp_query") or "").strip()
+        if explicit_query:
+            key = (
+                "mcp_query",
+                explicit_query.lower(),
+                window[0],
+                window[1],
+            )
+            return key, explicit_query, datasource
+
+        # pivot 路由：按 operator 选 pivot 字段与模板（real_trace v2）。
+        pivot_field = (cfg.pivot_field_map or {}).get(probe.operator, "")
+        if pivot_field:
+            template = (cfg.query_template_by_pivot or {}).get(
+                pivot_field, "host:{value}"
+            )
+            query = template.format(value=probe.target)
+            key_parts: list[Any] = [
+                pivot_field,
+                probe.target.strip().lower(),
+                window[0],
+                window[1],
+            ]
+            return tuple(key_parts), query, datasource
+
         query = cfg.query_template.format(
             host=probe.target,
             datasource=datasource,
@@ -384,10 +496,105 @@ class SoarMcpProbeExecutor(ScenarioExecutor):
                 context=group,
             )
 
+        # ── 关键修复：remote MCP 路径推进时间游标到缓存最大时间戳 ──
+        # execute_fanout 对 remote MCP 使用 advance_time=False（不逐轮推进），
+        # 但如果 _fetch_paginated 注入了新事件且游标仍停留在 0 / alert 时刻，
+        # _execute_single_probe 的 ts<=cursor 过滤会丢弃全部新事件。
+        # 此处与 bootstrap_investigation 对齐：游标至少推进到缓存最大时间戳。
+        if self._is_remote_mcp() and self._all_timestamps:
+            max_ts = max(self._all_timestamps)
+            if max_ts > self._time_cursor:
+                self._time_cursor = max_ts
+
         return self._execute_cached_fanout(
             probes,
             advance_time=not self._is_remote_mcp(),
         )
+
+    def execute_mcp_plans(
+        self,
+        plans: list[dict[str, Any]],
+        probes_by_id: dict[str, Probe],
+    ) -> dict[str, Any]:
+        """Execute validator-sanitized MCP calls and map results to source probes."""
+        call_tool = getattr(self.transport, "call_tool", None)
+        if not callable(call_tool) or not self._is_remote_mcp():
+            return {
+                "events": [],
+                "executions": [],
+                "failed_probe_ids": [
+                    str(plan.get("source_probe_id") or "") for plan in plans
+                ],
+            }
+
+        successful_probes: list[Probe] = []
+        failed_probe_ids: list[str] = []
+        executions: list[dict[str, Any]] = []
+        for plan in plans:
+            probe_id = str(plan.get("source_probe_id") or "")
+            probe = probes_by_id.get(probe_id)
+            started = time.perf_counter()
+            execution: dict[str, Any] = {
+                "plan_id": str(plan.get("plan_id") or ""),
+                "source_probe_id": probe_id,
+                "mcp_tool": str(plan.get("mcp_tool") or ""),
+                "status": "failed",
+                "hits": 0,
+                "latency_ms": 0.0,
+                "error": None,
+            }
+            try:
+                result = call_tool(
+                    execution["mcp_tool"],
+                    dict(plan.get("arguments") or {}),
+                )
+                extract = getattr(self.transport, "_extract_records", None)
+                records = extract(result) if callable(extract) else []
+                events = self.normalizer.normalize_batch(records)
+                self._ingest_events(events)
+                self._fetch_stats["queries"] += 1
+                self._fetch_stats["logical_queries"] += 1
+                self._fetch_stats["records"] += len(records)
+                self._fetch_stats["query_diagnostics"].append({
+                    "query": str(
+                        (plan.get("arguments") or {}).get("query") or ""
+                    ),
+                    "probe_ids": [probe_id],
+                    "records": len(records),
+                    "pages": 1,
+                    "source": "model_mcp_compiler",
+                    "mcp_tool": execution["mcp_tool"],
+                    "error": None,
+                })
+                execution["status"] = "ok"
+                execution["hits"] = len(records)
+                if probe is not None:
+                    successful_probes.append(probe)
+            except Exception as exc:  # noqa: BLE001
+                self._fetch_stats["errors"] += 1
+                failed_probe_ids.append(probe_id)
+                execution["error"] = f"{type(exc).__name__}: {exc}"
+            finally:
+                execution["latency_ms"] = round(
+                    (time.perf_counter() - started) * 1000, 1
+                )
+                executions.append(execution)
+
+        # 推进时间游标（与 execute_fanout / bootstrap 对齐）
+        if self._is_remote_mcp() and self._all_timestamps:
+            max_ts = max(self._all_timestamps)
+            if max_ts > self._time_cursor:
+                self._time_cursor = max_ts
+
+        events = self._execute_cached_fanout(
+            successful_probes,
+            advance_time=False,
+        )
+        return {
+            "events": events,
+            "executions": executions,
+            "failed_probe_ids": failed_probe_ids,
+        }
 
     def known_hosts(self) -> list[str]:
         hosts = set(self._static_hosts)

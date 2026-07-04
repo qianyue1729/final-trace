@@ -76,6 +76,14 @@ def _telemetry_attributes(record: dict) -> dict[str, Any]:
         "trace_step": ("trace_step", "data.trace_step"),
         "incident_id": ("incident_id", "data.incident_id"),
         "is_attack": ("is_attack", "data.is_attack"),
+        # real_trace_01 v2 分步 pivot 字段（backward chain 关联键）
+        "dst_user": ("dst_user", "dstuser", "data.dstuser", "data.dst_user"),
+        "script_name": ("script_name", "data.script_name"),
+        "collected_file": ("collected_file", "data.collected_file"),
+        "cmd_line": ("cmd_line", "data.cmd_line"),
+        "target_file": ("target_file", "data.target_file"),
+        "event_time": ("event_time", "data.event_time"),
+        "event_type": ("event_type", "data.event_type"),
     }
     attributes: dict[str, Any] = {}
     for target, paths in aliases.items():
@@ -93,6 +101,12 @@ def _telemetry_attributes(record: dict) -> dict[str, Any]:
         "is_attack",
         "src_entity_type",
         "dst_entity_type",
+        "script_name",
+        "collected_file",
+        "cmd_line",
+        "target_file",
+        "event_time",
+        "event_type",
     ):
         value = _dig(record, field)
         if value not in (None, "", [], {}):

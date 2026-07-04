@@ -854,3 +854,85 @@ def lifecycle_template_generator(graph: SessionGraph, templates: list[dict] | No
             ))
 
     return probes
+
+
+# =========================================================================
+# 2.6 Clue Pivot Generator (real_trace_01 v2 — backward pivot chain)
+# =========================================================================
+
+def clue_pivot_probe_generator(
+    graph: SessionGraph,
+    clue_pivot_rules: list[dict] | None = None,
+    cached_events: list[dict] | None = None,
+) -> list[Probe]:
+    """真实模式回溯：从已确认事件的属性提取下一跳 pivot，逐字段回溯攻击链。
+
+    每条规则 = {attr, field, technique[, tactic, operator]}：
+      从事件的 ``attributes[attr]`` 取值 val，生成携带显式 Lucene
+      ``{field}:"{val}" AND rule.mitre.id:{technique}`` 的探针。
+
+    证据来源同时含图节点与 executor 取证缓存（seed_only 时种子仅在缓存里）。
+    rules 为空（如 pipeline_18）时直接返回 []，不影响既有路径。
+    """
+    rules = list(clue_pivot_rules or [])
+    if not rules:
+        return []
+
+    # 统一成 (attrs, technique) 视图：图节点 + 缓存事件
+    views: list[tuple[dict, str]] = []
+    for node in graph.all_nodes():
+        views.append((
+            getattr(node, "attributes", {}) or {},
+            str(getattr(node, "technique", "") or ""),
+        ))
+    for ev in (cached_events or []):
+        attrs = dict(ev.get("attributes") or {})
+        tech = str(ev.get("technique") or attrs.get("mitre_technique") or "")
+        views.append((attrs, tech))
+
+    if not views:
+        return []
+
+    # 已发现的技术 → 该回溯步骤已完成，避免重复发探针。
+    seen_techniques = {
+        tech.strip().upper() for _attrs, tech in views if tech.strip()
+    }
+
+    probes: list[Probe] = []
+    emitted: set[str] = set()
+    for attrs, _tech in views:
+        for rule in rules:
+            attr = str(rule.get("attr") or "").strip()
+            field = str(rule.get("field") or "").strip()
+            technique = str(rule.get("technique") or "").strip()
+            if not attr or not field or not technique:
+                continue
+            if technique.upper() in seen_techniques:
+                continue
+            value = attrs.get(attr)
+            if value in (None, "", [], {}):
+                continue
+            value = str(value)
+            query = f'{field}:"{value}" AND rule.mitre.id:{technique}'
+            if query in emitted:
+                continue
+            emitted.add(query)
+            tactic = str(rule.get("tactic") or "") or normalize_tactic(technique)
+            operator = str(rule.get("operator") or "clue_pivot")
+            probes.append(Probe(
+                id=Probe.generate_id(value, operator, technique),
+                target=value,
+                target_type="clue",
+                operator=operator,
+                tactic=tactic,
+                source="clue_pivot",
+                priority_hint=0.9,
+                metadata={
+                    "mcp_query": query,
+                    "expected_technique": technique,
+                    "pivot_field": field,
+                    "pivot_attr": attr,
+                },
+            ))
+
+    return probes

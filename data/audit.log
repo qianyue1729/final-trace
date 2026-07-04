@@ -1,7 +1,0 @@
-{"event": "auth_denied", "path": "/v1/investigations", "client": "127.0.0.1", "ts": 1782973551.2002919}
-{"event": "investigation_submitted", "id": "inv-04e8bc128698", "technique": "T1041", "asset": "DB-PROD-01", "scenario_id": "pipeline_18", "client": "127.0.0.1", "ts": 1782973551.2112586}
-{"event": "investigation_finished", "id": "inv-04e8bc128698", "status": "completed", "decision": "contain_escalate", "elapsed": 1.49, "ts": 1782973552.7177773}
-{"event": "investigation_submitted", "id": "inv-bc6a90e355cd", "technique": "T1041", "asset": "DB-PROD-01", "scenario_id": "pipeline_18", "client": "127.0.0.1", "ts": 1783057380.2505424}
-{"event": "investigation_finished", "id": "inv-bc6a90e355cd", "status": "completed", "decision": "monitor", "elapsed": 17.06, "ts": 1783057397.3259573}
-{"event": "investigation_submitted", "id": "inv-3c41762b6083", "technique": "T1041", "asset": "DB-PROD-01", "scenario_id": "pipeline_18", "client": "127.0.0.1", "ts": 1783060201.7329645}
-{"event": "investigation_finished", "id": "inv-3c41762b6083", "status": "completed", "decision": "escalate_incomplete", "elapsed": 24.98, "ts": 1783060226.7461662}

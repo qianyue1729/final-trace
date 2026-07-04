@@ -16,9 +16,10 @@ from typing import Any, Optional
 
 from dataclasses import replace
 
-from trace_agent.agents.orchestrator import BudgetState, DecisionOrchestrator
+# [deprecated] from trace_agent.agents.orchestrator import BudgetState, DecisionOrchestrator
+from trace_agent.agents.lock_session import LOCKSession, BudgetState
+from trace_agent.agents.modular_orchestrator import ModularOrchestrator
 from trace_agent.data_loader import load_prior_bundle
-from trace_agent.decision.belief import DecisionLedger
 from trace_agent.decision.calibrator import ArtifactCalibrator
 from trace_agent.decision.types import AlertEvent
 from trace_agent.prior_v2 import PriorManager
@@ -134,6 +135,7 @@ class InvestigationRunner:
             max_age_days=config.calibration.max_age_days,
         )
         self._ingest_factory = self._build_ingest_factory()
+        self._probe_planner_factory = self._build_probe_planner_factory()
         self._alert_enricher = self._build_alert_enricher()
 
     def _build_alert_enricher(self) -> Optional[AlertEnricher]:
@@ -147,28 +149,33 @@ class InvestigationRunner:
             model_enricher=model_enricher,
         )
 
+    @staticmethod
+    def _build_model_client(settings):
+        from trace_agent.llm.client import DeepSeekClient
+
+        api_key = os.environ.get(settings.credential_env, "")
+        if settings.provider != "deepseek" or not api_key:
+            return None
+        return DeepSeekClient(
+            base_url=settings.endpoint,
+            api_key=api_key,
+            model=settings.model,
+            connect_timeout=settings.connect_timeout_seconds,
+            read_timeout=settings.read_timeout_seconds,
+            max_retries=settings.max_retries,
+            verify_tls=settings.verify_tls,
+            ca_bundle=settings.ca_bundle or None,
+        )
+
     def _build_ingest_factory(self):
         settings = self.config.model_judgement
         if settings.mode == "off":
             return None
 
         def factory(trust, graph, ledger):
-            from trace_agent.llm.client import DeepSeekClient
             from trace_agent.loop.llm_ingest import LLMIngestPipeline
 
-            api_key = os.environ.get(settings.credential_env, "")
-            client = None
-            if settings.provider == "deepseek" and api_key:
-                client = DeepSeekClient(
-                    base_url=settings.endpoint,
-                    api_key=api_key,
-                    model=settings.model,
-                    connect_timeout=settings.connect_timeout_seconds,
-                    read_timeout=settings.read_timeout_seconds,
-                    max_retries=settings.max_retries,
-                    verify_tls=settings.verify_tls,
-                    ca_bundle=settings.ca_bundle or None,
-                )
+            client = self._build_model_client(settings)
             return LLMIngestPipeline(
                 trust,
                 graph,
@@ -183,6 +190,63 @@ class InvestigationRunner:
             )
 
         return factory
+
+    def _build_probe_planner_factory(self):
+        settings = self.config.model_planner
+        if settings.mode == "off":
+            return None
+
+        def factory():
+            from trace_agent.loop.model_probe_planner import (
+                StructuredModelProbePlanner,
+            )
+
+            client = self._build_model_client(settings)
+            if client is None:
+                return None
+            return StructuredModelProbePlanner(
+                client,
+                model_version=settings.model,
+            )
+
+        return factory
+
+    def build_probe_planner(self):
+        if not callable(self._probe_planner_factory):
+            return None
+        return self._probe_planner_factory()
+
+    def build_mcp_runtime(self):
+        settings = self.config.model_mcp_compiler
+        if settings.mode == "off":
+            return None
+        from .model_mcp_runtime import (
+            ModelMcpRuntime,
+            StructuredModelMcpCompiler,
+        )
+
+        client = self._build_model_client(settings)
+        compiler = (
+            StructuredModelMcpCompiler(
+                client,
+                model_version=settings.model,
+            )
+            if client is not None
+            else None
+        )
+        return ModelMcpRuntime(
+            mode=settings.mode,
+            compiler=compiler,
+            page_limit=self.config.soar_mcp.page_limit,
+            max_plans_per_round=settings.max_plans_per_round,
+            max_calls_per_round=settings.max_calls_per_round,
+            max_calls_per_case=settings.max_calls_per_case,
+            max_tokens_per_case=settings.max_tokens_per_case,
+            max_context_nodes=settings.max_context_nodes,
+            max_time_range_days=settings.max_time_range_days,
+            max_filters=settings.max_filters,
+            fallback_to_template=settings.fallback_to_template,
+        )
 
     def _prior_manager(self) -> Optional[PriorManager]:
         if self._prior_bundle is None:
@@ -213,6 +277,21 @@ class InvestigationRunner:
                 normalizer=normalizer,
                 known_hosts=hosts,
             )
+            # SoarMcpProbeExecutor starts with an empty cache, so its inherited
+            # replay cursor is zero. Anchor local transport to scenario time;
+            # an explicit alert timestamp will override this later.
+            from trace_agent.loop.scenario_executor import ScenarioExecutor
+
+            scenario_timestamps = [
+                ScenarioExecutor._parse_ts(str(event.get("ts") or ""))
+                for event in scenario_data.get("events", [])
+            ]
+            scenario_timestamps = [
+                timestamp for timestamp in scenario_timestamps
+                if timestamp > 0
+            ]
+            if scenario_timestamps:
+                executor.align_to_alert(min(scenario_timestamps))
             return executor, scenario_data
 
         # Production: scenario_id may map to registry Wazuh scope (incident_id + is_attack).
@@ -346,8 +425,6 @@ class InvestigationRunner:
             bootstrap_stats = executor.bootstrap_investigation(alert_payload)
 
         prior_manager = self._prior_manager()
-        dl = DecisionLedger(prior_manager)
-        seed = dl.seed(alert)
 
         b = self.config.budget
         budget = BudgetState(
@@ -357,25 +434,37 @@ class InvestigationRunner:
             min_rounds_before_robust=b.min_rounds_before_robust,
             min_rounds_after_root=b.min_rounds_after_root,
         )
-        orch = DecisionOrchestrator(
+
+        # ── LOCKSession 初始化（替代 DecisionOrchestrator.__init__ + _bootstrap）──
+        session = LOCKSession.from_seed(
             alert=alert,
-            executor=executor,
             prior_manager=prior_manager,
             budget=budget,
-            seed=seed,
-            decision_calibrator=self._decision_calibrator,
-            automation_policy={
-                "min_slice_support": self.config.calibration.min_slice_support,
-                "min_precision": self.config.calibration.min_precision,
-                "min_recall": self.config.calibration.min_recall,
-                "contain_threshold": self.config.calibration.contain_threshold,
-                "dismiss_threshold": self.config.calibration.dismiss_threshold,
+            executor=executor,
+            config_dict={
+                "decision_calibrator": self._decision_calibrator,
+                "ingest_factory": self._ingest_factory,
+                "mcp_runtime": self.build_mcp_runtime(),
+                "progress_cb": progress_cb,
+                "fanout_budget": b.fanout_per_round,
+                "automation_policy": {
+                    "min_slice_support": self.config.calibration.min_slice_support,
+                    "min_precision": self.config.calibration.min_precision,
+                    "min_recall": self.config.calibration.min_recall,
+                    "contain_threshold": self.config.calibration.contain_threshold,
+                    "dismiss_threshold": self.config.calibration.dismiss_threshold,
+                },
             },
+        )
+
+        # ── ModularOrchestrator（替代 DecisionOrchestrator）──
+        orch = ModularOrchestrator(
+            session,
+            probe_planner=self.build_probe_planner(),
             planner_mode=self.config.model_planner.mode,
             planner_max_intents=self.config.model_planner.max_intents_per_round,
             planner_cost_budget=self.config.model_planner.cost_budget_per_round,
             planner_max_graph_nodes=self.config.model_planner.max_graph_nodes,
-            ingest_factory=self._ingest_factory,
             demo_profile_enabled=self.config.demo_profile.enabled,
             demo_plateau_rounds=self.config.demo_profile.plateau_rounds,
             demo_min_graph_nodes=self.config.demo_profile.min_graph_nodes,
@@ -386,7 +475,7 @@ class InvestigationRunner:
             progress_cb({"stage": "running", "round": 0})
 
         try:
-            result = orch.run()
+            result = orch.run(max_rounds=max_rounds)
             elapsed = time.time() - t0
 
             report = self._build_report(orch, result, executor, alert, elapsed)
@@ -411,10 +500,12 @@ class InvestigationRunner:
             orch.close()
 
     # ── 报告组装 ──
-    def _build_report(self, orch, result, executor, alert, elapsed) -> dict[str, Any]:
+    def _build_report(self, orch: ModularOrchestrator, result, executor, alert, elapsed) -> dict[str, Any]:
         confidence = result.decision_confidence.to_dict()
+        session = orch.session
+        graph = session.graph
         graph_nodes = []
-        for nid, node in orch.graph._nodes.items():
+        for nid, node in graph._nodes.items():
             attrs = node.attributes or {}
             graph_nodes.append({
                 "id": str(nid),
@@ -429,8 +520,36 @@ class InvestigationRunner:
             })
         graph_edges = [
             {"source": str(e.src), "target": str(e.dst), "relation": e.relation}
-            for e in orch.graph._edges.values()
+            for e in graph._edges.values()
         ]
+
+        # ── 决策账终态（从 session.ledger 获取）──
+        decision_ledger: dict[str, Any] = {}
+        try:
+            ledger = session.ledger
+            expl_list = []
+            for expl in ledger.explanations:
+                expl_list.append({
+                    "id": expl.id,
+                    "title": getattr(expl, "title", expl.id),
+                    "posterior": ledger.log_post.get(expl.id, 0.0),
+                })
+            contested = []
+            try:
+                for edge in ledger.get_contested():
+                    contested.append({
+                        "edge_id": str(edge),
+                    })
+            except (TypeError, AttributeError):
+                pass
+            decision_ledger = {
+                "explanations": expl_list,
+                "contested_edges": contested,
+                "margin": ledger.margin(),
+                "entropy": ledger.entropy(),
+            }
+        except Exception:
+            pass
 
         report = {
             "status": "completed",
@@ -450,16 +569,23 @@ class InvestigationRunner:
                 "boundary_decisions": result.boundary_decisions,
                 "incomplete": result.incomplete,
                 "unresolved_obligations": result.unresolved_obligations,
+                # ── 新增：决策账终态 ──
+                "decision_ledger": decision_ledger,
             },
             "usage": {
                 "rounds": result.rounds_used,
                 "events_processed": result.total_events_processed,
-                "probes_used": orch.budget.probes_used,
+                "probes_used": session.budget.probes_used,
                 "soar_fetch": getattr(executor, "fetch_stats", {}),
                 "voi_audit": result.voi_audit,
                 "model_planner": result.planner_audit,
                 "model_judgement": getattr(
-                    orch.ingest, "llm_stats", {"mode": "off"}
+                    session.ingest, "llm_stats", {"mode": "off"}
+                ),
+                "model_mcp_compiler": getattr(
+                    session.mcp_runtime,
+                    "stats",
+                    {"mode": "off", "provider_status": "disabled"},
                 ),
                 "round_diagnostics": list(result.round_diagnostics),
                 "elapsed_seconds": round(elapsed, 2),
@@ -482,10 +608,11 @@ class InvestigationRunner:
         return report
 
     @staticmethod
-    def _trace_coverage(orch, executor, bootstrap_stats: dict) -> dict[str, Any]:
+    def _trace_coverage(orch: ModularOrchestrator, executor, bootstrap_stats: dict) -> dict[str, Any]:
         """生产态溯源覆盖指标（不依赖 GT）。"""
         from trace_agent.loop.scenario_executor import ScenarioExecutor
 
+        graph = orch.session.graph
         hosts: set[str] = set()
         tactics: set[str] = set()
         for ev in getattr(executor, "_events", []):
@@ -496,7 +623,7 @@ class InvestigationRunner:
             if tac:
                 tactics.add(str(tac))
         graph_hosts: set[str] = set()
-        for node in orch.graph._nodes.values():
+        for node in graph._nodes.values():
             attrs = node.attributes or {}
             for key in ("host_uid", "asset_id", "host", "target"):
                 val = attrs.get(key)
@@ -508,7 +635,7 @@ class InvestigationRunner:
             "discovered_hosts": sorted(hosts),
             "hosts_in_graph": sorted(graph_hosts),
             "tactics_in_cache": sorted(tactics),
-            "tactics_in_graph": orch.graph.stats().get("tactics_seen", []),
+            "tactics_in_graph": graph.stats().get("tactics_seen", []),
             "soar_fetch": getattr(executor, "fetch_stats", {}),
         }
         chain_diag = getattr(executor, "_candidate_chain_diagnostics", None)
@@ -517,12 +644,15 @@ class InvestigationRunner:
         return coverage
 
     @staticmethod
-    def _eval_ground_truth(orch, scenario_data: dict) -> dict[str, Any]:
+    def _eval_ground_truth(
+        orch: ModularOrchestrator,
+        scenario_data: dict,
+    ) -> dict[str, Any]:
         gt_refs = set(
             scenario_data.get("ground_truth", {}).get("attack_edge_refs", [])
         )
         hits: set[str] = set()
-        for node in orch.graph._nodes.values():
+        for node in orch.session.graph._nodes.values():
             attrs = node.attributes or {}
             ref = str(attrs.get("raw_log_ref") or node.id or "")
             if ref in gt_refs or str(node.id) in gt_refs:

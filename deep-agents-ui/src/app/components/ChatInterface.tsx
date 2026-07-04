@@ -31,6 +31,22 @@ import { cn } from "@/lib/utils";
 import { useStickToBottom } from "use-stick-to-bottom";
 import { FilesPopover } from "@/app/components/TasksFilesSidebar";
 
+const normalizeToolArgs = (value: unknown): Record<string, unknown> => {
+  if (value && typeof value === "object" && !Array.isArray(value)) {
+    return value as Record<string, unknown>;
+  }
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        return parsed as Record<string, unknown>;
+      }
+    } catch {
+      return { raw: value };
+    }
+  }
+  return {};
+};
 interface ChatInterfaceProps {
   assistant: Assistant | null;
 }
@@ -75,6 +91,8 @@ export const ChatInterface = React.memo<ChatInterfaceProps>(({ assistant }) => {
     todos,
     files,
     ui,
+    lockProgress,
+    lockPhaseStream,
     setFiles,
     isLoading,
     isThreadLoading,
@@ -131,56 +149,50 @@ export const ChatInterface = React.memo<ChatInterfaceProps>(({ assistant }) => {
           args?: unknown;
           input?: unknown;
         }> = [];
+        if (message.tool_calls && Array.isArray(message.tool_calls)) {
+          toolCallsInMessage.push(...message.tool_calls);
+        }
         if (
           message.additional_kwargs?.tool_calls &&
           Array.isArray(message.additional_kwargs.tool_calls)
         ) {
           toolCallsInMessage.push(...message.additional_kwargs.tool_calls);
-        } else if (message.tool_calls && Array.isArray(message.tool_calls)) {
+        }
+        if (Array.isArray(message.content)) {
           toolCallsInMessage.push(
-            ...message.tool_calls.filter(
-              (toolCall: { name?: string }) => toolCall.name !== ""
+            ...message.content.filter(
+              (block: { type?: string }) => block.type === "tool_use"
             )
           );
-        } else if (Array.isArray(message.content)) {
-          const toolUseBlocks = message.content.filter(
-            (block: { type?: string }) => block.type === "tool_use"
-          );
-          toolCallsInMessage.push(...toolUseBlocks);
         }
-        const toolCallsWithStatus = toolCallsInMessage.map(
-          (toolCall: {
-            id?: string;
-            function?: { name?: string; arguments?: unknown };
-            name?: string;
-            type?: string;
-            args?: unknown;
-            input?: unknown;
-          }) => {
-            const name =
-              toolCall.function?.name ||
-              toolCall.name ||
-              toolCall.type ||
-              "unknown";
-            const args =
-              toolCall.function?.arguments ||
-              toolCall.args ||
-              toolCall.input ||
-              {};
-            return {
-              id: toolCall.id || `tool-${Math.random()}`,
+        const seenToolCalls = new Set<string>();
+        const toolCallsWithStatus = toolCallsInMessage.flatMap((toolCall) => {
+          const name =
+            toolCall.function?.name || toolCall.name || toolCall.type || "";
+          if (!name) return [];
+          const args = normalizeToolArgs(
+            toolCall.function?.arguments ?? toolCall.args ?? toolCall.input
+          );
+          const id = toolCall.id || `${message.id}-${name}`;
+          if (seenToolCalls.has(id)) return [];
+          seenToolCalls.add(id);
+          return [
+            {
+              id,
               name,
               args,
               status: interrupt ? "interrupted" : ("pending" as const),
-            } as ToolCall;
-          }
-        );
+            } as ToolCall,
+          ];
+        });
         messageMap.set(message.id!, {
           message,
           toolCalls: toolCallsWithStatus,
         });
       } else if (message.type === "tool") {
-        const toolCallId = message.tool_call_id;
+        const toolCallId =
+          message.tool_call_id ||
+          (message.additional_kwargs?.tool_call_id as string | undefined);
         if (!toolCallId) {
           return;
         }
@@ -194,7 +206,9 @@ export const ChatInterface = React.memo<ChatInterfaceProps>(({ assistant }) => {
           data.toolCalls[toolCallIndex] = {
             ...data.toolCalls[toolCallIndex],
             status: "completed" as const,
-            result: extractStringFromMessageContent(message),
+            result:
+              extractStringFromMessageContent(message) ||
+              JSON.stringify(message.content ?? ""),
           };
           break;
         }
@@ -257,30 +271,55 @@ export const ChatInterface = React.memo<ChatInterfaceProps>(({ assistant }) => {
             </div>
           ) : (
             <>
-              {processedMessages.map((data, index) => {
-                const messageUi = ui?.filter(
-                  (u: any) => u.metadata?.message_id === data.message.id
-                );
-                const isLastMessage = index === processedMessages.length - 1;
-                return (
-                  <ChatMessage
-                    key={data.message.id}
-                    message={data.message}
-                    toolCalls={data.toolCalls}
-                    isLoading={isLoading}
-                    actionRequestsMap={
-                      isLastMessage ? actionRequestsMap : undefined
-                    }
-                    reviewConfigsMap={
-                      isLastMessage ? reviewConfigsMap : undefined
-                    }
-                    ui={messageUi}
-                    stream={stream}
-                    onResumeInterrupt={resumeInterrupt}
-                    graphId={assistant?.graph_id}
-                  />
-                );
-              })}
+              {(() => {
+                // Find the last message that has LOCK tool calls
+                let lastLockMsgId: string | null = null;
+                for (let i = processedMessages.length - 1; i >= 0; i--) {
+                  const hasLockTool = processedMessages[i].toolCalls.some(
+                    (tc: any) =>
+                      [
+                        "init_investigation",
+                        "run_l_phase",
+                        "run_veto_phase",
+                        "run_o_phase",
+                        "run_c_phase",
+                        "run_k_phase",
+                        "run_full_loop",
+                      ].includes(tc.name)
+                  );
+                  if (hasLockTool) {
+                    lastLockMsgId = processedMessages[i].message.id!;
+                    break;
+                  }
+                }
+                return processedMessages.map((data, index) => {
+                  const messageUi = ui?.filter(
+                    (u: any) => u.metadata?.message_id === data.message.id
+                  );
+                  const isLastMessage = index === processedMessages.length - 1;
+                  const isLastLockMsg = data.message.id === lastLockMsgId;
+                  return (
+                    <ChatMessage
+                      key={data.message.id}
+                      message={data.message}
+                      toolCalls={data.toolCalls}
+                      isLoading={isLoading}
+                      actionRequestsMap={
+                        isLastMessage ? actionRequestsMap : undefined
+                      }
+                      reviewConfigsMap={
+                        isLastMessage ? reviewConfigsMap : undefined
+                      }
+                      ui={messageUi}
+                      lockProgress={isLastLockMsg ? lockProgress : undefined}
+                      lockPhaseStream={isLastLockMsg ? lockPhaseStream : undefined}
+                      stream={stream}
+                      onResumeInterrupt={resumeInterrupt}
+                      graphId={assistant?.graph_id}
+                    />
+                  );
+                });
+              })()}
             </>
           )}
         </div>

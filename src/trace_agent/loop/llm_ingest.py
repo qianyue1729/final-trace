@@ -676,8 +676,17 @@ class LLMIngestPipeline(IngestPipeline):
             1 for a in self._audit if a.get("routing_delta")
         )
         client_stats = self._llm.stats if self._llm else {}
+        if self._mode == "off":
+            provider_status = "disabled"
+        elif self._llm is None:
+            provider_status = "unavailable"
+        elif self._provider_errors or client_stats.get("errors"):
+            provider_status = "degraded"
+        else:
+            provider_status = "ready"
         return {
             "mode": self._mode,
+            "provider_status": provider_status,
             "l3_llm_calls": self._llm_calls,
             "provider_errors": self._provider_errors,
             "audit": list(self._audit),

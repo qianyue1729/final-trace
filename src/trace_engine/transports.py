@@ -384,6 +384,9 @@ def _flatten_wazuh_alert(item: dict) -> dict:
         stable_id = item.get("id") or item.get("_id")
         if stable_id:
             out["raw_log_ref"] = f"wazuh:{stable_id}"
+    # Wazuh 兆底：若规则组未匹配到已知源，标记为 "wazuh"
+    if not out.get("source"):
+        out["source"] = "wazuh"
     return out
 
 
@@ -521,9 +524,23 @@ class WazuhMcpTransport(McpHttpTransport):
     @staticmethod
     def _to_wazuh_query(query: str) -> str:
         """LOCK 探针查询串 → Wazuh Lucene 语法（扁平 SOAR 字段在 Indexer 中为 data.*）。"""
+        stripped = (query or "").strip()
+        if not stripped or stripped == "*":
+            return "*"
+        # Native Lucene (real_trace bootstrap, MCP contract queries)
+        if any(stripped.startswith(prefix) for prefix in ("rule.", "data.", "agent.", "id:")):
+            return stripped
+        if " AND " in stripped.upper() and not any(
+            part.lower().startswith(("host:", "ref:", "source:"))
+            for part in stripped.split()
+        ):
+            return stripped
+
         clauses: list[str] = []
         for token in query.split():
             low = token.lower()
+            if low in ("and", "or", "not"):
+                continue
             if low.startswith("host:"):
                 host = token.split(":", 1)[1].strip()
                 if host:
@@ -546,6 +563,34 @@ class WazuhMcpTransport(McpHttpTransport):
                         clauses.append(f"data.raw_log_ref:{ref_term}")
             elif low.startswith("source:"):
                 continue
+            elif low.startswith("technique:"):
+                value = token.split(":", 1)[1].strip()
+                if value:
+                    clauses.append(f"rule.mitre.id:{value}")
+            elif low.startswith("srcip:"):
+                value = token.split(":", 1)[1].strip()
+                if value:
+                    clauses.append(f"data.srcip:{WazuhMcpTransport._quote_term(value)}")
+            elif low.startswith("dstip:"):
+                value = token.split(":", 1)[1].strip()
+                if value:
+                    clauses.append(f"data.dst_ip:{WazuhMcpTransport._quote_term(value)}")
+            elif low.startswith("dstuser:"):
+                value = token.split(":", 1)[1].strip()
+                if value:
+                    clauses.append(f"data.dstuser:{value}")
+            elif low.startswith("script:"):
+                value = token.split(":", 1)[1].strip()
+                if value:
+                    clauses.append(
+                        f"data.script_name:{WazuhMcpTransport._quote_term(value)}"
+                    )
+            elif low.startswith("file:"):
+                value = token.split(":", 1)[1].strip()
+                if value:
+                    clauses.append(
+                        f"data.collected_file:{WazuhMcpTransport._quote_term(value)}"
+                    )
             elif token.strip():
                 clauses.append(token)
         return " AND ".join(clauses) if clauses else "*"

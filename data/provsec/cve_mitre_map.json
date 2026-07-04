@@ -1,0 +1,344 @@
+{
+  "version": "1.0",
+  "description": "ProvSec CVE to MITRE ATT&CK mapping for LOCK framework adapter",
+  "mappings": {
+    "C01": {
+      "cve": "CVE-2017-7529",
+      "name": "Nginx Integer Overflow",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "tactic": "initial-access",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Nginx nginx/1.13.1 整数溢出导致缓冲区溢出，可远程执行代码",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1190",
+          "tactic": "initial-access"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "persistence": {
+          "technique_id": "T1543.002",
+          "tactic": "persistence"
+        }
+      }
+    },
+    "C02": {
+      "cve": "CVE-2021-41773",
+      "name": "Apache Path Traversal",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "tactic": "initial-access",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Apache HTTP Server 2.4.49/2.4.50 路径穿越漏洞，可读取任意文件并远程执行代码",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1190",
+          "tactic": "initial-access"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "exfiltration": {
+          "technique_id": "T1005",
+          "tactic": "collection"
+        }
+      }
+    },
+    "C03": {
+      "cve": "CVE-2018-16509",
+      "name": "Ghostscript RCE",
+      "technique_id": "T1059.004",
+      "technique_name": "Unix Shell",
+      "tactic": "execution",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Ghostscript 9.26 以前版本 -dSAFER 沙箱逃逸，通过 PostScript 执行任意命令",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "defense_evasion": {
+          "technique_id": "T1036",
+          "tactic": "defense-evasion"
+        }
+      }
+    },
+    "C04": {
+      "cve": "CVE-2018-19518",
+      "name": "PHP IMAP RCE",
+      "technique_id": "T1059.004",
+      "technique_name": "Unix Shell",
+      "tactic": "execution",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "PHP imap_open 函数通过 -oProxyCommand 参数注入实现远程命令执行",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "lateral_movement": {
+          "technique_id": "T1021.004",
+          "tactic": "lateral-movement"
+        }
+      }
+    },
+    "C05": {
+      "cve": "CVE-2021-44228",
+      "name": "Log4j JNDI Injection",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "tactic": "initial-access",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Apache Log4j2 JNDI 注入漏洞（Log4Shell），通过日志消息触发远程类加载执行任意代码",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1190",
+          "tactic": "initial-access"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "lateral_movement": {
+          "technique_id": "T1021.004",
+          "tactic": "lateral-movement"
+        },
+        "credential_access": {
+          "technique_id": "T1552.001",
+          "tactic": "credential-access"
+        }
+      }
+    },
+    "C06": {
+      "cve": "CVE-2020-1938",
+      "name": "Tomcat Ghostcat",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "tactic": "initial-access",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Apache Tomcat AJP 协议漏洞（Ghostcat），可读取 WEB-INF 下任意文件并实现远程代码执行",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1190",
+          "tactic": "initial-access"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "credential_access": {
+          "technique_id": "T1552.001",
+          "tactic": "credential-access"
+        }
+      }
+    },
+    "C07": {
+      "cve": "CVE-2022-0543",
+      "name": "Redis Lua Sandbox Escape",
+      "technique_id": "T1059.006",
+      "technique_name": "Python",
+      "tactic": "execution",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Redis Lua 沙箱逃逸漏洞，通过 Lua 脚本执行任意系统命令",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1059.006",
+          "tactic": "execution"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "persistence": {
+          "technique_id": "T1546.004",
+          "tactic": "persistence"
+        },
+        "exfiltration": {
+          "technique_id": "T1041",
+          "tactic": "exfiltration"
+        }
+      }
+    },
+    "C08": {
+      "cve": "CVE-2021-42013",
+      "name": "Apache CVE Path Traversal/RCE",
+      "technique_id": "T1190",
+      "technique_name": "Exploit Public-Facing Application",
+      "tactic": "initial-access",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Apache HTTP Server 2.4.49/2.4.50 路径穿越与 RCE 漏洞（CVE-2021-41773 的绕过），可执行任意命令",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1190",
+          "tactic": "initial-access"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "persistence": {
+          "technique_id": "T1505.003",
+          "tactic": "persistence"
+        },
+        "exfiltration": {
+          "technique_id": "T1005",
+          "tactic": "collection"
+        }
+      }
+    },
+    "C09": {
+      "cve": "CVE-2021-3156",
+      "name": "Sudo Baron Samedit",
+      "technique_id": "T1068",
+      "technique_name": "Exploitation for Privilege Escalation",
+      "tactic": "privilege-escalation",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Sudo sudoedit 堆缓冲区溢出漏洞，普通用户可提权至 root",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1068",
+          "tactic": "privilege-escalation"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "persistence": {
+          "technique_id": "T1548.001",
+          "tactic": "privilege-escalation"
+        },
+        "defense_evasion": {
+          "technique_id": "T1070.002",
+          "tactic": "defense-evasion"
+        }
+      }
+    },
+    "C10": {
+      "cve": "CVE-2021-3493",
+      "name": "OverlayFS Privilege Escalation",
+      "technique_id": "T1068",
+      "technique_name": "Exploitation for Privilege Escalation",
+      "tactic": "privilege-escalation",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "Ubuntu OverlayFS 漏洞，非特权用户可通过 user namespace 提权至 root",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1068",
+          "tactic": "privilege-escalation"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "persistence": {
+          "technique_id": "T1548.001",
+          "tactic": "privilege-escalation"
+        },
+        "defense_evasion": {
+          "technique_id": "T1070.002",
+          "tactic": "defense-evasion"
+        }
+      }
+    },
+    "C11": {
+      "cve": "CVE-2019-5736",
+      "name": "Docker Container Escape",
+      "technique_id": "T1611",
+      "technique_name": "Escape to Host",
+      "tactic": "privilege-escalation",
+      "platform": "linux",
+      "log_source": "process_tree",
+      "description": "runC 容器逃逸漏洞，攻击者可覆写宿主机 runc 二进制文件实现容器逃逸并获取宿主机 root 权限",
+      "attack_stages": {
+        "initial": {
+          "technique_id": "T1611",
+          "tactic": "privilege-escalation"
+        },
+        "execution": {
+          "technique_id": "T1059.004",
+          "tactic": "execution"
+        },
+        "persistence": {
+          "technique_id": "T1543.002",
+          "tactic": "persistence"
+        },
+        "lateral_movement": {
+          "technique_id": "T1021.004",
+          "tactic": "lateral-movement"
+        },
+        "defense_evasion": {
+          "technique_id": "T1070.002",
+          "tactic": "defense-evasion"
+        }
+      }
+    }
+  },
+  "syscall_action_map": {
+    "execve": "EXEC",
+    "clone": "FORK",
+    "fork": "FORK",
+    "vfork": "FORK",
+    "connect": "CONNECT",
+    "accept": "CONNECT",
+    "accept4": "CONNECT",
+    "sendto": "CONNECT",
+    "recvfrom": "CONNECT",
+    "open": "OPEN_FILE",
+    "openat": "OPEN_FILE",
+    "read": "READ",
+    "write": "WRITE",
+    "close": "CLOSE",
+    "dup2": "EXEC",
+    "pipe": "EXEC",
+    "mprotect": "EXEC",
+    "mmap": "READ"
+  },
+  "tactic_technique_map": {
+    "process_creation": {
+      "technique_id": "T1059",
+      "tactic": "execution"
+    },
+    "file_creation": {
+      "technique_id": "T1105",
+      "tactic": "command-and-control"
+    },
+    "file_access": {
+      "technique_id": "T1005",
+      "tactic": "collection"
+    },
+    "network_connection": {
+      "technique_id": "T1071.001",
+      "tactic": "command-and-control"
+    },
+    "authentication": {
+      "technique_id": "T1078",
+      "tactic": "defense-evasion"
+    },
+    "unknown": {
+      "technique_id": "T0000",
+      "tactic": "unknown"
+    }
+  }
+}

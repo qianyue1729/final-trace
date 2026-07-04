@@ -34,6 +34,46 @@ def _incident_id(scenario_id: str) -> str:
     return f"INC-{slug}-001"
 
 
+# Technique prefix → MITRE tactic（与 ScenarioExecutor.TECHNIQUE_TACTIC_MAP 保持一致）
+_TECHNIQUE_TACTIC: dict[str, str] = {
+    "T1566": "initial-access",
+    "T1059": "execution",
+    "T1053": "persistence",
+    "T1548": "privilege-escalation",
+    "T1055": "defense-evasion",
+    "T1003": "credential-access",
+    "T1016": "discovery",
+    "T1021": "lateral-movement",
+    "T1005": "collection",
+    "T1041": "exfiltration",
+    "T1048": "exfiltration",
+    "T1070": "defense-evasion",
+    "T1078": "persistence",
+    "T1071": "command-and-control",
+    "T1047": "execution",
+    "T1087": "discovery",
+    "T1098": "persistence",
+    "T1110": "credential-access",
+    "T1190": "initial-access",
+    "T1218": "defense-evasion",
+    "T1486": "impact",
+    "T1560": "collection",
+    "T1569": "execution",
+    "T1570": "lateral-movement",
+    "T1068": "privilege-escalation",
+    "T1082": "discovery",
+    "T1505": "persistence",
+}
+
+
+def _technique_to_tactic(technique: str | None) -> str | None:
+    """从 MITRE technique ID 推导 tactic（如 T1059.001 → execution）。"""
+    if not technique:
+        return None
+    prefix = technique.split(".")[0]
+    return _TECHNIQUE_TACTIC.get(prefix)
+
+
 def _entity_host(entity: dict | None) -> str | None:
     if not entity:
         return None
@@ -49,14 +89,19 @@ def flatten_event(ev: dict, scenario_id: str) -> dict[str, Any]:
     dst_attrs = dst.get("attrs") or {}
     host = _entity_host(src) or _entity_host(dst)
 
+    raw_ref = ev.get("raw_log_ref") or ""
+    technique = ev.get("technique")
+    tactic = ev.get("tactic") or _technique_to_tactic(technique)
+
     row: dict[str, Any] = {
         "timestamp": ev.get("ts"),
         "scenario": scenario_id,
         "incident_id": _incident_id(scenario_id),
-        "raw_log_ref": ev.get("raw_log_ref"),
+        "raw_log_ref": raw_ref,
+        "is_attack": raw_ref.startswith("attack:"),
         "action": ev.get("action"),
-        "technique": ev.get("technique"),
-        "tactic": ev.get("tactic"),
+        "technique": technique,
+        "tactic": tactic,
         "anomaly_score": ev.get("anomaly_score"),
         "host": host,
         "process_name": src_attrs.get("name"),

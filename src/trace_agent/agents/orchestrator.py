@@ -1,4 +1,7 @@
-"""DecisionOrchestrator — RFC-004-02 §10 LOCK 主循环（单环）
+"""[DEPRECATED] 单体 LOCK 编排器 — 已被 ModularOrchestrator 替代。
+保留用于向后兼容，新代码请使用 modular_orchestrator.py。
+
+DecisionOrchestrator — RFC-004-02 §10 LOCK 主循环（单环）
 
 只有一个 while。决策账只是 self.ledgers 里多出来的一本；没有"外环"。
 L→②检验→O→C→K 每拍照常跳。
@@ -125,7 +128,8 @@ class DecisionOrchestrator:
                  demo_profile_enabled: bool = False,
                  demo_plateau_rounds: int = 5,
                  demo_min_graph_nodes: int = 8,
-                 demo_min_graph_edges: int = 6):
+                 demo_min_graph_edges: int = 6,
+                 progress_cb=None):
         """
         Args:
             alert: 触发调查的告警事件
@@ -169,6 +173,7 @@ class DecisionOrchestrator:
         self._demo_min_graph_edges = max(0, demo_min_graph_edges)
         self._posterior_history: list[float] = []
         self._round_diagnostics: list[dict[str, Any]] = []
+        self._progress_cb = progress_cb
 
         # Loss matrix
         if loss is None:
@@ -209,31 +214,94 @@ class DecisionOrchestrator:
 
         # ═══ Phase 0: Bootstrap ═══
         self._bootstrap()
+        self._emit_progress({
+            "stage": "lock_loop",
+            "phase": "bootstrap",
+            "round": 0,
+            "status": "completed",
+            "graph_nodes": self.graph.stats().get("node_count", 0),
+        })
 
         prev_stats = self.graph.stats()
 
         # ═══ Main Loop ═══
         while not self.budget.exhausted():
             self.budget.rounds_used += 1
+            round_no = self.budget.rounds_used
 
             # ── L 拍：选哪条 ──
+            self._emit_progress({
+                "stage": "lock_loop", "phase": "L", "round": round_no,
+                "status": "running",
+            })
             pool = self._l_phase(prev_stats)
+            planner_result = (
+                dict(self._planner_audit[-1])
+                if self._planner_audit
+                and self._planner_audit[-1].get("round") == round_no
+                else None
+            )
+            self._emit_progress({
+                "stage": "lock_loop", "phase": "L", "round": round_no,
+                "status": "completed", "candidate_count": len(pool.peek()),
+                "model_planner": planner_result,
+            })
 
             # ── ② 检验拍 ──
             pool = self._veto_phase(pool)
+            self._emit_progress({
+                "stage": "lock_loop", "phase": "Veto", "round": round_no,
+                "status": "completed", "candidate_count": len(pool.peek()),
+            })
 
             # ── O 拍：怎么查 ──
             chosen = self._o_phase(pool)
+            self._emit_progress({
+                "stage": "lock_loop", "phase": "O", "round": round_no,
+                "status": "completed",
+                "probes_selected": [probe.operator for probe in chosen],
+            })
 
             if not chosen:
                 # No viable probes remain
+                self._emit_progress({
+                    "stage": "lock_loop", "phase": "K", "round": round_no,
+                    "status": "stopped", "stop_reason": "no_probes",
+                })
                 break
 
             # ── C 拍：验真 ──
             ingest_result = self._c_phase(chosen)
+            routed = getattr(ingest_result, "routed", {}) or {}
+            judgement_stats = getattr(self.ingest, "llm_stats", {"mode": "off"})
+            judgement_audit = list(judgement_stats.get("audit") or [])
+            self._emit_progress({
+                "stage": "lock_loop", "phase": "C", "round": round_no,
+                "status": "completed",
+                "events": len(getattr(ingest_result, "all_events", []) or []),
+                "attached": len(routed.get("ATTACH", [])),
+                "model_judgement": {
+                    "mode": judgement_stats.get("mode", "off"),
+                    "l3_llm_calls": judgement_stats.get("l3_llm_calls", 0),
+                    "provider_errors": judgement_stats.get("provider_errors", 0),
+                    "shadow_summary": judgement_stats.get("shadow_summary") or {},
+                    "latest_audit": judgement_audit[-1] if judgement_audit else None,
+                },
+            })
 
             # ── K 拍：收尾 ──
             stop_decision = self._k_phase(chosen, ingest_result)
+            diagnostic = (
+                dict(self._round_diagnostics[-1])
+                if self._round_diagnostics else {}
+            )
+            self._emit_progress({
+                "stage": "lock_loop", "phase": "K", "round": round_no,
+                "status": "stopped" if stop_decision.should_stop else "completed",
+                **diagnostic,
+                "stop_should_stop": stop_decision.should_stop,
+                "stop_reason_candidate": stop_decision.reason,
+            })
 
             prev_stats = self.graph.stats()
 
@@ -243,6 +311,15 @@ class DecisionOrchestrator:
 
         # Budget exhausted or no probes
         return self._build_result("budget" if self.budget.exhausted() else "no_probes")
+
+    def _emit_progress(self, event: dict[str, Any]) -> None:
+        """Report bounded LOCK progress without allowing observers to break a run."""
+        if not callable(self._progress_cb):
+            return
+        try:
+            self._progress_cb(dict(event))
+        except Exception:
+            pass
 
     # ═══════════════════════════════════════════════════════════════════
     # Phase implementations

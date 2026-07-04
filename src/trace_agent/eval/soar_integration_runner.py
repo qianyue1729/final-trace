@@ -353,10 +353,11 @@ def run_scenario_test(
     elapsed = time.time() - t0
 
     if verbose:
-        print(f"  决策: {result.decision} (置信度={result.confidence:.3f})")
-        print(f"  停止原因: {result.stop_reason}")
-        print(f"  轮数: {result.rounds_used}, 探针: {result.total_events_processed}")
-        print(f"  耗时: {elapsed:.1f}s")
+        conf_str = f"{result.confidence:.3f}" if result.confidence is not None else "N/A"
+        print(f"  Decision: {result.decision} (confidence={conf_str})")
+        print(f"  Stop reason: {result.stop_reason}")
+        print(f"  Rounds: {result.rounds_used}, Events: {result.total_events_processed}")
+        print(f"  Elapsed: {elapsed:.1f}s")
 
     # ── Step 8: 评估 ──
     metrics = evaluate_result(result, orch, scenario_data, scenario_id, elapsed)
@@ -369,7 +370,8 @@ def run_scenario_test(
 
     if verbose:
         print(f"  Recall: {metrics.recall:.3f} | Precision: {metrics.precision:.3f} | F1: {metrics.f1:.3f}")
-        print(f"  决策正确: {'✓' if metrics.decision_correct else '✗'}")
+        correct_mark = "YES" if metrics.decision_correct else "NO"
+        print(f"  Decision correct: {correct_mark}")
 
     return metrics
 
@@ -405,14 +407,15 @@ def evaluate_result(
     f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) > 0 else 0.0
 
     # 决策正确性：已知攻击场景 → 应为 contain_escalate
-    decision_correct = (result.decision == "contain_escalate")
+    decision = result.decision or "unknown"
+    decision_correct = (decision == "contain_escalate")
 
     return ScenarioMetrics(
         scenario_id=scenario_id,
-        decision=result.decision,
+        decision=decision,
         decision_correct=decision_correct,
-        confidence=result.confidence,
-        stop_reason=result.stop_reason,
+        confidence=result.confidence or 0.0,
+        stop_reason=result.stop_reason or "unknown",
         rounds_used=result.rounds_used,
         probes_used=result.total_events_processed,
         total_attack_edges=total_attack_edges,
@@ -519,20 +522,20 @@ def print_report(results: dict[str, ScenarioMetrics]) -> None:
     """打印汇总报告到 stdout。"""
     print("\n")
     print("=" * 72)
-    print("  SOAR + LOCK 集成测试报告")
+    print("  SOAR + LOCK Integration Report")
     print("=" * 72)
 
-    # 表头
+    # Table header
     header = (
-        f"{'场景':<20} {'决策':<18} {'正确':^6} "
+        f"{'Scenario':<20} {'Decision':<18} {'Correct':^7} "
         f"{'Recall':>7} {'Prec':>7} {'F1':>7} "
-        f"{'轮数':>5} {'耗时':>7}"
+        f"{'Rounds':>6} {'Time':>7}"
     )
     print(header)
     print("-" * 72)
 
     for sid, m in results.items():
-        correct_mark = "✓" if m.decision_correct else "✗"
+        correct_mark = "Y" if m.decision_correct else "N"
         row = (
             f"{sid:<20} {m.decision:<18} {correct_mark:^6} "
             f"{m.recall:>7.3f} {m.precision:>7.3f} {m.f1:>7.3f} "
@@ -555,13 +558,13 @@ def print_report(results: dict[str, ScenarioMetrics]) -> None:
     total_time = sum(v.elapsed_seconds for v in results.values())
     total_llm = sum(v.llm_calls for v in results.values())
 
-    print(f"  决策正确率: {correct}/{total}")
-    print(f"  平均 Recall: {avg_recall:.3f}")
-    print(f"  平均 Precision: {avg_prec:.3f}")
-    print(f"  平均 F1: {avg_f1:.3f}")
-    print(f"  总耗时: {total_time:.1f}s")
+    print(f"  Decision correct: {correct}/{total}")
+    print(f"  Avg Recall: {avg_recall:.3f}")
+    print(f"  Avg Precision: {avg_prec:.3f}")
+    print(f"  Avg F1: {avg_f1:.3f}")
+    print(f"  Total time: {total_time:.1f}s")
     if total_llm > 0:
-        print(f"  LLM 调用: {total_llm} 次")
+        print(f"  LLM calls: {total_llm}")
     print("=" * 72)
 
 

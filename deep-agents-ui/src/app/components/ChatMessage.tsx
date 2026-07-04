@@ -9,6 +9,8 @@ import type {
   ToolCall,
   ActionRequest,
   ReviewConfig,
+  LockProgressEvent,
+  LOCKPhaseStream,
 } from "@/app/types/types";
 import { Message } from "@langchain/langgraph-sdk";
 import {
@@ -17,6 +19,16 @@ import {
 } from "@/app/utils/utils";
 import { cn } from "@/lib/utils";
 
+const LOCK_TOOL_NAMES = new Set([
+  "init_investigation",
+  "run_l_phase",
+  "run_veto_phase",
+  "run_o_phase",
+  "run_c_phase",
+  "run_k_phase",
+  "run_full_loop",
+]);
+
 interface ChatMessageProps {
   message: Message;
   toolCalls: ToolCall[];
@@ -24,6 +36,8 @@ interface ChatMessageProps {
   actionRequestsMap?: Map<string, ActionRequest>;
   reviewConfigsMap?: Map<string, ReviewConfig>;
   ui?: any[];
+  lockProgress?: LockProgressEvent[];
+  lockPhaseStream?: LOCKPhaseStream;
   stream?: any;
   onResumeInterrupt?: (value: any) => void;
   graphId?: string;
@@ -37,6 +51,8 @@ export const ChatMessage = React.memo<ChatMessageProps>(
     actionRequestsMap,
     reviewConfigsMap,
     ui,
+    lockProgress,
+    lockPhaseStream,
     stream,
     onResumeInterrupt,
     graphId,
@@ -124,27 +140,42 @@ export const ChatMessage = React.memo<ChatMessageProps>(
           )}
           {hasToolCalls && (
             <div className="mt-4 flex w-full flex-col">
-              {toolCalls.map((toolCall: ToolCall) => {
-                if (toolCall.name === "task") return null;
-                const toolCallGenUiComponent = ui?.find(
-                  (u) => u.metadata?.tool_call_id === toolCall.id
-                );
-                const actionRequest = actionRequestsMap?.get(toolCall.name);
-                const reviewConfig = reviewConfigsMap?.get(toolCall.name);
-                return (
-                  <ToolCallBox
-                    key={toolCall.id}
-                    toolCall={toolCall}
-                    uiComponent={toolCallGenUiComponent}
-                    stream={stream}
-                    graphId={graphId}
-                    actionRequest={actionRequest}
-                    reviewConfig={reviewConfig}
-                    onResume={onResumeInterrupt}
-                    isLoading={isLoading}
-                  />
-                );
-              })}
+              {(() => {
+                // Find last LOCK tool call id — only that one gets the dashboard
+                let lastLockId: string | null = null;
+                for (let i = toolCalls.length - 1; i >= 0; i--) {
+                  if (LOCK_TOOL_NAMES.has(toolCalls[i].name)) {
+                    lastLockId = toolCalls[i].id;
+                    break;
+                  }
+                }
+                return toolCalls.map((toolCall: ToolCall) => {
+                  if (toolCall.name === "task") return null;
+                  const toolCallGenUiComponent = ui?.find(
+                    (u) => u.metadata?.tool_call_id === toolCall.id
+                  );
+                  const actionRequest = actionRequestsMap?.get(toolCall.name);
+                  const reviewConfig = reviewConfigsMap?.get(toolCall.name);
+                  const isActiveLock = LOCK_TOOL_NAMES.has(toolCall.name) && toolCall.id === lastLockId;
+                  return (
+                    <ToolCallBox
+                      key={toolCall.id}
+                      toolCall={toolCall}
+                      progress={(lockProgress ?? []).filter(
+                        (item) => item.tool_call_id === toolCall.id
+                      )}
+                      uiComponent={toolCallGenUiComponent}
+                      stream={stream}
+                      graphId={graphId}
+                      actionRequest={actionRequest}
+                      reviewConfig={reviewConfig}
+                      onResume={onResumeInterrupt}
+                      isLoading={isLoading}
+                      lockPhaseStream={isActiveLock ? lockPhaseStream : undefined}
+                    />
+                  );
+                });
+              })()}
             </div>
           )}
           {!isUser && subAgents.length > 0 && (

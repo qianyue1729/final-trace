@@ -1,28 +1,27 @@
 # 溯源 Agent：Deep Agents 前后端
 
-调试前端来自 `langchain-ai/deep-agents-ui`。该仓库已于 2026-06-28
-归档，因此这里只把它作为可替换的本地调试壳；后端保持标准 LangGraph
-API，不依赖该 UI 的私有接口。
+唯一官方 UI 为 `deep-agents-ui`（LangGraph SDK 客户端）。旧版 `demo/` Vite 作战室已下线。
 
 ## 架构
 
 ```text
-deep-agents-ui :3001
-        │ LangGraph SDK
+deep-agents-ui :3002（或 :3001）
+        │ @langchain/langgraph-sdk
         ▼
 LangGraph Agent Server :2024
         │ assistant_id = trace_agent
         ▼
-Deep Agents graph
-        │ 受限工具
-        ├─ list_trace_scenarios
-        ├─ inspect_trace_prior
-        ├─ run_trace_scenario
-        └─ run_production_trace（默认禁用）
+Deep Agents graph（create_deep_agent）
+        │ LOCK 拍级 tools
+        ├─ init_investigation / run_l_phase … run_k_phase / run_full_loop
+        ├─ get_session_state / get_voi_ranking / get_decision_ledger …
+        └─ inspect_trace_prior
                 │
                 ▼
-trace_agent + trace_engine + SOAR/Wazuh
+ModularOrchestrator + trace_engine + SOAR/Wazuh MCP
 ```
+
+前端通过 `onCustomEvent` 展示 LOCK 相位流（`LockLoopPanel`、`LOCKPhaseStream`）。
 
 ## 本地调试
 
@@ -30,10 +29,10 @@ trace_agent + trace_engine + SOAR/Wazuh
 
 ```powershell
 .\scripts\start_deep_agent_backend.ps1
-.\scripts\start_deep_agents_ui.ps1
+.\scripts\start_deep_agents_ui.ps1 -Port 3002
 ```
 
-打开 `http://localhost:3001`。前端默认连接：
+打开 http://localhost:3002。前端默认连接：
 
 - Deployment URL：`http://127.0.0.1:2024`
 - Assistant ID：`trace_agent`
@@ -49,16 +48,18 @@ LangGraph API 读取 OpenAPI 资源时的 GBK 解码错误。
 默认只能跑 `soar_mcp_env` 本地场景。若确需连接真实后端：
 
 ```powershell
-.\scripts\start_deep_agent_backend.ps1 -EnableProduction
+.\scripts\start_deep_agent_backend.ps1 -EnableProduction -DemoProfile
 ```
+
+`-DemoProfile` 加载 `configs/engine_demo_wazuh.yaml`（平台期早停、guardrail 降级）。
 
 生产配置必须使用 `backend: soar_mcp`。请先为服务配置鉴权并轮换工作区中
 曾经暴露的密钥。
 
-`-EnableProduction` 只从 `host-client.env` 导入 MCP endpoint/token，并设置：
+`-EnableProduction` 从 `host-client.env` 导入 MCP endpoint/token，并设置：
 
 - `TRACE_AGENT_ALLOW_PRODUCTION=1`
-- `TRACE_AGENT_ENGINE_CONFIG=<仓库>/configs/engine.yaml`
+- `TRACE_AGENT_ENGINE_CONFIG=<仓库>/configs/engine.yaml`（或 demo profile）
 
 若要使用其他配置：
 
@@ -76,6 +77,6 @@ $env:PYTHONPATH = "..\src"
 uv run --python 3.11 --extra dev pytest
 
 cd ..\deep-agents-ui
-yarn lint
-yarn build
+npm run lint
+npm run build
 ```

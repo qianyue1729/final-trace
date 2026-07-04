@@ -28,6 +28,13 @@
       "description": "APT 多阶段攻击；演示入口改用链内枢纽 evt_015（原 evt_025 邻接过少）。九源 SOAR fan-out。",
       "tags": ["SOAR", "9 数据源", "25 跳"],
       "entry_alert_ref": "attack:idx_stress:evt_015",
+      "wazuh_scope": {
+        "incident_prefix": "INC-APT-5HOST-001",
+        "scope_field": "incident",
+        "attacks_only": true,
+        "indexed_attack_chain": true,
+        "scenario_slug": "apt_5host"
+      },
       "run": {
         "mcp_calls": 400,
         "d_max": 50,
@@ -41,11 +48,38 @@
       "description": "多路径分支 APT、高噪声；演示入口 evt_005（原 evt_031 易耗尽预算）。18 源分片。",
       "tags": ["SOAR", "18 数据源", "31 跳"],
       "entry_alert_ref": "attack:idx_stress:evt_005",
+      "wazuh_scope": {
+        "incident_prefix": "INC-MULTIPATH-12HOST-001",
+        "scope_field": "incident",
+        "attacks_only": true,
+        "indexed_attack_chain": true,
+        "scenario_slug": "multipath_12host"
+      },
       "run": {
         "mcp_calls": 400,
         "d_max": 50,
         "max_iterations": 80,
         "beam_width": 5
+      }
+    },
+    "provsec_case_05": {
+      "file": "scenarios/scenario_provsec_case_05.json",
+      "name": "ProvSec C05: Log4j JNDI Injection",
+      "description": "CVE-2021-44228 Log4j JNDI 注入攻击溯源；ProvSec syscall 级数据集，单主机 Linux/Docker 环境，200 攻击 + 300 噪声事件。",
+      "tags": ["ProvSec", "syscall", "vulnerability", "Log4j", "CVE-2021-44228"],
+      "entry_alert_ref": "attack:provsec:evt_001",
+      "wazuh_scope": {
+        "incident_prefix": "INC-PROVSEC-C05",
+        "scope_field": "incident",
+        "attacks_only": true,
+        "indexed_attack_chain": true,
+        "scenario_slug": "provsec_case_05"
+      },
+      "run": {
+        "mcp_calls": 200,
+        "d_max": 30,
+        "max_iterations": 50,
+        "beam_width": 4
       }
     }
   }

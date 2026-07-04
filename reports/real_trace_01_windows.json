@@ -1,0 +1,47 @@
+{
+  "config": "F:\\cursor all\\final trace\\configs\\engine.real_trace.yaml",
+  "checks": [
+    {
+      "name": "seed_t1048_dstip",
+      "query": "rule.mitre.id:T1048 AND data.dst_ip:\"198.51.100.77\"",
+      "expected": 1,
+      "count": 2,
+      "passed": true,
+      "techniques": [
+        "T1048",
+        "T1048"
+      ]
+    },
+    {
+      "name": "pivot_collected_file",
+      "query": "data.collected_file:\"/tmp/collected_7f3a2c.dat\" AND rule.mitre.id:T1005",
+      "expected": 1,
+      "count": 2,
+      "passed": true,
+      "techniques": [
+        "T1005",
+        "T1005"
+      ]
+    }
+  ],
+  "e2e": {
+    "status": "completed",
+    "nodes": 16,
+    "edges": 16,
+    "bootstrap": {
+      "case_prefetch_events": 2,
+      "entry_prefetch_events": 0,
+      "asset_inventory": {},
+      "discovered_hosts": [
+        "wazuh.manager"
+      ],
+      "bootstrap_strategy": "seed_only",
+      "bootstrap_query": "rule.mitre.id:T1048 AND data.dst_ip:\"198.51.100.77\"",
+      "bootstrap_pivot": "data.dst_ip",
+      "attack_chain_events": 2,
+      "time_cursor_advanced_to": 1783144852.932
+    },
+    "mcp_errors": 0,
+    "passed": true
+  }
+}

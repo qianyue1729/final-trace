@@ -55,11 +55,11 @@ normalizer:
   field_map:
     ref: "raw_log_ref"
     timestamp: "timestamp"
-    technique: "mitre_technique"
-    tactic: "mitre_tactic"
+    technique: "mitre_technique"       # _flatten_wazuh_alert 顶层键
+    tactic: "mitre_tactic"             # _flatten_wazuh_alert 顶层键（MCP 层推导）
     action: "action"
     anomaly_score: "anomaly_score"
-    host: "hostname"
+    host: "host"                       # _flatten_wazuh_alert 保证顶层 host 字段
     host_fallback: "agent_name"
     process_name: "src_process"
 
@@ -67,6 +67,46 @@ budget:
   total_rounds: 50
   total_probes: 400
   fanout_per_round: 8
+
+model_planner:
+  mode: "shadow"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  verify_tls: true
+  max_intents_per_round: 4
+  cost_budget_per_round: 1.0
+  max_graph_nodes: 40
+
+model_judgement:
+  mode: "assist"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  verify_tls: true
+  max_calls_per_round: 3
+  max_calls_per_case: 20
+  max_tokens_per_case: 20000
+  max_context_nodes: 40
+  ambiguity_margin: 0.35
+
+model_mcp_compiler:
+  mode: "shadow"
+  provider: "deepseek"
+  model: "deepseek-v4-flash"
+  endpoint: "https://api.deepseek.com/v1"
+  credential_env: "DEEPSEEK_API_KEY"
+  verify_tls: true
+  max_plans_per_round: 4
+  max_calls_per_round: 3
+  max_calls_per_case: 30
+  max_tokens_per_case: 20000
+  max_context_nodes: 40
+  max_time_range_days: 30
+  max_filters: 4
+  fallback_to_template: true
 
 service:
   host: "0.0.0.0"

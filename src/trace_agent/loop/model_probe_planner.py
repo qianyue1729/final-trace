@@ -173,6 +173,11 @@ class StructuredModelProbePlanner:
                 model_version=self.model_version,
             )
 
+    def close(self) -> None:
+        close = getattr(self.provider, "close", None)
+        if callable(close):
+            close()
+
 
 @dataclass(frozen=True)
 class IntentValidation:
